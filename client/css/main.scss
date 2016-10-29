@@ -1,0 +1,433 @@
+$faded-grey: #AAA;
+$theme-primary: rgb(0, 229, 255);
+$body-bg: #080325;
+$task-bg: #201B3A;
+
+$footer-height: 40px;
+$mobile-width: 700px;
+
+@mixin mobile {
+	@media only screen and (max-width: #{$mobile-width}) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media only screen and (min-width: #{$mobile-width}) {
+		@content;
+	}
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "Roboto", sans-serif;
+	color: #FFF;
+	background-color: $body-bg;
+	text-align: center;
+}
+
+h1, h2, h3 {
+	font-weight: 300;
+}
+
+h4, h5, h6 {
+	font-weight: 500;
+	margin-bottom: 0px;
+}
+
+/* Testing Only */
+.test-role-buttons {
+	display: none;
+	margin: 0;
+	margin-right: 20px;
+	text-align: right;
+}
+
+/* Navigation */
+
+.navbar {
+	margin: 0 !important;
+	background-color: $task-bg !important;
+}
+
+.mobile-menu-button {
+	display: inline-block !important;
+}
+
+.mobile-menu {
+	a, a:active {
+		text-decoration: none;
+	}
+}
+
+.brand-image {
+	display: inline-block;
+	margin-top: 10px;
+
+	@include desktop {
+		margin-left: 20px;
+	}
+
+	@include mobile {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
+
+.nav-links {
+	display: inline-block;
+	position: absolute;
+	margin-left: 30px;
+	margin-top: 7px;
+}
+
+.nav-user-buttons {
+	padding-top: 5px;
+	padding-right: 10px;
+}
+
+.page-title {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+/* Profile Page */
+
+.profile-page {
+	margin: 0;
+}
+
+.profile-card {
+	margin: 50px auto;
+	padding: 5px 30px;
+	min-height: 475px;
+	max-width: 600px;
+	font-size: 18px;
+	text-align: left;
+}
+
+.profile-gitlab-section {
+	margin-top: 40px;
+}
+
+
+/* Admin */
+
+.admin-page {
+	margin: 0;
+}
+
+.admin-card {
+	margin: 50px auto;
+	padding: 3px 30px;
+	max-width: 1000px;
+	min-height: 475px;
+	font-size: 18px;
+	text-align: left;
+}
+
+.admin-submission {
+	text-decoration: none;
+	color: #FFF;
+}
+
+.admin-archived-submission {
+	@extend .admin-submission;
+	opacity: 0.5;
+}
+
+.submission-list-time {
+	display: inline-block;
+	box-sizing: border-box;
+	font-size: 12px;
+	width: 55px;
+}
+
+.submission-list-category {
+	opacity: 0.9;
+	font-weight: 300;
+	padding-left: 15px;
+	padding-right: 10px;
+}
+
+.submission-list-name {
+	padding-right: 7px;
+}
+
+.admin-task-form {
+	max-width: 1000px;
+	margin: 20px auto;
+
+	input {
+		height: 40px;
+		padding: 5px;
+		background-color: $task-bg;
+		color: #FFF;
+		border: 1px solid #333;
+
+		&:focus {
+			outline: none;
+		}
+
+		&:nth-of-type(1) {
+			width: 30%;
+		}
+
+		&:nth-of-type(2) {
+			width: 60%;
+		}
+	}
+}
+
+/* Hiding submit buttons with display:none does not work on Safari */
+.hide-btn {
+	width: 0 !important;
+	height: 0 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: none !important;
+}
+
+.loading-spinner {
+	padding: 20px 0;
+}
+
+/* Contribute Page */
+
+$card-height: 175px;
+$card-width: 275px;
+
+.contribute-page {
+	padding: 0 10px;
+}
+
+.category-container {
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+
+	@media only screen and (min-width: 1250px) {
+		padding: 0 10%;
+	}
+
+	@media only screen and (min-width: 1500px) {
+		padding: 0 20%;
+	}
+}
+
+.category-card {
+	position: relative;
+	margin: 20px 10px 0 10px;
+	width: $card-width;
+	height: $card-height;
+	line-height: $card-height;
+	border-radius: 5%;
+	background-color: #FFF;
+	text-align: center;
+	color: #000;
+	font-size: 30px;
+
+	a, a:hover {
+		display: block;
+		color: #000;
+		text-decoration: none;
+	}
+	
+	&:hover {
+		cursor: pointer;
+		text-decoration: none;
+		color: #000;	
+		background-color: #DDD;	
+	}
+}
+
+.delete-category-btn {
+	z-index: 10;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 30px;
+	line-height: 30px;
+	height: 30px;
+	color: $faded-grey;
+
+	&:hover {
+		color: #000;
+		cursor: pointer;
+	}
+}
+
+.add-category-card {
+	margin: 20px 10px 0 10px;
+	width: 80px;
+	height: $card-height;
+	line-height: $card-height;	
+	text-align: center;	
+	color: $faded-grey;
+	font-size: 60px;
+
+	&:hover {
+		color: #FFF;
+		cursor: pointer;
+	}
+}
+
+/* Task Page */
+
+$table-font: 16px;
+
+.task-page {
+	margin: 40px 10%;
+
+	@include mobile {
+		margin: 0;
+	}
+}
+
+.task-table {
+	margin: 0 auto;
+	max-width: 1600px;
+	table-layout: auto !important;
+}
+
+/* !important is needed to override material-ui inline styles */
+
+.table-super {
+	border-bottom: none !important;
+
+	> * {
+		font-size: 20px !important;
+		column-span: all;
+	}
+}
+
+.table-header {
+	border-bottom: none !important;
+
+	> * {
+		font-size: 14px !important;	
+	}
+} 
+
+
+.table-row > * {
+	font-size: $table-font !important;
+	white-space: normal !important;
+	word-wrap: break-word;
+	height: 60px !important;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.archived-task {
+	opacity: 0.6 !important;
+}
+
+.mobile-hidden {
+	@include mobile {
+		display: none;
+	}
+}
+
+.desktop-hidden {
+	@include desktop {
+		display: none !important;
+	}
+}
+
+.name-col {
+	width: 30% !important;
+
+	@include mobile {
+		width: 70% !important;
+	}
+}
+
+.description-col {
+	width: 55% !important;
+	@extend .mobile-hidden;
+}
+
+.submission-col {
+	width: 15% !important;
+
+	@include mobile {
+		width: 30% !important;
+	}
+}
+
+.admin-modal {
+	text-align: left;
+}
+
+.task-modal {
+	text-align: left;
+	margin: 0 !important;
+
+	p {
+		color: rgba(255, 255, 255, 0.8) !important;
+	}
+}
+
+.task-modal-description {
+	margin-bottom: 30px;
+
+	a {
+		cursor: pointer;
+		color: #FFF;
+	}
+}
+
+.task-modal-submissions {
+	a {
+		text-decoration: none;
+		color: $theme-primary;
+	}
+
+	.submission-delete-btn {
+		cursor: pointer;
+		padding: 0 5px;
+		
+		&:hover {
+			color: #FFF;
+		}
+	}
+}
+
+.wrap {
+	min-height: 99vh;
+}
+
+.main {
+	overflow: auto;
+	padding-bottom: $footer-height;
+}
+
+footer {
+	position: relative;
+	clear: both;
+	margin: 0;
+	margin-top: -1 * $footer-height;
+	height: $footer-height;
+	line-height: $footer-height;
+	color: #555;
+	background-color: #000;
+	font-size: 14px;
+
+	p {
+		margin-bottom: 0;
+
+		@include mobile {
+			margin-top: 50px;
+		}
+	}
+}
