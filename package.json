@@ -1,7 +1,7 @@
 {
   "name": "community-twitch-development",
   "version": "1.0.0",
-  "description": "A web app that helps Twitch streamers collaborate with viewers on a development project.",
+  "description": "A web app that helps Twitch streamers and viewers collaborate on a development project.",
   "main": "server.js",
   "scripts": {
     "start": "npm run dev",

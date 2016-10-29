@@ -38,7 +38,7 @@ export default class Navbar extends Component {
 				iconElementLeft={
 					<div>
 						<IconButton onTouchTap={this.toggleMobileNav.bind(this)} className="desktop-hidden"><NavigationMenu color="#FFF" /></IconButton>
-						<a href="//hardlydifficult.com" className="brand-image">
+						<a href={process.env.BASE_URL} className="brand-image">
 							<img src={process.env.BRAND_IMAGE} width="80px" />
 						</a>
 						<div className="nav-links mobile-hidden">
