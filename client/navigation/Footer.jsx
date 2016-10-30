@@ -4,7 +4,7 @@ const Footer = () => {
 	const year = new Date().getFullYear();
 	return (
 		<footer>
-			<p>Hardly Difficult LLC &copy; {year}</p>
+			<p>Community Twitch Development &copy; {year}</p>
 		</footer>
 	);
 };
