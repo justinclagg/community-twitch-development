@@ -1,4 +1,4 @@
-# community-twitch-development
+# Community Twitch Development
 
 A web app that helps Twitch streamers and viewers collaborate on a development project.
 
