@@ -260,10 +260,11 @@ export function editClaims(category, task, socket) {
 }
 
 /**
- * Add a task submission (admin only)
+ * Add a task submission
  * 
  * @param {object} task
  * @param {array} updatedSubmissions
+ * @param {object} updatedTask
  * @param {object} socket
  * @returns {object} payload - Task id and submissions
  */

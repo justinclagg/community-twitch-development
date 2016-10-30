@@ -73,11 +73,11 @@ class App extends Component {
 						isAuthenticated={isAuthenticated}
 						/>
 					<div className='test-role-buttons'>
-						<span>User Role: &nbsp;</span>
+						<span>Change User Role: &nbsp;</span>
 						<DropDownMenu
 							value={this.state.testUserRole}
 							onChange={this.changeUserRole.bind(this)}
-							labelStyle={{ paddingLeft: 0, fontSize: '20px' }}
+							labelStyle={{ paddingLeft: 0, fontSize: '18px' }}
 							underlineStyle={{ borderTop: 'none' }}
 							>
 							<MenuItem value={'admin'} primaryText={'Admin'} />

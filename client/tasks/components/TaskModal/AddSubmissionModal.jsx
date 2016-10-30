@@ -50,9 +50,9 @@ export default class AddSubmissionModal extends Component {
 		const updatedSubmissions = [...task.submissions, submission];
 		const updatedTask = {...task, submissions: updatedSubmissions };
 
+		removeClaim();
 		setSelectedTask(updatedTask);
 		dispatch(editSubmissions(task, updatedSubmissions, updatedTask, socket));
-		removeClaim();
 		this.toggleModal();
 	}
 
