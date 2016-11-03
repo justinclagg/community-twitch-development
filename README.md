@@ -6,7 +6,7 @@ A Twitch streamer can create categories and add tasks to them. Users can claim a
 
 React and Redux are used to build the frontend. The app runs on a Node server using MongoDB, Passport.js, Redis, and socket.io.
 
-View the demo [here](https://community-twitch-development.herokuapp.com/).
+View the demo [here](https://community-twitch-development.herokuapp.com/). (The "change user role" dropdown is for demo purposes only)
 
 --
 # Installation
