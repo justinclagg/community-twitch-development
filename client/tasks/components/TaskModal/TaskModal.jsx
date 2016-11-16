@@ -231,14 +231,17 @@ export default class TaskModal extends Component {
 
 		return (
 			<Dialog
-				title={editNameMode ?
-					<TextField 
-						name='name'
-						onKeyDown={(event) => this.checkTaskEditInput(event)}
-						defaultValue={task.name}
-						autoFocus
-						/> :
-					<div onDoubleClick={this.toggleEditName.bind(this)}>{task.name}</div>
+				title={profile.role !== 'admin' ?
+					<div>{task.name}</div> :
+					<div>{editNameMode ?
+						<TextField 
+							name='name'
+							onKeyDown={(event) => this.checkTaskEditInput(event)}
+							defaultValue={task.name}
+							autoFocus
+							/> :
+							<div onDoubleClick={this.toggleEditName.bind(this)}>{task.name}</div>
+					}</div>
 				}
 				actions={taskModalButtons}
 				modal={false}
@@ -248,22 +251,25 @@ export default class TaskModal extends Component {
 				className='task-modal'
 				>
 				<p className='task-modal-description'>
-					{editDescriptionMode ?
-						<TextField
-							name='description'
-							onKeyDown={(event) => this.checkTaskEditInput(event)}
-							multiLine={true}
-							rows={1}
-							rowsMax={10}
-							fullWidth={true}
-							defaultValue={task.description}
-							autoFocus
-							/> :
-						<Linkify 
-							onDoubleClick={this.toggleEditDescription.bind(this)}
-							>
-							{task.description}
-						</Linkify>
+					{profile.role !== 'admin' ?
+						<Linkify>{task.description}</Linkify> :
+						<div>{editDescriptionMode ?
+							<TextField
+								name='description'
+								onKeyDown={(event) => this.checkTaskEditInput(event)}
+								multiLine={true}
+								rows={1}
+								rowsMax={10}
+								fullWidth={true}
+								defaultValue={task.description}
+								autoFocus
+								/> :
+							<Linkify 
+								onDoubleClick={this.toggleEditDescription.bind(this)}
+								>
+								{task.description}
+							</Linkify>
+						}</div>
 					}
 				</p>
 				<p className='task-modal-claims'>{claimsText}</p>
