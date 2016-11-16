@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import Linkify from 'linkifyjs/react';
 
 import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import RequireLoginModal from './RequireLoginModal.jsx';
 import AddSubmissionModal from './AddSubmissionModal.jsx';
 import DeleteSubmissionModal from './DeleteSubmissionModal.jsx';
 
-import { editClaims, deleteOwnSubmission } from '../../taskActions.js';
+import { editClaims, editTask, deleteOwnSubmission } from '../../taskActions.js';
 
 export default class TaskModal extends Component {
 
@@ -17,7 +18,9 @@ export default class TaskModal extends Component {
 			open: false,
 			claimsText: '',
 			submissionsText: '',
-			isClaimed: false
+			isClaimed: false,
+			editDescriptionMode: false,
+			editNameMode: false
 		};
 	}
 
@@ -76,26 +79,26 @@ export default class TaskModal extends Component {
 			if (role === 'admin') {
 				// Admins can delete any submission
 				deleteSubmissionButton = (
-					<span className="submission-delete-btn" onTouchTap={() => this.DeleteSubmissionModal.toggleModal(submission)}> x </span>
+					<span className='submission-delete-btn' onTouchTap={() => this.DeleteSubmissionModal.toggleModal(submission)}> x </span>
 				);
 			}
 			else if (username === submission.username) {
 				// Users can delete their own submission
 				deleteSubmissionButton = (
-					<span className="submission-delete-btn" onTouchTap={this.deleteOwnSubmission.bind(this, submission)}> x </span>
+					<span className='submission-delete-btn' onTouchTap={this.deleteOwnSubmission.bind(this, submission)}> x </span>
 				);
 			}
 
 			return (
 				<p key={index}>
-					<a href={submission.url} target="_blank">Submission {index + 1} - {submission.username}</a>
+					<a href={submission.url} target='_blank'>Submission {index + 1} - {submission.username}</a>
 					{deleteSubmissionButton}
 				</p>
 			);
 		});
 
 		let submissionsText = (
-			<div className="task-modal-submissions">
+			<div className='task-modal-submissions'>
 				<p>{numberOfSubmissions}</p>
 				{submissionLinks}
 			</div>
@@ -148,45 +151,122 @@ export default class TaskModal extends Component {
 		this.setState({ open: !this.state.open });
 	}
 
+	toggleEditName() {
+		this.setState({ editNameMode: !this.state.editNameMode });
+	}
+
+	toggleEditDescription() {
+		this.setState({ editDescriptionMode: !this.state.editDescriptionMode });
+	}
+
+	checkTaskEditInput(event) {
+		switch (event.keyCode) {
+			case 13:
+				if (!event.shiftKey) {
+					// enter: Save task edit and leave edit mode
+					const editedTask = this.getEditedTask(this.props.task, event);
+					this.editTask(editedTask);
+					if (event.target.name === 'description') {
+						this.toggleEditDescription();
+					}
+					else {
+						this.toggleEditName();
+					}
+				}
+				else {
+					// shift + enter: newline
+				}
+				break;
+			case 27:
+				// escape: Leave edit mode without save
+				if (event.target.name === 'description') {
+					this.toggleEditDescription();
+				}
+				else {
+					this.toggleEditName();
+				}
+				break;
+		}
+	}
+
+	getEditedTask(task, event) {
+		if (event.target.name === 'name') {
+			return {...task, name: event.target.value };
+		}
+		else if (event.target.name === 'description') {
+			return {...task, description: event.target.value };
+		}
+	}
+
+	editTask(updatedTask) {
+		const { category, socket, setSelectedTask } = this.props;
+		setSelectedTask(updatedTask);
+		this.props.dispatch(editTask(category, updatedTask, socket));
+	}
+
 	render() {
 		const { dispatch, task, profile, isAuthenticated, socket } = this.props;
-		const { isClaimed, claimsText, submissionsText } = this.state;
+		const { isClaimed, claimsText, submissionsText, editDescriptionMode, editNameMode } = this.state;
 
 		// Claim task button
 		let claimBtn;
 		if (isClaimed && isAuthenticated) {
-			claimBtn = <FlatButton label="Unclaim" onTouchTap={this.removeClaim.bind(this)} />;
+			claimBtn = <FlatButton label='Unclaim' onTouchTap={this.removeClaim.bind(this)} />;
 		}
 		else if (isAuthenticated) {
-			claimBtn = <FlatButton label="Claim" onTouchTap={this.addClaim.bind(this)} primary={true} />;
+			claimBtn = <FlatButton label='Claim' onTouchTap={this.addClaim.bind(this)} primary={true} />;
 		}
 		else {
-			claimBtn = <FlatButton label="Claim" onTouchTap={() => this.RequireLoginModal.toggleModal()} primary={true} />;
+			claimBtn = <FlatButton label='Claim' onTouchTap={() => this.RequireLoginModal.toggleModal()} primary={true} />;
 		}
 
 		let taskModalButtons = [
 			{...claimBtn},
-			<FlatButton label="Close" onTouchTap={this.toggleModal.bind(this)} />
+			<FlatButton label='Close' onTouchTap={this.toggleModal.bind(this)} />
 		];
 		// Add a submit button if task is claimed
 		if (isClaimed && isAuthenticated) {
-			taskModalButtons.unshift(<FlatButton label="Submit" primary={true} onTouchTap={() => this.AddSubmissionModal.toggleModal()} />);
+			taskModalButtons.unshift(<FlatButton label='Submit' primary={true} onTouchTap={() => this.AddSubmissionModal.toggleModal()} />);
 		}
 
 		return (
 			<Dialog
-				title={task.name}
+				title={editNameMode ?
+					<TextField 
+						name='name'
+						onKeyDown={(event) => this.checkTaskEditInput(event)}
+						defaultValue={task.name}
+						autoFocus
+						/> :
+					<div onDoubleClick={this.toggleEditName.bind(this)}>{task.name}</div>
+				}
 				actions={taskModalButtons}
 				modal={false}
 				open={this.state.open}
 				onRequestClose={this.toggleModal.bind(this)}
 				contentStyle={{ width: '100%' }}
-				className="task-modal"
+				className='task-modal'
 				>
-				<p className="task-modal-description">
-					<Linkify>{task.description}</Linkify>
+				<p className='task-modal-description'>
+					{editDescriptionMode ?
+						<TextField
+							name='description'
+							onKeyDown={(event) => this.checkTaskEditInput(event)}
+							multiLine={true}
+							rows={1}
+							rowsMax={10}
+							fullWidth={true}
+							defaultValue={task.description}
+							autoFocus
+							/> :
+						<Linkify 
+							onDoubleClick={this.toggleEditDescription.bind(this)}
+							>
+							{task.description}
+						</Linkify>
+					}
 				</p>
-				<p className="task-modal-claims">{claimsText}</p>
+				<p className='task-modal-claims'>{claimsText}</p>
 				{submissionsText}
 				<RequireLoginModal ref={ref => this.RequireLoginModal = ref} />
 				<AddSubmissionModal

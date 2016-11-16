@@ -76,9 +76,15 @@ export default class Task extends Component {
 		const { task, handleTaskClick, profile, showArchive } = this.props;
 		const { editMode } = this.state;
 
+		// Don't show archived tasks when showArchive == false
 		if (task.archive && !showArchive) {
-			// Don't show archived tasks when showArchive == false
 			return null;
+		}
+
+		// Shorten displayed description if too long
+		let taskDescription = task.description;
+		if (taskDescription.length > 200) {
+			taskDescription = taskDescription.slice(0, 200) + '...';
 		}
 
 		let TaskRow;
@@ -87,26 +93,26 @@ export default class Task extends Component {
 			// Admin view, edit mode
 			TaskRow = (
 				<TableRow className={taskClass} onTouchTap={null}>
-					<TableRowColumn className="name-col">
+					<TableRowColumn className='name-col'>
 						<TextField
-							name="name"
+							name='name'
 							defaultValue={task.name}
 							onKeyDown={this.checkTaskEditInput.bind(this, task)}
 							fullWidth={true}
-							autoComplete="off"
+							autoComplete='off'
 							/>
 					</TableRowColumn>
-					<TableRowColumn className="description-col">
+					<TableRowColumn className='description-col'>
 						<TextField
-							name="description"
-							defaultValue={task.description}
+							name='description'
+							defaultValue={taskDescription}
 							onKeyDown={this.checkTaskEditInput.bind(this, task)}
 							fullWidth={true}
-							autoComplete="off"
+							autoComplete='off'
 							autoFocus
 							/>
 					</TableRowColumn>
-					<TableRowColumn className="submission-col">{task.submissions.length}</TableRowColumn>
+					<TableRowColumn className='submission-col'>{task.submissions.length}</TableRowColumn>
 					<IconMenu
 						iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
 						anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -114,8 +120,8 @@ export default class Task extends Component {
 						iconStyle={{ color: '#AAA' }}
 						onTouchTap={this.handleIconMenu}
 						>
-						<MenuItem primaryText="Edit" onTouchTap={this.toggleEditMode.bind(this)} />
-						<MenuItem primaryText="Delete" onTouchTap={this.deleteTask.bind(this, task._id)} />
+						<MenuItem primaryText='Edit' onTouchTap={this.toggleEditMode.bind(this)} />
+						<MenuItem primaryText='Delete' onTouchTap={this.deleteTask.bind(this, task._id)} />
 					</IconMenu>
 				</TableRow>
 			);
@@ -124,9 +130,9 @@ export default class Task extends Component {
 			// Admin view, no edit mode
 			TaskRow = (
 				<TableRow className={taskClass} onTouchTap={(event) => handleTaskClick(task, event)}>
-					<TableRowColumn className="name-col">{task.name}</TableRowColumn>
-					<TableRowColumn className="description-col">{task.description}</TableRowColumn>
-					<TableRowColumn className="submission-col">{task.submissions.length}</TableRowColumn>
+					<TableRowColumn className='name-col'>{task.name}</TableRowColumn>
+					<TableRowColumn className='description-col'>{taskDescription}</TableRowColumn>
+					<TableRowColumn className='submission-col'>{task.submissions.length}</TableRowColumn>
 					<IconMenu
 						iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
 						anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -134,12 +140,12 @@ export default class Task extends Component {
 						iconStyle={{ color: '#AAA' }}
 						onTouchTap={this.handleIconMenu}
 						>
-						<MenuItem primaryText="Edit" onTouchTap={this.toggleEditMode.bind(this)} />
+						<MenuItem primaryText='Edit' onTouchTap={this.toggleEditMode.bind(this)} />
 						{task.archive ?
-							<MenuItem primaryText="Unarchive" onTouchTap={this.toggleArchiveTask.bind(this, task)} /> :
-							<MenuItem primaryText="Archive" onTouchTap={this.toggleArchiveTask.bind(this, task)} />
+							<MenuItem primaryText='Unarchive' onTouchTap={this.toggleArchiveTask.bind(this, task)} /> :
+							<MenuItem primaryText='Archive' onTouchTap={this.toggleArchiveTask.bind(this, task)} />
 						}
-						<MenuItem primaryText="Delete" onTouchTap={this.deleteTask.bind(this, task._id)} />
+						<MenuItem primaryText='Delete' onTouchTap={this.deleteTask.bind(this, task._id)} />
 					</IconMenu>
 				</TableRow>
 			);
@@ -148,9 +154,9 @@ export default class Task extends Component {
 			// Non-admin view
 			TaskRow = (
 				<TableRow className={taskClass} onTouchTap={(event) => handleTaskClick(task, event)}>
-					<TableRowColumn className="name-col">{task.name}</TableRowColumn>
-					<TableRowColumn className="description-col">{task.description}</TableRowColumn>
-					<TableRowColumn className="submission-col">{task.submissions.length}</TableRowColumn>
+					<TableRowColumn className='name-col'>{task.name}</TableRowColumn>
+					<TableRowColumn className='description-col'>{taskDescription}</TableRowColumn>
+					<TableRowColumn className='submission-col'>{task.submissions.length}</TableRowColumn>
 				</TableRow>
 			);
 		}
