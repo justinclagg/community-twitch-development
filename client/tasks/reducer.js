@@ -1,92 +1,48 @@
+import * as t from './actionTypes';
+
 const initialState = {
-	categories: [],
 	tasks: [],
 	submissions: [],
 	fetchingTasks: false,
-	fetchingCategories: false,
 	fetchingSubmissions: false,
 	error: null
 };
 
-export default function taskReducer(state = initialState, action) {
+export default function tasks(state = initialState, action) {
 	switch (action.type) {
-		case 'FETCH_CATEGORIES':
-			return {
-				...state,
-				fetchingCategories: true
-			};
-
-		case 'FETCH_CATEGORIES_FULFILLED':
-			return {
-				...state,
-				fetchingCategories: false,
-				categories: action.payload
-			};
-
-		case 'FETCH_CATEGORIES_REJECTED':
-			return {
-				...state,
-				fetchingCategories: false,
-				error: action.payload
-			};
-
-		case 'ADD_CATEGORY_FULFILLED':
-			return {
-				...state,
-				categories: [...state.categories, action.payload]
-			};
-		
-		case 'ADD_CATEGORY_REJECTED':
-			return {
-				...state,
-				error: action.payload
-			};
-
-		case 'DELETE_CATEGORY_FULFILLED':
-			return {
-				...state,
-				categories: state.categories.filter((category) => category !== action.payload)
-			};
-		
-		case 'DELETE_CATEGORY_REJECTED':
-			return {
-				...state,
-				error: action.payload
-			};
-
-		case 'FETCH_TASKS':
+		case t.FETCH:
 			return {
 				...state,
 				fetchingTasks: true
 			};
 
-		case 'FETCH_TASKS_FULFILLED':
+		case t.FETCH_SUCCESS:
 			return {
 				...state,
 				fetchingTasks: false,
 				tasks: action.payload
 			};
 
-		case 'FETCH_TASKS_REJECTED':
+		case t.FETCH_FAILURE:
 			return {
 				...state,
 				fetchingTasks: false,
 				error: action.payload
 			};
 
-		case 'ADD_TASK_FULFILLED':
+		case t.ADD_SUCCESS:
 			return {
 				...state,
 				tasks: [...state.tasks, action.payload]
 			};
 		
-		case 'ADD_TASK_REJECTED':
+		case t.ADD_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 
-		case 'DELETE_TASK_FULFILLED':
+		case t.DELETE_SUCCESS:
 			return {
 				...state,
 				tasks: state.tasks.filter(task => {
@@ -94,13 +50,13 @@ export default function taskReducer(state = initialState, action) {
 				})
 			};
 		
-		case 'DELETE_TASK_REJECTED':
+		case t.DELETE_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 
-		case 'EDIT_TASK_FULFILLED':
+		case t.EDIT_SUCCESS:
 			return {
 				...state,
 				tasks: state.tasks.map(task => {
@@ -114,13 +70,13 @@ export default function taskReducer(state = initialState, action) {
 				})
 			};
 		
-		case 'EDIT_TASK_REJECTED':
+		case t.EDIT_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 		
-		case 'ARCHIVE_TASK_FULFILLED':
+		case t.TOGGLE_ARCHIVE_SUCCESS:
 			return {
 				...state,
 				tasks: state.tasks.map(task => {
@@ -133,13 +89,19 @@ export default function taskReducer(state = initialState, action) {
 				})
 			};
 		
-		case 'ARCHIVE_TASK_REJECTED':
+		case t.TOGGLE_ARCHIVE_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 
-		case 'EDIT_CLAIMS_FULFILLED':
+		case t.CLEAR:
+			return {
+				...state,
+				tasks: []
+			};
+
+		case t.EDIT_CLAIMS_SUCCESS:
 			return {
 				...state,
 				tasks: state.tasks.map(task => {
@@ -152,13 +114,13 @@ export default function taskReducer(state = initialState, action) {
 				})
 			};
 		
-		case 'EDIT_CLAIMS_REJECTED':
+		case t.EDIT_CLAIMS_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 		
-		case 'EDIT_SUBMISSIONS_FULFILLED':
+		case t.ADD_SUBMISSION_SUCCESS:
 			return {
 				...state,
 				tasks: state.tasks.map(task => {
@@ -171,13 +133,13 @@ export default function taskReducer(state = initialState, action) {
 				})
 			};
 		
-		case 'EDIT_SUBMISSIONS_REJECTED':
+		case t.ADD_SUBMISSION_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 
-		case 'DELETE_SUBMISSION_FULFILLED':
+		case t.DELETE_SUBMISSION_SUCCESS:
 			return {
 				...state,
 				tasks: state.tasks.map(task => {
@@ -190,13 +152,13 @@ export default function taskReducer(state = initialState, action) {
 				})
 			};
 		
-		case 'DELETE_SUBMISSION_REJECTED':
+		case t.DELETE_SUBMISSION_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 		
-		case 'DELETE_OWN_SUBMISSION_FULFILLED':
+		case t.DELETE_OWN_SUBMISSION_SUCCESS:
 			return {
 				...state,
 				tasks: state.tasks.map(task => {
@@ -209,26 +171,26 @@ export default function taskReducer(state = initialState, action) {
 				})
 			};
 		
-		case 'DELETE_OWN_SUBMISSION_REJECTED':
+		case t.DELETE_OWN_SUBMISSION_FAILURE:
 			return {
 				...state,
 				error: action.payload
 			};
 		
-		case 'FETCH_SUBMISSIONS':
+		case t.FETCH_SUBMISSIONS:
 			return {
 				...state,
 				fetchingSubmissions: true
 			};
 
-		case 'FETCH_SUBMISSIONS_FULFILLED':
+		case t.FETCH_SUBMISSIONS_SUCCESS:
 			return {
 				...state,
 				submissions: action.payload,
 				fetchingSubmissions: false
 			};
 
-		case 'FETCH_SUBMISSIONS_REJECTED':
+		case t.FETCH_SUBMISSIONS_FAILURE:
 			return {
 				...state,
 				error: action.payload,

@@ -3,22 +3,25 @@ import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-import { deleteSubmission } from '../../taskActions.js';
+import { deleteSubmission } from '../../actions';
 
-export default class DeleteSubmissionModal extends Component {
+class DeleteSubmissionModal extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			open: false,
 			submission: {} // Submission to be deleted
 		};
+		this.toggleModal = this.toggleModal.bind(this);
 	}
 
+
 	toggleModal(submission) {
-		const { open } = this.state;
-		if (!open) { this.setState({ submission }); }
-		this.setState({ open: !open });
+		if (!this.state.open) this.setState({ submission });
+		this.setState((prevState) => {
+			return { open: !prevState.open };
+		});
 	}
 
 	deleteSubmission() {
@@ -39,11 +42,11 @@ export default class DeleteSubmissionModal extends Component {
 				title="Delete Submission"
 				actions={[
 					<FlatButton label="Delete" onTouchTap={this.deleteSubmission.bind(this)} secondary={true} />,
-					<FlatButton label="Cancel" onTouchTap={this.toggleModal.bind(this)} />
+					<FlatButton label="Cancel" onTouchTap={this.toggleModal} />
 				]}
 				modal={false}
 				open={this.state.open}
-				onRequestClose={this.toggleModal.bind(this)}
+				onRequestClose={this.toggleModal}
 				className="admin-modal"
 				contentStyle={{ width: '100%' }}
 				>
@@ -59,3 +62,5 @@ DeleteSubmissionModal.propTypes = {
 	task: PropTypes.object.isRequired,
 	setSelectedTask: PropTypes.func.isRequired
 };
+
+export default DeleteSubmissionModal;

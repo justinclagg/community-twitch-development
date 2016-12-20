@@ -4,17 +4,29 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
-import { editSubmissions } from '../../taskActions.js';
-import validUrl from '../../../utils/validURl.js';
+import { editSubmissions } from '../../actions';
+import validUrl from '../../../utils/validURl';
 
-export default class AddSubmissionModal extends Component {
+class AddSubmissionModal extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			open: false,
 			error: null
 		};
+		this.toggleModal = this.toggleModal.bind(this);
+		this.checkForSubmit = this.checkForSubmit.bind(this);
+		this.addSubmission = this.addSubmission.bind(this);
+	}
+
+	toggleModal() {
+		this.setState((prevState) => {
+			return {
+				open: !prevState.open,
+				error: null
+			};
+		});
 	}
 
 	checkForSubmit(event) {
@@ -50,17 +62,10 @@ export default class AddSubmissionModal extends Component {
 		const updatedSubmissions = [...task.submissions, submission];
 		const updatedTask = {...task, submissions: updatedSubmissions };
 
-		removeClaim();
 		setSelectedTask(updatedTask);
 		dispatch(editSubmissions(task, updatedSubmissions, updatedTask, socket));
+		removeClaim();
 		this.toggleModal();
-	}
-
-	toggleModal() {
-		this.setState({
-			open: !this.state.open,
-			error: null
-		});
 	}
 
 	render() {
@@ -69,12 +74,12 @@ export default class AddSubmissionModal extends Component {
 			<Dialog
 				title="Submit your work"
 				actions={[
-					<FlatButton label="Submit" onTouchTap={this.addSubmission.bind(this)} primary={true} />,
-					<FlatButton label="Close" onTouchTap={this.toggleModal.bind(this)} />
+					<FlatButton label="Submit" onTouchTap={this.addSubmission} primary={true} />,
+					<FlatButton label="Close" onTouchTap={this.toggleModal} />
 				]}
 				modal={false}
 				open={open}
-				onRequestClose={this.toggleModal.bind(this)}
+				onRequestClose={this.toggleModal}
 				className="task-modal"
 				contentStyle={{ width: '100%' }}
 				>
@@ -83,7 +88,7 @@ export default class AddSubmissionModal extends Component {
 					hintText="Submission Link"
 					errorText={error}
 					name="submission"
-					onKeyDown={this.checkForSubmit.bind(this)}
+					onKeyDown={this.checkForSubmit}
 					fullWidth={true}
 					autoComplete="off"
 					autoFocus
@@ -113,3 +118,5 @@ AddSubmissionModal.propTypes = {
 	removeClaim: PropTypes.func.isRequired,
 	setSelectedTask: PropTypes.func.isRequired
 };
+
+export default AddSubmissionModal;

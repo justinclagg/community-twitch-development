@@ -7,43 +7,50 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
-import { deleteTask, editTask, toggleArchiveTask } from '../taskActions.js';
+import { deleteTask, editTask, toggleArchive } from '../actions';
 
-export default class Task extends Component {
+class Task extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
-			editMode: false
+			editing: false
 		};
+		this.onIconMenuClick = this.onIconMenuClick.bind(this);
+		this.toggleEditing = this.toggleEditing.bind(this);
+		this.editTask = (category, task) => props.dispatch(editTask(category, task, props.socket));
+		this.toggleArchive = (task) => props.dispatch(toggleArchive(task, props.socket));
+		this.deleteTask = (category, _id) => props.dispatch(deleteTask(category, _id, props.socket));
 	}
 
-	handleIconMenu(event) {
+	onIconMenuClick(event) {
 		event.stopPropagation(); // Don't open task modal when clicking admin task menu
 	}
 
-	toggleEditMode() {
-		this.setState({ editMode: !this.state.editMode });
+	toggleEditing() {
+		this.setState((prevState) => {
+			return { editing: !prevState.editing };
+		});
 	}
 
 	// Test each key press for tab, enter, escape
-	checkTaskEditInput(task, event) {
+	onEditInput(task, event) {
 		let editedTask = {};
 		switch (event.keyCode) {
 			case 9:
 				// tab: Save task edit
 				editedTask = this.getEditedTask(task, event);
-				this.editTask(editedTask);
+				this.editTask(this.props.category, editedTask);
 				break;
 			case 13:
 				// enter: Save task edit and leave edit mode
 				editedTask = this.getEditedTask(task, event);
-				this.editTask(editedTask);
-				this.toggleEditMode();
+				this.editTask(this.props.category, editedTask);
+				this.toggleEditing();
 				break;
 			case 27:
 				// escape: Leave edit mode without save
-				this.toggleEditMode();
+				this.toggleEditing();
 				break;
 		}
 	}
@@ -57,24 +64,9 @@ export default class Task extends Component {
 		}
 	}
 
-	editTask(task) {
-		const { dispatch, socket, category } = this.props;			
-		dispatch(editTask(category, task, socket));
-	}
-
-	toggleArchiveTask(task) {
-		const { dispatch, socket } = this.props;	
-		dispatch(toggleArchiveTask(task, socket));
-	}
-
-	deleteTask(_id) {
-		const { dispatch, socket, category } = this.props;
-		dispatch(deleteTask(category, _id, socket));
-	}
-
 	render() {
 		const { task, handleTaskClick, profile, showArchive } = this.props;
-		const { editMode } = this.state;
+		const { editing } = this.state;
 
 		// Don't show archived tasks when showArchive == false
 		if (task.archive && !showArchive) {
@@ -87,76 +79,62 @@ export default class Task extends Component {
 			taskDescription = taskDescription.slice(0, 200) + '...';
 		}
 
-		let TaskRow;
 		const taskClass = task.archive ? 'archived-task table-row' : 'table-row';
-		if (editMode) {
-			// Admin view, edit mode
-			TaskRow = (
-				<TableRow className={taskClass} onTouchTap={null}>
-					<TableRowColumn className='name-col'>
-						<TextField
-							name='name'
-							defaultValue={task.name}
-							onKeyDown={this.checkTaskEditInput.bind(this, task)}
-							fullWidth={true}
-							autoComplete='off'
-							/>
-					</TableRowColumn>
-					<TableRowColumn className='description-col'>
-						<TextField
-							name='description'
-							defaultValue={taskDescription}
-							onKeyDown={this.checkTaskEditInput.bind(this, task)}
-							fullWidth={true}
-							autoComplete='off'
-							autoFocus
-							/>
-					</TableRowColumn>
-					<TableRowColumn className='submission-col'>{task.submissions.length}</TableRowColumn>
-					<IconMenu
-						iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-						anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-						targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-						iconStyle={{ color: '#AAA' }}
-						onTouchTap={this.handleIconMenu}
-						>
-						<MenuItem primaryText='Edit' onTouchTap={this.toggleEditMode.bind(this)} />
-						<MenuItem primaryText='Delete' onTouchTap={this.deleteTask.bind(this, task._id)} />
-					</IconMenu>
-				</TableRow>
-			);
-		}
-		else if (profile.role === 'admin') {
-			// Admin view, no edit mode
-			TaskRow = (
-				<TableRow className={taskClass} onTouchTap={(event) => handleTaskClick(task, event)}>
-					<TableRowColumn className='name-col'>{task.name}</TableRowColumn>
-					<TableRowColumn className='description-col'>{taskDescription}</TableRowColumn>
-					<TableRowColumn className='submission-col'>{task.submissions.length}</TableRowColumn>
-					<IconMenu
-						iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-						anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-						targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-						iconStyle={{ color: '#AAA' }}
-						onTouchTap={this.handleIconMenu}
-						>
-						<MenuItem primaryText='Edit' onTouchTap={this.toggleEditMode.bind(this)} />
-						{task.archive ?
-							<MenuItem primaryText='Unarchive' onTouchTap={this.toggleArchiveTask.bind(this, task)} /> :
-							<MenuItem primaryText='Archive' onTouchTap={this.toggleArchiveTask.bind(this, task)} />
-						}
-						<MenuItem primaryText='Delete' onTouchTap={this.deleteTask.bind(this, task._id)} />
-					</IconMenu>
-				</TableRow>
-			);
-		}
-		else {
+		let TaskRow;
+		if (profile.role !== 'admin') {
 			// Non-admin view
 			TaskRow = (
 				<TableRow className={taskClass} onTouchTap={(event) => handleTaskClick(task, event)}>
 					<TableRowColumn className='name-col'>{task.name}</TableRowColumn>
 					<TableRowColumn className='description-col'>{taskDescription}</TableRowColumn>
 					<TableRowColumn className='submission-col'>{task.submissions.length}</TableRowColumn>
+				</TableRow>
+			);
+		}
+		else {
+			// Admin view
+			TaskRow = (
+				<TableRow className={taskClass} onTouchTap={!editing ? (event) => handleTaskClick(task, event) : null}>
+					<TableRowColumn className='name-col'>
+						{!editing ?
+							task.name :
+							<TextField
+								name='name'
+								defaultValue={task.name}
+								onKeyDown={(event) => this.onEditInput(task, event)}
+								fullWidth={true}
+								autoComplete='off'
+								/>
+						}
+					</TableRowColumn>
+					<TableRowColumn className='description-col'>
+						{!editing ?
+							taskDescription :
+							<TextField
+								name='description'
+								defaultValue={taskDescription}
+								onKeyDown={(event) => this.onEditInput(task, event)}
+								fullWidth={true}
+								autoComplete='off'
+								autoFocus
+								/>
+						}
+					</TableRowColumn>
+					<TableRowColumn className='submission-col'>{task.submissions.length}</TableRowColumn>
+					<IconMenu
+						iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+						anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+						targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+						iconStyle={{ color: '#AAA' }}
+						onTouchTap={this.onIconMenuClick}
+						>
+						<MenuItem primaryText='Edit' onTouchTap={this.toggleEditing} />
+						{task.archive ?
+							<MenuItem primaryText='Unarchive' onTouchTap={() => this.toggleArchive(task)} /> :
+							<MenuItem primaryText='Archive' onTouchTap={() => this.toggleArchive(task)} />
+						}
+						<MenuItem primaryText='Delete' onTouchTap={() => this.deleteTask(this.props.category, task._id)} />
+					</IconMenu>
 				</TableRow>
 			);
 		}
@@ -177,3 +155,5 @@ Task.propTypes = {
 	handleTaskClick: PropTypes.func.isRequired,
 	showArchive: PropTypes.bool.isRequired
 };
+
+export default Task;

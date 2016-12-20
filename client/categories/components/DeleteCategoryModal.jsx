@@ -3,27 +3,29 @@ import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-import { deleteCategory } from '../../taskActions.js';
+import { deleteCategory } from '../actions';
 
-export default class DeleteCategoryModal extends Component {
+class DeleteCategoryModal extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			open: false,
 			category: '' // Category to be deleted
 		};
+		this.toggleModal = this.toggleModal.bind(this);
+		this.deleteCategory = this.deleteCategory.bind(this);
 	}
 
 	toggleModal(category) {
-		const { open } = this.state;
-		if (!open) { this.setState({ category }); }
-		this.setState({ open: !open });
+		if (!this.state.open) { this.setState({ category }); }
+		this.setState((prevState) => {
+			return { open: !prevState.open };
+		});
 	}
 
 	deleteCategory() {
-		const { dispatch, socket } = this.props;
-		dispatch(deleteCategory(this.state.category, socket));
+		this.props.dispatch(deleteCategory(this.state.category, this.props.socket));
 		this.toggleModal();
 	}
 
@@ -35,16 +37,16 @@ export default class DeleteCategoryModal extends Component {
 					<FlatButton
 						label="Delete"
 						secondary={true}
-						onTouchTap={this.deleteCategory.bind(this)}
+						onTouchTap={this.deleteCategory}
 						/>,
 					<FlatButton
 						label="Cancel"
-						onTouchTap={this.toggleModal.bind(this)}
+						onTouchTap={this.toggleModal}
 						/>
 				]}
 				modal={false}
 				open={this.state.open}
-				onRequestClose={this.toggleModal.bind(this)}
+				onRequestClose={this.toggleModal}
 				className="admin-modal"
 				contentStyle={{ width: '100%' }}
 				>
@@ -58,3 +60,5 @@ DeleteCategoryModal.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	socket: PropTypes.object.isRequired
 };
+
+export default DeleteCategoryModal;

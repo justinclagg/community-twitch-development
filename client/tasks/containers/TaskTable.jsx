@@ -2,20 +2,22 @@ import React, { PropTypes } from 'react';
 
 import { Table, TableBody, TableHeaderColumn, TableRow } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
-import CategoryDropdown from './CategoryDropdown.jsx';
-import Task from './Task.jsx';
+import { Task, CategoryDropdown } from '..';
 
-export default class TaskTable extends React.Component {
+class TaskTable extends React.Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			showArchive: false
 		};
+		this.toggleShowArchive = this.toggleShowArchive.bind(this);
 	}
 
 	toggleShowArchive() {
-		this.setState({ showArchive: !this.state.showArchive });
+		this.setState((prevState) => {
+			return { showArchive: !prevState.showArchive };
+		});
 	}
 
 	render() {
@@ -51,7 +53,7 @@ export default class TaskTable extends React.Component {
 						<TableHeaderColumn>
 							<Toggle
 								label="Archive"
-								onToggle={this.toggleShowArchive.bind(this)}
+								onToggle={this.toggleShowArchive}
 								labelStyle={{ fontSize: '14px', fontWeight: 'normal' }}
 								labelPosition="left"
 								style={{ marginTop: '20px', maxWidth: '100px' }}
@@ -80,3 +82,5 @@ TaskTable.propTypes = {
 	isAuthenticated: PropTypes.bool.isRequired,
 	profile: PropTypes.object.isRequired
 };
+
+export default TaskTable;

@@ -5,18 +5,14 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import { grey300, cyan700, cyan500 } from 'material-ui/styles/colors';
 
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import Navbar from './navigation/Navbar.jsx';
-import Footer from './navigation/Footer.jsx';
-
-import { checkLogin, changeUserRole } from './users/userActions.js';
+import { Navbar, Footer } from './shared';
+import { checkLogin, ChangeUserRole } from './users';
 
 import io from 'socket.io-client';
 const socket = io.connect(process.env.HEROKU_URL);
 
 function mapStateToProps(state) {
-	const { isAuthenticated, profile } = state.userReducer;
+	const { isAuthenticated, profile } = state.users;
 	return {
 		isAuthenticated,
 		profile
@@ -25,15 +21,11 @@ function mapStateToProps(state) {
 
 class App extends Component {
 
-	constructor() {
-		super();
-		this.state = {
-			testUserRole: 'default'
-		};
+	constructor(props) {
+		super(props);
 	}
 
 	componentWillMount() {
-		// Check if the user is logged in
 		this.props.dispatch(checkLogin());
 	}
 
@@ -56,13 +48,6 @@ class App extends Component {
 		return { muiTheme: getMuiTheme(darkBaseTheme, customTheme) };
 	}
 
-	changeUserRole(event, index, role) {
-		// For testing and demo only. Changes the user's role on frontend
-		let updatedProfile = {...this.props.profile, role: role };
-		this.props.dispatch(changeUserRole(updatedProfile));
-		this.setState({ testUserRole: role });
-	}
-
 	render() {
 		const { dispatch, isAuthenticated, profile } = this.props;
 		return (
@@ -72,20 +57,10 @@ class App extends Component {
 						dispatch={dispatch}
 						isAuthenticated={isAuthenticated}
 						/>
-					<div className='test-role-buttons'>
-						<span>Change User Role: &nbsp;</span>
-						<DropDownMenu
-							value={this.state.testUserRole}
-							onChange={this.changeUserRole.bind(this)}
-							labelStyle={{ paddingLeft: 0, fontSize: '18px' }}
-							underlineStyle={{ borderTop: 'none' }}
-							>
-							<MenuItem value={'admin'} primaryText={'Admin'} />
-							<MenuItem value={'subscriber'} primaryText={'Subscriber'} />
-							<MenuItem value={'member'} primaryText={'Member'} />
-							<MenuItem value={'default'} primaryText={'Default'} />
-						</DropDownMenu>
-					</div>
+					<ChangeUserRole
+						dispatch={dispatch}
+						profile={profile}
+						/>
 					<div className='main'>
 						{this.props.children && React.cloneElement(this.props.children, { dispatch, isAuthenticated, profile, socket })}
 					</div>

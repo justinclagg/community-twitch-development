@@ -3,30 +3,30 @@ import { Link } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 
-import { logoutUser } from '../users/userActions.js';
+import * as users from '../users';
+const { logoutUser } = users;
 
-export default class Navbar extends Component {
+class Navbar extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			mobileNavOpen: false
 		};
+		this.toggleMobileNav = this.toggleMobileNav.bind(this);
+		this.logoutUser = () => props.dispatch(logoutUser());
 	}
 
 	toggleMobileNav() {
-		this.setState({ mobileNavOpen: !this.state.mobileNavOpen });
-	}
-
-	logoutUser() {
-		this.props.dispatch(logoutUser());
+		this.setState((prevState) => {
+			return { mobileNavOpen: !prevState.mobileNavOpen };
+		});
 	}
 
 	render() {
@@ -37,13 +37,14 @@ export default class Navbar extends Component {
 				className="navbar"
 				iconElementLeft={
 					<div>
-						<IconButton onTouchTap={this.toggleMobileNav.bind(this)} className="desktop-hidden"><NavigationMenu color="#FFF" /></IconButton>
+						<IconButton onTouchTap={this.toggleMobileNav} className="desktop-hidden"><NavigationMenu color="#FFF" /></IconButton>
 						<Link to="/" className="brand-image">
 							<img src={process.env.BRAND_IMAGE} width="80px" />
+							{/*<span className="nav-title">TWITCH</span>*/}
 						</Link>
-						<div className="nav-links mobile-hidden">
+						{/*<div className="nav-links mobile-hidden">
 							<Link to="/"><FlatButton label="Home" /></Link>
-						</div>
+						</div>*/}
 						{/* Mobile navigation menu */}
 						<Drawer
 							docked={false}
@@ -53,15 +54,15 @@ export default class Navbar extends Component {
 							className="mobile-menu"
 							>
 							<Link to="/">
-								<MenuItem onTouchTap={this.toggleMobileNav.bind(this)}>Home</MenuItem>
+								<MenuItem onTouchTap={this.toggleMobileNav}>Home</MenuItem>
 							</Link>
 							<Divider />
 							{isAuthenticated ?
 								<div>
 									<Link to="/profile">
-										<MenuItem onTouchTap={this.toggleMobileNav.bind(this)}>Profile</MenuItem>
+										<MenuItem onTouchTap={this.toggleMobileNav}>Profile</MenuItem>
 									</Link>
-									<MenuItem label="Logout" onTouchTap={this.logoutUser.bind(this)}>Logout</MenuItem>
+									<MenuItem label="Logout" onTouchTap={this.logoutUser}>Logout</MenuItem>
 								</div>
 								:
 								<a href="/auth/twitch">
@@ -78,7 +79,7 @@ export default class Navbar extends Component {
 								<Link to="/profile">
 									<RaisedButton label="Profile" primary={true} />
 								</Link>
-								<RaisedButton label="Logout" onTouchTap={this.logoutUser.bind(this)} />
+								<RaisedButton label="Logout" onTouchTap={this.logoutUser} />
 							</div>
 							:
 							<a href="/auth/twitch">
@@ -96,3 +97,5 @@ Navbar.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	isAuthenticated: PropTypes.bool.isRequired
 };
+
+export default Navbar;

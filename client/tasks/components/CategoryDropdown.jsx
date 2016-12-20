@@ -6,7 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 class CategoryDropdown extends Component {
 
-	onMenuClick(event, index, value) {
+	onMenuItemClick(event, index, value) {
 		this.props.router.push(`/contribute/${encodeURIComponent(value)}`);
 	}
 
@@ -19,7 +19,7 @@ class CategoryDropdown extends Component {
 		return (
 			<DropDownMenu
 				value={this.props.category}
-				onChange={this.onMenuClick.bind(this)}
+				onChange={this.onMenuItemClick.bind(this)}
 				labelStyle={{ paddingLeft: 0, fontSize: '20px' }}
 				underlineStyle={{ borderTop: 'none' }}
 				>
@@ -29,10 +29,10 @@ class CategoryDropdown extends Component {
 	}
 }
 
-export default withRouter(CategoryDropdown);
-
 CategoryDropdown.propTypes = {
 	categories: PropTypes.array.isRequired,
 	category: PropTypes.string.isRequired,
 	router: PropTypes.object.isRequired
 };
+
+export default withRouter(CategoryDropdown);

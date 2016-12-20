@@ -3,17 +3,19 @@ import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class RequireLoginModal extends Component {
+class RequireLoginModal extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			open: false
 		};
 	}
 
 	toggleModal() {
-		this.setState({ open: !this.state.open });
+		this.setState((prevState) => {
+			return { open: !prevState.open };
+		});
 	}
 
 	render() {
@@ -31,3 +33,5 @@ export default class RequireLoginModal extends Component {
 		);
 	}
 }
+
+export default RequireLoginModal;

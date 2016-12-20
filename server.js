@@ -1,5 +1,5 @@
 /* Configure Environment Variables */
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && false) {
 	const parseHerokuEnv = require('./server/utils/parseHerokuEnv.js');
 	parseHerokuEnv();
 }
@@ -20,7 +20,7 @@ const mongoose = require('mongoose');
 const db = mongoose.connection;
 const MongoStore = require('connect-mongo')(session);
 mongoose.connect(process.env.MONGODB_URI, { config: { autoIndex: false } });
-mongoose.Promise = Promise; // Replace mpromise (deprecated)
+mongoose.Promise = Promise; // Replaces mpromise (deprecated)
 
 const app = express();
 const server = require('http').Server(app);

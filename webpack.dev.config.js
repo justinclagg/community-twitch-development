@@ -12,6 +12,7 @@ module.exports = {
 	entry: {
 		app: path.resolve(SRC_DIR, 'index.js'),
 		vendor: [
+			'webpack-hot-middleware/client',
 			'whatwg-fetch',
 			'material-ui',
 			'react',
@@ -54,6 +55,10 @@ module.exports = {
 					presets: ['react', 'es2015'],
 					plugins: ['transform-object-rest-spread']
 				}
+			},
+			{
+				test: /\.(jpe?g|png|gif|svg)$/i,
+				loader: 'url?limit=10000!img?progressive=true'
 			},
 			{
 				test: /\.scss$/,

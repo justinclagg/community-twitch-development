@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
-import checkStatus from '../utils/checkStatus.js';
-import parseJSON from '../utils/parseJSON.js';
+import * as t from './actionTypes';
+import checkStatus from '../utils/checkStatus';
+import parseJSON from '../utils/parseJSON';
 
 /**
  * Testing only. Changes the user's access level when viewing pages
@@ -10,7 +11,7 @@ import parseJSON from '../utils/parseJSON.js';
  */
 export function changeUserRole(updatedProfile) {
 	return {
-		type: 'CHANGE_USER_ROLE',
+		type: t.CHANGE_ROLE,
 		payload: {
 			profile: updatedProfile
 		}
@@ -31,10 +32,10 @@ export function checkLogin() {
 		.then(checkStatus)
 		.then(parseJSON)
 		.then(profile => {
-			dispatch({ type: 'LOGIN_SUCCESS', payload: { profile } });
+			dispatch({ type: t.LOGIN_SUCCESS, payload: { profile } });
 		})
 		.catch(err => {
-			dispatch({ type: 'LOGIN_FAILURE', payload: err });			
+			dispatch({ type: t.LOGIN_FAILURE, payload: err });			
 		});
 	};
 }
@@ -49,10 +50,10 @@ export function logoutUser() {
 			credentials: 'same-origin'
 		})
 		.then(() => {
-			dispatch({ type: 'LOGOUT_SUCCESS' });
+			dispatch({ type: t.LOGOUT_SUCCESS });
 		})
 		.catch(err => {
-			dispatch({ type: 'LOGOUT_FAILURE', payload: err });
+			dispatch({ type: t.LOGOUT_FAILURE, payload: err });
 		});
 	};
 }
@@ -71,10 +72,10 @@ export function unlinkGitlab() {
 		.then(checkStatus)
 		.then(parseJSON)
 		.then(profile => {
-			dispatch({ type: 'GITLAB_UNLINK_SUCCESS', payload: { profile } });
+			dispatch({ type: t.GITLAB_UNLINK_SUCCESS, payload: { profile } });
 		})
 		.catch(err => {
-			dispatch({ type: 'GITLAB_UNLINK_FAILURE', payload: err });
+			dispatch({ type: t.GITLAB_UNLINK_FAILURE, payload: err });
 		});
 	};
 }

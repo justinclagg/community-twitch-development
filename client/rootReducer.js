@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import taskReducer from './tasks/taskReducer.js';
-import userReducer from './users/userReducer.js';
+import tasks from './tasks';
+import categories from './categories';
+import users from './users';
 
 export default combineReducers({
-	taskReducer,
-	userReducer
+	tasks,
+	categories,
+	users
 });

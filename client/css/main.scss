@@ -1,9 +1,10 @@
 $faded-grey: #AAA;
 $theme-primary: rgb(0, 229, 255);
-$body-bg: #080325;
+$body-bg: #4f4f4f;
+$nav-grey: #303030;
 $task-bg: #201B3A;
 
-$footer-height: 40px;
+$footer-height: 50px;
 $mobile-width: 700px;
 
 @mixin mobile {
@@ -27,6 +28,7 @@ body {
 	font-family: "Roboto", sans-serif;
 	color: #FFF;
 	background-color: $body-bg;
+	background-image: url("../../public/img/bg_noise.jpg");
 	text-align: center;
 }
 
@@ -45,14 +47,14 @@ h4, h5, h6 {
 	margin: 0;
 	margin-right: 20px;
 	text-align: right;
-	font-size: 18px;
 }
 
 /* Navigation */
 
 .navbar {
 	margin: 0 !important;
-	background-color: $task-bg !important;
+	background-color: $nav-grey !important;
+	height: 60px !important;
 }
 
 .mobile-menu-button {
@@ -68,6 +70,10 @@ h4, h5, h6 {
 .brand-image {
 	display: inline-block;
 	margin-top: 10px;
+	
+	&:link {
+		text-decoration: none !important;
+	}
 
 	@include desktop {
 		margin-left: 20px;
@@ -77,6 +83,17 @@ h4, h5, h6 {
 		position: absolute;
 		left: 50%;
 		transform: translateX(-50%);
+	}
+}
+
+.nav-title {
+	font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 3px;
+	color: #FFF;
+
+	&:active {
+		text-decoration: none;
 	}
 }
 
@@ -167,9 +184,9 @@ h4, h5, h6 {
 	input {
 		height: 40px;
 		padding: 5px;
-		background-color: $task-bg;
+		background-color: $nav-grey;
 		color: #FFF;
-		border: 1px solid #333;
+		border: 1px solid $body-bg;
 
 		&:focus {
 			outline: none;
@@ -200,9 +217,6 @@ h4, h5, h6 {
 
 /* Contribute Page */
 
-$card-height: 175px;
-$card-width: 275px;
-
 .contribute-page {
 	padding: 0 10px;
 }
@@ -223,6 +237,9 @@ $card-width: 275px;
 	}
 }
 
+$card-height: 160px;
+$card-width: 275px;
+
 .category-card {
 	position: relative;
 	margin: 20px 10px 0 10px;
@@ -231,15 +248,12 @@ $card-width: 275px;
 	line-height: $card-height;
 	border-radius: 5%;
 	background-color: #FFF;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	border: none;
 	text-align: center;
 	color: #000;
 	font-size: 30px;
-
-	a, a:hover {
-		display: block;
-		color: #000;
-		text-decoration: none;
-	}
+	text-decoration: none;
 	
 	&:hover {
 		cursor: pointer;
@@ -273,6 +287,8 @@ $card-width: 275px;
 	text-align: center;	
 	color: $faded-grey;
 	font-size: 60px;
+	background-color: transparent;
+	border: none;
 
 	&:hover {
 		color: #FFF;
@@ -316,7 +332,6 @@ $table-font: 16px;
 		font-size: 14px !important;	
 	}
 } 
-
 
 .table-row > * {
 	font-size: $table-font !important;
@@ -381,6 +396,7 @@ $table-font: 16px;
 
 .task-modal-description {
 	margin-bottom: 30px;
+	white-space: pre-wrap;
 
 	a {
 		cursor: pointer;
@@ -420,8 +436,8 @@ footer {
 	margin-top: -1 * $footer-height;
 	height: $footer-height;
 	line-height: $footer-height;
-	color: #555;
-	background-color: #000;
+	color: #DDD;
+	background-color: $nav-grey;
 	font-size: 14px;
 
 	p {

@@ -4,31 +4,34 @@ import Linkify from 'linkifyjs/react';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+
 import RequireLoginModal from './RequireLoginModal.jsx';
 import AddSubmissionModal from './AddSubmissionModal.jsx';
 import DeleteSubmissionModal from './DeleteSubmissionModal.jsx';
 
-import { editClaims, editTask, deleteOwnSubmission } from '../../taskActions.js';
+import { editClaims, editTask, deleteOwnSubmission } from '../../actions';
 
-export default class TaskModal extends Component {
+class TaskModal extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			open: false,
 			claimsText: '',
-			submissionsText: '',
+			submissionsText: '', // Can be determined, may not be appropriate for state
 			isClaimed: false,
-			editDescriptionMode: false,
-			editNameMode: false
+			editDescription: false,
+			editName: false
 		};
+		this.addClaim = this.addClaim.bind(this);
+		this.removeClaim = this.removeClaim.bind(this);
 	}
 
 	// Update the modal if the selected task changes
 	componentWillReceiveProps(nextProps) {
 		const prevTask = this.props.task;
 		const nextTask = nextProps.task;
-
+		
 		if (nextTask !== prevTask) {
 			this.generateClaimsText(nextTask.claims);
 			this.generateSubmissionsText(nextTask.submissions);
@@ -120,7 +123,7 @@ export default class TaskModal extends Component {
 		const { username } = this.props.profile;
 
 		const updatedClaims = (task.claims.indexOf(username) === -1) ? [...claims, username] : claims; // Prevent duplicate usernames in claims
-		const updatedTask = {...task, claims: updatedClaims };
+		const updatedTask = { ...task, claims: updatedClaims };
 		this.setState({ isClaimed: true });
 		this.generateClaimsText(updatedClaims);
 		dispatch(editClaims(category, updatedTask, socket));
@@ -132,7 +135,7 @@ export default class TaskModal extends Component {
 		const { username } = this.props.profile;
 
 		const updatedClaims = claims.filter((user) => user !== username);
-		const updatedTask = {...task, claims: updatedClaims };
+		const updatedTask = { ...task, claims: updatedClaims };
 		this.setState({ isClaimed: false });
 		this.generateClaimsText(updatedClaims);
 		dispatch(editClaims(category, updatedTask, socket));
@@ -148,15 +151,21 @@ export default class TaskModal extends Component {
 	}
 
 	toggleModal() {
-		this.setState({ open: !this.state.open });
+		this.setState((prevState) => {
+			return { open: !prevState.open, editName: false, editDescription: false };
+		});
 	}
 
 	toggleEditName() {
-		this.setState({ editNameMode: !this.state.editNameMode });
+		this.setState((prevState) => {
+			return { editName: !prevState.editName };
+		});
 	}
 
 	toggleEditDescription() {
-		this.setState({ editDescriptionMode: !this.state.editDescriptionMode });
+		this.setState((prevState) => {
+			return { editDescription: !prevState.editDescription };
+		});
 	}
 
 	checkTaskEditInput(event) {
@@ -191,10 +200,10 @@ export default class TaskModal extends Component {
 
 	getEditedTask(task, event) {
 		if (event.target.name === 'name') {
-			return {...task, name: event.target.value };
+			return { ...task, name: event.target.value };
 		}
 		else if (event.target.name === 'description') {
-			return {...task, description: event.target.value };
+			return { ...task, description: event.target.value };
 		}
 	}
 
@@ -206,22 +215,22 @@ export default class TaskModal extends Component {
 
 	render() {
 		const { dispatch, task, profile, isAuthenticated, socket } = this.props;
-		const { isClaimed, claimsText, submissionsText, editDescriptionMode, editNameMode } = this.state;
+		const { isClaimed, claimsText, submissionsText, editDescription, editName } = this.state;
 
 		// Claim task button
 		let claimBtn;
 		if (isClaimed && isAuthenticated) {
-			claimBtn = <FlatButton label='Unclaim' onTouchTap={this.removeClaim.bind(this)} />;
+			claimBtn = <FlatButton label='Unclaim' onTouchTap={this.removeClaim} />;
 		}
 		else if (isAuthenticated) {
-			claimBtn = <FlatButton label='Claim' onTouchTap={this.addClaim.bind(this)} primary={true} />;
+			claimBtn = <FlatButton label='Claim' onTouchTap={this.addClaim} primary={true} />;
 		}
 		else {
 			claimBtn = <FlatButton label='Claim' onTouchTap={() => this.RequireLoginModal.toggleModal()} primary={true} />;
 		}
 
 		let taskModalButtons = [
-			{...claimBtn},
+			{ ...claimBtn },
 			<FlatButton label='Close' onTouchTap={this.toggleModal.bind(this)} />
 		];
 		// Add a submit button if task is claimed
@@ -233,14 +242,14 @@ export default class TaskModal extends Component {
 			<Dialog
 				title={profile.role !== 'admin' ?
 					<div>{task.name}</div> :
-					<div>{editNameMode ?
-						<TextField 
+					<div>{editName ?
+						<TextField
 							name='name'
 							onKeyDown={(event) => this.checkTaskEditInput(event)}
 							defaultValue={task.name}
 							autoFocus
 							/> :
-							<div onDoubleClick={this.toggleEditName.bind(this)}>{task.name}</div>
+						<div onDoubleClick={this.toggleEditName.bind(this)}>{task.name}</div>
 					}</div>
 				}
 				actions={taskModalButtons}
@@ -253,7 +262,7 @@ export default class TaskModal extends Component {
 				<p className='task-modal-description'>
 					{profile.role !== 'admin' ?
 						<Linkify>{task.description}</Linkify> :
-						<div>{editDescriptionMode ?
+						<div>{editDescription ?
 							<TextField
 								name='description'
 								onKeyDown={(event) => this.checkTaskEditInput(event)}
@@ -264,7 +273,7 @@ export default class TaskModal extends Component {
 								defaultValue={task.description}
 								autoFocus
 								/> :
-							<Linkify 
+							<Linkify
 								onDoubleClick={this.toggleEditDescription.bind(this)}
 								>
 								{task.description}
@@ -281,15 +290,15 @@ export default class TaskModal extends Component {
 					socket={socket}
 					task={task}
 					profile={profile}
-					removeClaim={this.removeClaim.bind(this)}
-					setSelectedTask={this.props.setSelectedTask.bind(this)}
+					removeClaim={this.removeClaim}
+					setSelectedTask={this.props.setSelectedTask}
 					/>
 				<DeleteSubmissionModal
 					ref={ref => this.DeleteSubmissionModal = ref}
 					dispatch={dispatch}
 					socket={socket}
 					task={task}
-					setSelectedTask={this.props.setSelectedTask.bind(this)}
+					setSelectedTask={this.props.setSelectedTask}
 					/>
 			</Dialog>
 		);
@@ -305,3 +314,5 @@ TaskModal.propTypes = {
 	isAuthenticated: PropTypes.bool.isRequired,
 	setSelectedTask: PropTypes.func.isRequired,
 };
+
+export default TaskModal;

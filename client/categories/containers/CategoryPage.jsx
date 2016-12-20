@@ -1,21 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';	
+import { withRouter } from 'react-router';
 
-import AddCategoryModal from '../components/ContributeModal/AddCategoryModal.jsx';
-import DeleteCategoryModal from '../components/ContributeModal/DeleteCategoryModal.jsx';
-import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import { AddCategoryModal, DeleteCategoryModal } from '..';
+import { LoadingSpinner } from '../../shared';
 
-import { fetchCategories } from '../taskActions.js';
+import { fetchCategories } from '../actions';
 
 function mapStateToProps(store) {
 	return {
-		categories: store.taskReducer.categories,
-		fetchingCategories: store.taskReducer.fetchingCategories
+		categories: store.categories.categories,
+		fetchingCategories: store.categories.fetchingCategories
 	};
 }
 
-export class ContributePage extends Component {
+class CategoryPage extends Component {
+
+	constructor(props) {
+		super(props);
+		this.fetchCategories = () => props.dispatch(fetchCategories());
+	}
 
 	componentWillMount() {
 		this.fetchCategories();
@@ -24,10 +28,6 @@ export class ContributePage extends Component {
 	componentDidMount() {
 		const { socket } = this.props;
 		socket.on('categories', () => this.fetchCategories());
-	}
-
-	fetchCategories() {
-		this.props.dispatch(fetchCategories());
 	}
 
 	onCategoryClick(category) {
@@ -90,9 +90,8 @@ export class ContributePage extends Component {
 	}
 }
 
-export default withRouter(connect(mapStateToProps)(ContributePage));
 
-ContributePage.propTypes = {
+CategoryPage.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	socket: PropTypes.object.isRequired,
 	profile: PropTypes.object.isRequired,
@@ -100,3 +99,5 @@ ContributePage.propTypes = {
 	fetchingCategories: PropTypes.bool.isRequired,
 	router: PropTypes.object.isRequired
 };
+
+export default withRouter(connect(mapStateToProps)(CategoryPage));

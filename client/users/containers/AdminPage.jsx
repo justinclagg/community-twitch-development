@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 
 import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
-import LoadingSpinner from '../../tasks/components/LoadingSpinner.jsx';
+import { LoadingSpinner } from '../../shared';
 
-import { fetchSubmissions } from '../../tasks/taskActions.js';
-import { getLocalTime, getLocalDate } from '../../utils/formatTime.js';
+import { fetchSubmissions } from '../../tasks';
+import { getLocalTime, getLocalDate } from '../../utils/formatTime';
 
 function mapStateToProps(state) {
-	const { submissions, fetchingSubmissions } = state.taskReducer;
+	const { submissions, fetchingSubmissions } = state.tasks;
 	return {
 		submissions,
 		fetchingSubmissions
@@ -18,6 +18,11 @@ function mapStateToProps(state) {
 
 class AdminPage extends Component {
 
+	constructor(props) {
+		super(props);
+		this.fetchSubmissions = () => props.dispatch(fetchSubmissions());
+	}
+
 	componentWillMount() {
 		this.fetchSubmissions();
 	}
@@ -25,10 +30,6 @@ class AdminPage extends Component {
 	componentDidMount() {
 		const { socket } = this.props;
 		socket.on('submissions', () => this.fetchSubmissions());
-	}
-
-	fetchSubmissions() {
-		this.props.dispatch(fetchSubmissions());
 	}
 
 	/**

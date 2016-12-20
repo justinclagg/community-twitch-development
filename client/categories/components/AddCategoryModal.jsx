@@ -4,22 +4,27 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
-import { addCategory } from '../../taskActions.js';
+import { addCategory } from '../actions';
 
-export default class AddCategoryModal extends Component {
+class AddCategoryModal extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			open: false,
 			error: null
 		};
+		this.toggleModal = this.toggleModal.bind(this);
+		this.checkForSubmit = this.checkForSubmit.bind(this);
+		this.addCategory = this.addCategory.bind(this);
 	}
 
 	toggleModal() {
-		this.setState({
-			open: !this.state.open,
-			error: null
+		this.setState((prevState) => {
+			return {
+				open: !prevState.open,
+				error: null
+			};
 		});
 	}
 
@@ -49,12 +54,12 @@ export default class AddCategoryModal extends Component {
 			<Dialog
 				title="Add Category"
 				actions={[
-					<FlatButton label="Add" onTouchTap={this.addCategory.bind(this)} primary={true} />,
-					<FlatButton label="Cancel" onTouchTap={this.toggleModal.bind(this)} />
+					<FlatButton label="Add" onTouchTap={this.addCategory} primary={true} />,
+					<FlatButton label="Cancel" onTouchTap={this.toggleModal} />
 				]}
 				modal={false}
 				open={this.state.open}
-				onRequestClose={this.toggleModal.bind(this)}
+				onRequestClose={this.toggleModal}
 				className="admin-modal"
 				contentStyle={{ width: '100%' }}
 				>
@@ -63,7 +68,7 @@ export default class AddCategoryModal extends Component {
 					hintText="Category Name"
 					errorText={this.state.error}
 					name="category"
-					onKeyDown={this.checkForSubmit.bind(this)}
+					onKeyDown={this.checkForSubmit}
 					autoComplete="off"
 					autoFocus
 					/>
@@ -76,3 +81,5 @@ AddCategoryModal.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	socket: PropTypes.object.isRequired
 };
+
+export default AddCategoryModal;

@@ -13,6 +13,9 @@ export function getLocalTime(date) {
 		period = 'pm';
 		if (hours > 12) hours -= 12;
 	}
+	else if (hours == 0) {
+		hours = 12;
+	}
 	return `${hours}:${minutes} ${period}`;
 }
 

@@ -1,4 +1,5 @@
 import 'whatwg-fetch';
+import * as t from './actionTypes';
 import checkStatus from '../utils/checkStatus.js';
 import parseJSON from '../utils/parseJSON.js';
 
@@ -10,94 +11,22 @@ import parseJSON from '../utils/parseJSON.js';
  */
 export function fetchTasks(category) {
 	return (dispatch) => {
-		dispatch({ type: 'FETCH_TASKS' });
+		dispatch({ type: t.FETCH });
 		category = encodeURIComponent(category);
 		fetch(`/live/tasks/${category}`)
 			.then(checkStatus)
 			.then(parseJSON)
 			.then(tasks => {
-				dispatch({ type: 'FETCH_TASKS_FULFILLED', payload: tasks });
+				dispatch({ type: t.FETCH_SUCCESS, payload: tasks });
 			})
 			.catch(err => {
-				dispatch({ type: 'FETCH_TASKS_REJECTED', payload: err });
+				dispatch({ type: t.FETCH_FAILURE, payload: err });
 			});
 	};
 }
 
-/**
- * Get a list of all categories
- * 
- * @returns {array} categories - Array of category names
- */
-export function fetchCategories() {
-	return (dispatch) => {
-		dispatch({ type: 'FETCH_CATEGORIES' });
-		fetch('/live/categories')
-			.then(checkStatus)
-			.then(parseJSON)
-			.then(categories => {
-				dispatch({ type: 'FETCH_CATEGORIES_FULFILLED', payload: categories });
-			})
-			.catch(err => {
-				dispatch({ type: 'FETCH_CATEGORIES_REJECTED', payload: err });
-			});
-	};
-}
-
-/**
- * Add a new category (admin only)
- * 
- * @param {string} category
- * @param {object} socket
- * @returns {string} category
- */
-export function addCategory(category, socket) {
-	return (dispatch) => {
-		fetch('/live/categories', {
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ category })
-		})
-			.then(checkStatus)
-			.then(() => {
-				dispatch({ type: 'ADD_CATEGORY_FULFILLED', payload: category });
-				socket.emit('categories');
-			})
-			.catch(err => {
-				dispatch({ type: 'ADD_CATEGORY_REJECTED', payload: err });
-			});
-	};
-}
-
-/**
- * Delete a category (admin only)
- * 
- * @param {string} category
- * @param {object} socket
- * @returns {string} category
- */
-export function deleteCategory(category, socket) {
-	return (dispatch) => {
-		fetch('/live/categories/', {
-			method: 'DELETE',
-			credentials: 'same-origin',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ category })
-		})
-			.then(checkStatus)
-			.then(() => {
-				dispatch({ type: 'DELETE_CATEGORY_FULFILLED', payload: category });
-				socket.emit('categories');
-			})
-			.catch(err => {
-				dispatch({ type: 'DELETE_CATEGORY_REJECTED', payload: err });
-			});
-	};
+export function clearTasks() {
+	return { type: t.CLEAR };
 }
 
 /**
@@ -128,11 +57,11 @@ export function addTask(category, name, description, socket) {
 			.then(checkStatus)
 			.then(parseJSON)
 			.then(task => {
-				dispatch({ type: 'ADD_TASK_FULFILLED', payload: {...payload, _id: task._id} });
+				dispatch({ type: t.ADD_SUCCESS, payload: {...payload, _id: task._id} });
 				socket.emit('tasks');
 			})
 			.catch(err => {
-				dispatch({ type: 'ADD_TASK_REJECTED', payload: err });
+				dispatch({ type: t.ADD_FAILURE, payload: err });
 			});
 	};
 }
@@ -155,11 +84,11 @@ export function deleteTask(category, _id, socket) {
 		})
 			.then(checkStatus)
 			.then(() => {
-				dispatch({ type: 'DELETE_TASK_FULFILLED', payload: _id });
+				dispatch({ type: t.DELETE_SUCCESS, payload: _id });
 				socket.emit('tasks');
 			})
 			.catch(err => {
-				dispatch({ type: 'DELETE_TASK_REJECTED', payload: err });
+				dispatch({ type: t.DELETE_FAILURE, payload: err });
 			});
 	};
 }
@@ -187,12 +116,12 @@ export function editTask(category, task, socket) {
 		})
 			.then(checkStatus)
 			.then(() => {
-				dispatch({ type: 'EDIT_TASK_FULFILLED', payload });
+				dispatch({ type: t.EDIT_SUCCESS, payload });
 				socket.emit('task modal', task);
-				socket.emit('tasks');				
+				socket.emit('tasks');			
 			})
 			.catch(err => {
-				dispatch({ type: 'EDIT_TASK_REJECTED', payload: err });
+				dispatch({ type: t.EDIT_FAILURE, payload: err });
 			});
 	};
 }
@@ -204,7 +133,7 @@ export function editTask(category, task, socket) {
  * @param {object} socket 
  * @returns {object} payload - Task id and archive value
  */
-export function toggleArchiveTask(task, socket) {
+export function toggleArchive(task, socket) {
 	return (dispatch) => {
 		const payload = {
 			_id: task._id,
@@ -218,11 +147,11 @@ export function toggleArchiveTask(task, socket) {
 		})
 			.then(checkStatus)
 			.then(() => {
-				dispatch({ type: 'ARCHIVE_TASK_FULFILLED', payload });
+				dispatch({ type: t.TOGGLE_ARCHIVE_SUCCESS, payload });
 				socket.emit('tasks');
 			})
 			.catch(err => {
-				dispatch({ type: 'ARCHIVE_TASK_REJECTED', payload: err });
+				dispatch({ type: t.TOGGLE_ARCHIVE_FAILURE, payload: err });
 			});
 	};
 }
@@ -249,12 +178,12 @@ export function editClaims(category, task, socket) {
 		})
 			.then(checkStatus)
 			.then(() => {
-				dispatch({ type: 'EDIT_CLAIMS_FULFILLED', payload });
+				dispatch({ type: t.EDIT_CLAIMS_SUCCESS, payload });
 				socket.emit('task modal', task);
 				socket.emit('tasks');
 			})
 			.catch(err => {
-				dispatch({ type: 'EDIT_CLAIMS_REJECTED', payload: err });
+				dispatch({ type: t.EDIT_CLAIMS_FAILURE, payload: err });
 			});
 	};
 }
@@ -264,7 +193,6 @@ export function editClaims(category, task, socket) {
  * 
  * @param {object} task
  * @param {array} updatedSubmissions
- * @param {object} updatedTask
  * @param {object} socket
  * @returns {object} payload - Task id and submissions
  */
@@ -283,11 +211,11 @@ export function editSubmissions(task, updatedSubmissions, updatedTask, socket) {
 		})
 			.then(checkStatus)
 			.then(() => {
-				dispatch({ type: 'EDIT_SUBMISSIONS_FULFILLED', payload });
+				dispatch({ type: t.ADD_SUBMISSION_SUCCESS, payload });
 				socket.emit('submissions', updatedTask);
 			})
 			.catch(err => {
-				dispatch({ type: 'EDIT_SUBMISSIONS_REJECTED', payload: err });
+				dispatch({ type: t.ADD_SUBMISSION_FAILURE, payload: err });
 			});
 	};
 }
@@ -315,11 +243,11 @@ export function deleteSubmission(task, updatedSubmissions, updatedTask, socket) 
 		})
 			.then(checkStatus)
 			.then(() => {
-				dispatch({ type: 'DELETE_SUBMISSION_FULFILLED', payload });
+				dispatch({ type: t.DELETE_SUBMISSION_SUCCESS, payload });
 				socket.emit('submissions', updatedTask);
 			})
 			.catch(err => {
-				dispatch({ type: 'DELETE_SUBMISSION_REJECTED', payload: err });
+				dispatch({ type: t.DELETE_SUBMISSION_FAILURE, payload: err });
 			});
 	};
 }
@@ -349,11 +277,11 @@ export function deleteOwnSubmission(task, updatedSubmissions, submissionUsername
 		})
 			.then(checkStatus)
 			.then(() => {
-				dispatch({ type: 'DELETE_OWN_SUBMISSION_FULFILLED', payload });
+				dispatch({ type: t.DELETE_OWN_SUBMISSION_SUCCESS, payload });
 				socket.emit('submissions', updatedTask);
 			})
 			.catch(err => {
-				dispatch({ type: 'DELETE_OWN_SUBMISSION_REJECTED', payload: err });
+				dispatch({ type: t.DELETE_OWN_SUBMISSION_FAILURE, payload: err });
 			});
 	};
 }
@@ -365,7 +293,7 @@ export function deleteOwnSubmission(task, updatedSubmissions, submissionUsername
  */
 export function fetchSubmissions() {
 	return (dispatch) => {
-		dispatch({ type: 'FETCH_SUBMISSIONS' });
+		dispatch({ type: t.FETCH_SUBMISSIONS });
 		fetch('/live/admin/submissions', {
 			method: 'GET',
 			credentials: 'same-origin'
@@ -389,10 +317,10 @@ export function fetchSubmissions() {
 				});
 				// Order submissions from newest to oldest
 				submissionList.sort((a, b) => b.date - a.date);
-				dispatch({ type: 'FETCH_SUBMISSIONS_FULFILLED', payload: submissionList });
+				dispatch({ type: t.FETCH_SUBMISSIONS_SUCCESS, payload: submissionList });
 			})
 			.catch(err => {
-				dispatch({ type: 'FETCH_SUBMISSIONS_REJECTED', payload: err });
+				dispatch({ type: t.FETCH_SUBMISSIONS_FAILURE, payload: err });
 			});
 	};
 }

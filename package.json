@@ -1,7 +1,7 @@
 {
   "name": "community-twitch-development",
   "version": "1.0.0",
-  "description": "A web app that helps Twitch streamers and viewers collaborate on a development project.",
+  "description": "A web app that helps Twitch streamers collaborate with viewers on a development project.",
   "main": "server.js",
   "scripts": {
     "start": "npm run dev",
@@ -64,7 +64,9 @@
     "dotenv-webpack": "^1.3.0",
     "eslint": "^3.9.0",
     "eslint-plugin-react": "^6.4.1",
+    "file-loader": "^0.9.0",
     "html-webpack-plugin": "^2.24.0",
+    "img-loader": "^1.3.1",
     "inline-manifest-webpack-plugin": "^3.0.1",
     "json-loader": "^0.5.4",
     "morgan": "^1.7.0",
@@ -73,6 +75,7 @@
     "redux-logger": "^2.6.1",
     "sass-loader": "^4.0.1",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.7.0",
     "webpack-hot-middleware": "^2.12.2",

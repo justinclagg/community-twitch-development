@@ -2,38 +2,40 @@ import React from 'react';
 import { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import TaskTable from '../components/TaskTable.jsx';
-import AddTaskForm from '../components/AddTaskForm.jsx';
-import TaskModal from '../components/TaskModal/TaskModal.jsx';
-import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import { TaskTable, AddTaskForm, TaskModal } from '..';
+import { LoadingSpinner } from '../../shared';
 
-import { fetchTasks, fetchCategories } from '../taskActions.js';
+import { fetchTasks, clearTasks } from '../actions';
+import { fetchCategories } from '../../categories';
 
 function mapStateToProps(store) {
 	return {
-		tasks: store.taskReducer.tasks,
-		categories: store.taskReducer.categories,
-		fetchingTasks: store.taskReducer.fetchingTasks
+		tasks: store.tasks.tasks,
+		categories: store.categories.categories,
+		fetchingTasks: store.tasks.fetchingTasks
 	};
 }
 
 class TaskPage extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			selectedTask: {}
 		};
+		this.fetchTasks = (category) => props.dispatch(fetchTasks(category));
+		this.clearTasks = () => props.dispatch(clearTasks());
+		this.fetchCategories = () => props.dispatch(fetchCategories());
 	}
 
 	componentWillMount() {
-		this.fetchTasks();
+		this.fetchTasks(this.props.params.category);
 		this.fetchCategories();
 	}
 
 	componentDidMount() {
 		const { socket } = this.props;
-		socket.on('tasks', () => this.fetchTasks());
+		socket.on('tasks', () => this.fetchTasks(this.props.params.category));
 		socket.on('categories', () => this.fetchCategories());
 		socket.on('task modal', (task) => this.setSelectedTask(task));
 		socket.on('submissions', (task) => this.setSelectedTask(task));
@@ -42,16 +44,12 @@ class TaskPage extends Component {
 	// Update tasks if the URL changes to a different category
 	componentDidUpdate(prevProps) {
 		if (prevProps.params.category !== this.props.params.category) {
-			this.fetchTasks();
+			this.fetchTasks(this.props.params.category);
 		}
 	}
 
-	fetchTasks() {
-		this.props.dispatch(fetchTasks(this.props.params.category));
-	}
-
-	fetchCategories() {
-		this.props.dispatch(fetchCategories());
+	componentWillUnmount() {
+		this.clearTasks();
 	}
 
 	handleTaskClick(task, event) {
@@ -106,8 +104,6 @@ class TaskPage extends Component {
 	}
 }
 
-export default connect(mapStateToProps)(TaskPage);
-
 TaskPage.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	socket: PropTypes.object.isRequired,
@@ -117,3 +113,5 @@ TaskPage.propTypes = {
 	profile: PropTypes.object.isRequired,
 	isAuthenticated: PropTypes.bool.isRequired
 };
+
+export default connect(mapStateToProps)(TaskPage);

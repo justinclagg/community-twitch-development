@@ -5,12 +5,13 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import userHasAccess from '../../utils/userHasAccess';
-import { unlinkGitlab } from '../userActions.js';
+import { unlinkGitlab } from '../actions';
 
-export default class ProfilePage extends Component {
+class ProfilePage extends Component {
 	
-	unlinkGitlab() {
-		this.props.dispatch(unlinkGitlab());
+	constructor(props) {
+		super(props);
+		this.unlinkGitlab = () => props.dispatch(unlinkGitlab());
 	}
 
 	render() {
@@ -31,7 +32,7 @@ export default class ProfilePage extends Component {
 								<a href={`https://gitlab.com/groups/${GITLAB_GROUP_ID}`} target="_blank">
 									<RaisedButton label="Go to GitLab" primary={true} />
 								</a>
-								<RaisedButton label="Unlink GitLab" onTouchTap={this.unlinkGitlab.bind(this)} />
+								<RaisedButton label="Unlink GitLab" onTouchTap={this.unlinkGitlab} />
 							</p>
 						</div>
 					);
@@ -88,3 +89,5 @@ ProfilePage.propTypes = {
 	isAuthenticated: PropTypes.bool,
 	profile: PropTypes.object
 };
+
+export default ProfilePage;
