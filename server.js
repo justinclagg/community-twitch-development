@@ -1,5 +1,5 @@
 /* Configure Environment Variables */
-if (process.env.NODE_ENV === 'production' && false) {
+if (process.env.NODE_ENV === 'production') {
 	const parseHerokuEnv = require('./server/utils/parseHerokuEnv.js');
 	parseHerokuEnv();
 }
