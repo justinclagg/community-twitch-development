@@ -5,11 +5,11 @@
  * @param {object} env - Output from dotenv, containing environment variables declared in .env
  */
 
-module.exports = function parseDotenv(env) {
+function parseDotenv(env) {
 	Object.keys(env).forEach(key => {
 		process.env[key] = parseKey(key, env[key]);
 	});
-};
+}
 
 function parseKey(key, value) {
 	const lowercaseStrings = ['TWITCH_STREAMER', 'GITLAB_ACCESS_LEVEL'];
@@ -31,3 +31,8 @@ function parseKey(key, value) {
 		return value;
 	}
 }
+
+module.exports = {
+	parseDotenv,
+	parseKey
+};

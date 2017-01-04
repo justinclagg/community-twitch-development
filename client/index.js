@@ -11,6 +11,7 @@ import rootReducer from './rootReducer.js';
 import routes from './routes.jsx';
 
 require('es6-promise').polyfill(); // Promise polyfill
+require('isomorphic-fetch');
 
 injectTapEventPlugin(); // Needed for material-ui onTouchTap
 

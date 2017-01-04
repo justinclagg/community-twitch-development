@@ -3,9 +3,14 @@ if (process.env.NODE_ENV === 'production') {
 	const parseHerokuEnv = require('./server/utils/parseHerokuEnv.js');
 	parseHerokuEnv();
 }
+else if (process.env.NODE_ENV === 'test') {
+	const env = require('dotenv').config({path: './.env.test'});
+	const parseDotenv = require('./server/utils/parseDotenv.js').parseDotenv;	
+	parseDotenv(env);
+}
 else {
 	const env = require('dotenv').config();
-	const parseDotenv = require('./server/utils/parseDotenv.js');
+	const parseDotenv = require('./server/utils/parseDotenv.js').parseDotenv;
 	parseDotenv(env);
 }
 
@@ -61,7 +66,7 @@ if (process.env.NODE_ENV === 'production') {
 	adapter.pubClient.on('error', (err) => console.log('socket adapter publish error: ' + err));
 	adapter.subClient.on('error', (err) => console.log('socket adapter subscribe error: ' + err));
 }
-else {
+else if (process.env.NODE_ENV === 'development') {
 	// Development only middleware
 	// Webpack hot reloading
 	const webpack = require('webpack');
@@ -143,4 +148,6 @@ cache.on('end', () => {
 
 /* Routes */
 
-require('./server/routes/routes.js')(cache, app, passport);
+require('./server/routes')(cache, app, passport);
+
+module.exports = app;

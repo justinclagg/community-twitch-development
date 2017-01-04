@@ -4,19 +4,20 @@
  * @param {string} role - Minimum required access level to use endpoint
  */
 
-module.exports = function requireRole(role) {
+module.exports = function requireRole(requiredRole) {
 	return (req, res, next) => {
-		if (req.user.role === role) {
+		const userRole = req.user.role;
+		if (userRole === requiredRole) {
 			next();
 		}
-		else if (role === 'subscriber' && req.user.role === 'admin') {
+		else if (requiredRole === 'subscriber' && userRole === 'admin') {
 			next();
 		}
-		else if (role === 'member' && req.isAuthenticated()) {
+		else if (requiredRole === 'member' && (userRole === 'subscriber' || userRole === 'admin')) {
 			next();
 		}
 		else {
-			res.redirect('/');
+			res.status(403).send();
 		}
 	};
 };

@@ -1,7 +1,7 @@
-import 'whatwg-fetch';
 import * as t from './actionTypes';
-import checkStatus from '../utils/checkStatus.js';
-import parseJSON from '../utils/parseJSON.js';
+import checkStatus from '../utils/checkStatus';
+import parseJSON from '../utils/parseJSON';
+import submissionList from '../utils/submissionList';
 
 /**
  * Get all tasks in the specified category
@@ -13,7 +13,7 @@ export function fetchTasks(category) {
 	return (dispatch) => {
 		dispatch({ type: t.FETCH });
 		category = encodeURIComponent(category);
-		fetch(`/live/tasks/${category}`)
+		return fetch(`/live/tasks/${category}`)
 			.then(checkStatus)
 			.then(parseJSON)
 			.then(tasks => {
@@ -40,7 +40,7 @@ export function clearTasks() {
  */
 export function addTask(category, name, description, socket) {
 	return (dispatch) => {
-		const payload = {
+		const task = {
 			category,
 			name,
 			description,
@@ -48,17 +48,17 @@ export function addTask(category, name, description, socket) {
 			submissions: [],
 			archive: false
 		};
-		fetch(`/live/tasks/${category}`, {
+		return fetch(`/live/tasks/${category}`, {
 			method: 'POST',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload)
+			body: JSON.stringify(task)
 		})
 			.then(checkStatus)
 			.then(parseJSON)
-			.then(task => {
-				dispatch({ type: t.ADD_SUCCESS, payload: {...payload, _id: task._id} });
+			.then(newTask => {
 				socket.emit('tasks');
+				dispatch({ type: t.ADD_SUCCESS, payload: {...task, _id: newTask._id} });
 			})
 			.catch(err => {
 				dispatch({ type: t.ADD_FAILURE, payload: err });
@@ -76,7 +76,7 @@ export function addTask(category, name, description, socket) {
  */
 export function deleteTask(category, _id, socket) {
 	return (dispatch) => {
-		fetch(`/live/tasks/${category}`, {
+		return fetch(`/live/tasks/${category}`, {
 			method: 'DELETE',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -108,7 +108,7 @@ export function editTask(category, task, socket) {
 			name: task.name,
 			description: task.description
 		};
-		fetch(`/live/tasks/${category}`, {
+		return fetch(`/live/tasks/${category}`, {
 			method: 'PUT',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -301,23 +301,8 @@ export function fetchSubmissions() {
 			.then(checkStatus)
 			.then(parseJSON)
 			.then(tasks => {
-				let submissionList = [];
-				tasks.forEach(task => {
-					// Add the task name, category, and archive status to each submission
-					let taskSubmissions = task.submissions.map(submission => { 
-						return {
-							...submission,
-							name: task.name,
-							category: task.category,
-							archive: task.archive
-						};
-					});
-					// Flatten array of submissions and combine with submissionList
-					submissionList = [...submissionList, ...taskSubmissions];
-				});
-				// Order submissions from newest to oldest
-				submissionList.sort((a, b) => b.date - a.date);
-				dispatch({ type: t.FETCH_SUBMISSIONS_SUCCESS, payload: submissionList });
+				const submissions = submissionList(tasks);
+				dispatch({ type: t.FETCH_SUBMISSIONS_SUCCESS, payload: submissions });
 			})
 			.catch(err => {
 				dispatch({ type: t.FETCH_SUBMISSIONS_FAILURE, payload: err });

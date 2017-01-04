@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>Community Game Development</title>
-	<meta name="description" content="A web app that helps Twitch streamers and viewers collaborate on a development project.">
-	<meta name="author" content="Justin Clagg">
-	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500" media="none" onload="if(media!='all')media='all'">
-</head>
-<body>
-	<div id="app"></div>
-	<script>/******/ (function(modules) { // webpackBootstrap
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// install a JSONP callback for chunk loading
 /******/ 	var parentJsonpFunction = window["webpackJsonp"];
 /******/ 	window["webpackJsonp"] = function webpackJsonpCallback(chunkIds, moreModules) {
@@ -642,6 +630,4 @@
 /******/ })
 /************************************************************************/
 /******/ ([]);
-</script>
-<script type="text/javascript" src="/vendor.js"></script><script type="text/javascript" src="/app.js"></script></body>
-</html>
+//# sourceMappingURL=manifest.js.map

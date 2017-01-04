@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+require('isomorphic-fetch');
 const TwitchtvStrategy = require('passport-twitchtv').Strategy;
 const GitLabStrategy = require('passport-gitlab2');
 const User = require('../models/userSchema.js');
