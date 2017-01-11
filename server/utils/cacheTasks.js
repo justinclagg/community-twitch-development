@@ -9,13 +9,12 @@ const Task = require('../models/taskSchema.js');
  * @param {object} [task] - Optional added task
  */
 
-module.exports = function cacheTasks(cache, category, res, task) {
+module.exports = function cacheTasks(cache, category) {
 	// Get all tasks in given category
 	Task.find({ category }, (err, tasks) => {
 		if (err) return console.log(`Database error getting tasks: ${err}`);
 		cache.set(category, JSON.stringify(tasks), (err) => {
 			if (err) return console.log(err);
-			if (res) res.status(201).send(task);
 		});
 	});
 };

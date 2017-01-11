@@ -5,6 +5,10 @@ import Task from '../../server/models/taskSchema';
 
 chai.use(chaiHttp);
 
+/* Integration test for task routes */
+
+// tasks need to exist before deleting or editing
+
 describe('Task routes', function () {
 	this.timeout(0);
 	const newTask = {
@@ -55,7 +59,7 @@ describe('Task routes', function () {
 				});
 		});
 
-		it('reject posts from non-admins', function (done) {
+		it('rejects posts from non-admins', function (done) {
 			server.request.user = subscriberUser;			
 			chai.request(server)
 				.post(taskRoute)
@@ -79,7 +83,43 @@ describe('Task routes', function () {
 					done();
 				});
 		});
+
+		it('rejects deletions from non-admins', function (done) {
+			server.request.user = subscriberUser;			
+			chai.request(server)
+				.delete(taskRoute)
+				.send(existingTask._id)
+				.end((err, res) => {
+					expect(res).to.have.status(403);
+					done();
+				});
+		});
 	});
+	
+	// describe('EDIT task', function () {
+	// 	it('should edit a task', function (done) {
+	// 		server.request.user = adminUser;
+	// 		chai.request(server)
+	// 			.put(taskRoute)
+	// 			.send(existingTask)
+	// 			.end((err, res) => {
+	// 				expect(res).to.have.status(201);
+	// 				expect(res.body).to.deep.equal({});
+	// 				done();
+	// 			});
+	// 	});
+
+	// 	it('rejects edits from non-admins', function (done) {
+	// 		server.request.user = subscriberUser;			
+	// 		chai.request(server)
+	// 			.put(taskRoute)
+	// 			.send(existingTask)
+	// 			.end((err, res) => {
+	// 				expect(res).to.have.status(403);
+	// 				done();
+	// 			});
+	// 	});
+	// });
 
 
 

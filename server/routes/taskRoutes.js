@@ -30,7 +30,8 @@ module.exports = (cache, app) => {
 				let newTask = new Task(req.body);
 				newTask.save((err, newTask) => {
 					if (err) return next(err);
-					cacheTasks(cache, req.params.category, res, newTask);
+					res.status(201).send(newTask);
+					cacheTasks(cache, req.params.category);
 				});
 			}
 		)
@@ -40,7 +41,8 @@ module.exports = (cache, app) => {
 			(req, res, next) => {
 				Task.findOneAndRemove({ _id: req.body._id }, (err) => {
 					if (err) return next(err);
-					cacheTasks(cache, req.params.category, res);
+					res.status(201).send();
+					cacheTasks(cache, req.params.category);
 				});
 			}
 		)
@@ -56,7 +58,8 @@ module.exports = (cache, app) => {
 					}},
 					(err) => {
 						if (err) return next(err);
-						cacheTasks(cache, req.params.category, res);
+						res.status(201).send();
+						cacheTasks(cache, req.params.category);
 					}
 				);
 			}
@@ -72,7 +75,8 @@ module.exports = (cache, app) => {
 				{ $set: { claims: req.body.claims } }, 
 				(err) => {
 					if (err) return next(err);
-					cacheTasks(cache, req.params.category, res);
+					res.status(201).send();
+					cacheTasks(cache, req.params.category);
 				}
 			);
 		}
@@ -90,7 +94,8 @@ module.exports = (cache, app) => {
 					{ $set: { submissions: req.body.submissions } }, 
 					(err) => {
 						if (err) return next(err);
-						cacheTasks(cache, req.params.category, res);
+						res.status(201).send();
+						cacheTasks(cache, req.params.category);
 					}
 				);
 			}
@@ -104,7 +109,8 @@ module.exports = (cache, app) => {
 					{ $set: { submissions: req.body.submissions } }, 
 					(err) => {
 						if (err) return next(err);
-						cacheTasks(cache, req.params.category, res);
+						res.status(201).send();
+						cacheTasks(cache, req.params.category);
 					}
 				);
 			}
@@ -121,7 +127,8 @@ module.exports = (cache, app) => {
 						{ $set: { submissions: req.body.submissions } }, 
 						(err) => {
 							if (err) return next(err);
-							cacheTasks(cache, req.params.category, res);
+							res.status(201).send();
+							cacheTasks(cache, req.params.category);
 						}
 					);
 				}
@@ -144,7 +151,8 @@ module.exports = (cache, app) => {
 				}},
 				(err) => {
 					if (err) return next(err);
-					cacheTasks(cache, req.params.category, res);
+					res.status(201).send();
+					cacheTasks(cache, req.params.category);
 				}
 			);
 		}

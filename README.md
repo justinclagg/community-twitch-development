@@ -17,8 +17,6 @@ Clone the repository, and install depedencies with npm.
 npm install
 ~~~
 
-This app was developed in Node 6.7.0.
-
 --
 # Set Up
 
