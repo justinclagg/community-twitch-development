@@ -14,7 +14,8 @@ describe('requireRole()', function () {
 	});
 
 	it('should send status 403 if user does not have access', function () {
-		const request = { user: { role: 'member' } };
+		// const request = { user: { role: 'member' } };
+		const request = {};
 		const response = {
 			status: function (responseStatus) {
 				return this; // chainable function

@@ -9,49 +9,49 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(8);
+	var _reactDom = __webpack_require__(14);
 	
-	var _reactRedux = __webpack_require__(57);
+	var _reactRedux = __webpack_require__(78);
 	
-	var _reactRouter = __webpack_require__(46);
+	var _reactRouter = __webpack_require__(61);
 	
-	var _redux = __webpack_require__(105);
+	var _redux = __webpack_require__(120);
 	
-	var _reduxThunk = __webpack_require__(279);
+	var _reduxThunk = __webpack_require__(315);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reduxPromiseMiddleware = __webpack_require__(278);
+	var _reduxPromiseMiddleware = __webpack_require__(314);
 	
 	var _reduxPromiseMiddleware2 = _interopRequireDefault(_reduxPromiseMiddleware);
 	
-	var _reactTapEventPlugin = __webpack_require__(249);
+	var _reactTapEventPlugin = __webpack_require__(305);
 	
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 	
-	var _rootReducer = __webpack_require__(300);
+	var _rootReducer = __webpack_require__(335);
 	
 	var _rootReducer2 = _interopRequireDefault(_rootReducer);
 	
-	var _routes = __webpack_require__(301);
+	var _routes = __webpack_require__(336);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(170).polyfill(); // Promise polyfill
-	__webpack_require__(389);
+	__webpack_require__(217).polyfill(); // Promise polyfill
+	__webpack_require__(478);
 	
 	(0, _reactTapEventPlugin2.default)(); // Needed for material-ui onTouchTap
 	
-	__webpack_require__(711);
+	__webpack_require__(761);
 	
 	// Apply middleware
 	var middleware = void 0;
 	if (({"PORT":"80","BASE_URL":"http://localhost","SESSION_SECRET":"n5AzzxZzl9W1pz6FKe","MONGODB_URI":"mongodb://justinclagg:Sc29454$@ds011314.mlab.com:11314/community-twitch-development","REDIS_URL":"redis://rediscloud:3I$peE4IWgf3mcES04@redis-13963.c8.us-east-1-3.ec2.cloud.redislabs.com:13963","TWITCH_STREAMER":"jclagg","TWITCH_CLIENT_ID":"je5tmxn27a05twzo4m5i1ehzj6tkko9","TWITCH_CLIENT_SECRET":"f2yopjs0vdk079d4g87w6aykvhc0a3","TWITCH_CALLBACK":"/auth/twitch/callback","ADDITIONAL_ADMINS":"","ADDITIONAL_SUBSCRIBERS":"jclagg_test","GITLAB_ACCESS_LEVEL":"subscriber","GITLAB_CLIENT_ID":"4af01c2cfe753d61b72f0af4278ac834eb1cd77c8b744f91c45757c9d013bd37","GITLAB_CLIENT_SECRET":"dbf9248c0aae7a6acf80b0a84e4cbc2763eba4fd90d1dba6b4e5716e5a5472d5","GITLAB_GROUP_ID":"Community-Twitch-Development","GITLAB_ACCESS_TOKEN":"7ULvKyr1BoSzq_Wiq4sG","GITLAB_CALLBACK":"/auth/gitlab/callback","BRAND_IMAGE":"/img/twitch_brand_logo.png"}).NODE_ENV === 'production') {
 		middleware = (0, _redux.applyMiddleware)((0, _reduxPromiseMiddleware2.default)(), _reduxThunk2.default);
 	} else {
-		var logger = __webpack_require__(696);
+		var logger = __webpack_require__(743);
 		middleware = (0, _redux.applyMiddleware)(logger(), (0, _reduxPromiseMiddleware2.default)(), _reduxThunk2.default);
 	}
 	
@@ -66,182 +66,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 30:
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * This is the web browser implementation of `debug()`.
-	 *
-	 * Expose `debug()` as the module.
-	 */
-	
-	exports = module.exports = __webpack_require__(328);
-	exports.log = log;
-	exports.formatArgs = formatArgs;
-	exports.save = save;
-	exports.load = load;
-	exports.useColors = useColors;
-	exports.storage = 'undefined' != typeof chrome
-	               && 'undefined' != typeof chrome.storage
-	                  ? chrome.storage.local
-	                  : localstorage();
-	
-	/**
-	 * Colors.
-	 */
-	
-	exports.colors = [
-	  'lightseagreen',
-	  'forestgreen',
-	  'goldenrod',
-	  'dodgerblue',
-	  'darkorchid',
-	  'crimson'
-	];
-	
-	/**
-	 * Currently only WebKit-based Web Inspectors, Firefox >= v31,
-	 * and the Firebug extension (any Firefox version) are known
-	 * to support "%c" CSS customizations.
-	 *
-	 * TODO: add a `localStorage` variable to explicitly enable/disable colors
-	 */
-	
-	function useColors() {
-	  // is webkit? http://stackoverflow.com/a/16459606/376773
-	  return ('WebkitAppearance' in document.documentElement.style) ||
-	    // is firebug? http://stackoverflow.com/a/398120/376773
-	    (window.console && (console.firebug || (console.exception && console.table))) ||
-	    // is firefox >= v31?
-	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
-	}
-	
-	/**
-	 * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
-	 */
-	
-	exports.formatters.j = function(v) {
-	  return JSON.stringify(v);
-	};
-	
-	
-	/**
-	 * Colorize log arguments if enabled.
-	 *
-	 * @api public
-	 */
-	
-	function formatArgs() {
-	  var args = arguments;
-	  var useColors = this.useColors;
-	
-	  args[0] = (useColors ? '%c' : '')
-	    + this.namespace
-	    + (useColors ? ' %c' : ' ')
-	    + args[0]
-	    + (useColors ? '%c ' : ' ')
-	    + '+' + exports.humanize(this.diff);
-	
-	  if (!useColors) return args;
-	
-	  var c = 'color: ' + this.color;
-	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
-	
-	  // the final "%c" is somewhat tricky, because there could be other
-	  // arguments passed either before or after the %c, so we need to
-	  // figure out the correct index to insert the CSS into
-	  var index = 0;
-	  var lastC = 0;
-	  args[0].replace(/%[a-z%]/g, function(match) {
-	    if ('%%' === match) return;
-	    index++;
-	    if ('%c' === match) {
-	      // we only are interested in the *last* %c
-	      // (the user may have provided their own)
-	      lastC = index;
-	    }
-	  });
-	
-	  args.splice(lastC, 0, c);
-	  return args;
-	}
-	
-	/**
-	 * Invokes `console.log()` when available.
-	 * No-op when `console.log` is not a "function".
-	 *
-	 * @api public
-	 */
-	
-	function log() {
-	  // this hackery is required for IE8/9, where
-	  // the `console.log` function doesn't have 'apply'
-	  return 'object' === typeof console
-	    && console.log
-	    && Function.prototype.apply.call(console.log, console, arguments);
-	}
-	
-	/**
-	 * Save `namespaces`.
-	 *
-	 * @param {String} namespaces
-	 * @api private
-	 */
-	
-	function save(namespaces) {
-	  try {
-	    if (null == namespaces) {
-	      exports.storage.removeItem('debug');
-	    } else {
-	      exports.storage.debug = namespaces;
-	    }
-	  } catch(e) {}
-	}
-	
-	/**
-	 * Load `namespaces`.
-	 *
-	 * @return {String} returns the previously persisted debug modes
-	 * @api private
-	 */
-	
-	function load() {
-	  var r;
-	  try {
-	    r = exports.storage.debug;
-	  } catch(e) {}
-	  return r;
-	}
-	
-	/**
-	 * Enable namespaces listed in `localStorage.debug` initially.
-	 */
-	
-	exports.enable(load());
-	
-	/**
-	 * Localstorage attempts to return the localstorage.
-	 *
-	 * This is necessary because safari throws
-	 * when a user disables cookies/localstorage
-	 * and you attempt to access it.
-	 *
-	 * @return {LocalStorage}
-	 * @api private
-	 */
-	
-	function localstorage(){
-	  try {
-	    return window.localStorage;
-	  } catch (e) {}
-	}
-
-
-/***/ },
-
-/***/ 42:
+/***/ 50:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -264,19 +89,19 @@ webpackJsonp([2,0],{
 	exports.deleteOwnSubmission = deleteOwnSubmission;
 	exports.fetchSubmissions = fetchSubmissions;
 	
-	var _actionTypes = __webpack_require__(164);
+	var _actionTypes = __webpack_require__(192);
 	
 	var t = _interopRequireWildcard(_actionTypes);
 	
-	var _checkStatus = __webpack_require__(106);
+	var _checkStatus = __webpack_require__(122);
 	
 	var _checkStatus2 = _interopRequireDefault(_checkStatus);
 	
-	var _parseJSON = __webpack_require__(107);
+	var _parseJSON = __webpack_require__(123);
 	
 	var _parseJSON2 = _interopRequireDefault(_parseJSON);
 	
-	var _submissionList = __webpack_require__(320);
+	var _submissionList = __webpack_require__(355);
 	
 	var _submissionList2 = _interopRequireDefault(_submissionList);
 	
@@ -459,8 +284,8 @@ webpackJsonp([2,0],{
 	 */
 	function editSubmissions(task, updatedSubmissions, updatedTask, socket) {
 		return function (dispatch) {
-			var _id = task._id;
-			var category = task.category;
+			var _id = task._id,
+			    category = task.category;
 	
 			var payload = {
 				_id: _id,
@@ -490,8 +315,8 @@ webpackJsonp([2,0],{
 	 */
 	function deleteSubmission(task, updatedSubmissions, updatedTask, socket) {
 		return function (dispatch) {
-			var _id = task._id;
-			var category = task.category;
+			var _id = task._id,
+			    category = task.category;
 	
 			var payload = {
 				_id: _id,
@@ -522,8 +347,8 @@ webpackJsonp([2,0],{
 	 */
 	function deleteOwnSubmission(task, updatedSubmissions, submissionUsername, updatedTask, socket) {
 		return function (dispatch) {
-			var _id = task._id;
-			var category = task.category;
+			var _id = task._id,
+			    category = task.category;
 	
 			var payload = {
 				_id: _id,
@@ -566,22 +391,22 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 50:
+/***/ 68:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 	
-	var keys = __webpack_require__(339);
-	var hasBinary = __webpack_require__(340);
-	var sliceBuffer = __webpack_require__(294);
-	var after = __webpack_require__(291);
-	var utf8 = __webpack_require__(719);
+	var keys = __webpack_require__(428);
+	var hasBinary = __webpack_require__(221);
+	var sliceBuffer = __webpack_require__(329);
+	var after = __webpack_require__(326);
+	var utf8 = __webpack_require__(769);
 	
 	var base64encoder;
-	if (global.ArrayBuffer) {
-	  base64encoder = __webpack_require__(324);
+	if (global && global.ArrayBuffer) {
+	  base64encoder = __webpack_require__(409);
 	}
 	
 	/**
@@ -639,7 +464,7 @@ webpackJsonp([2,0],{
 	 * Create a blob api even for blob builder when vendor prefixes exist
 	 */
 	
-	var Blob = __webpack_require__(325);
+	var Blob = __webpack_require__(410);
 	
 	/**
 	 * Encodes a packet.
@@ -793,8 +618,11 @@ webpackJsonp([2,0],{
 	 */
 	
 	exports.decodePacket = function (data, binaryType, utf8decode) {
+	  if (data === undefined) {
+	    return err;
+	  }
 	  // String data
-	  if (typeof data == 'string' || data === undefined) {
+	  if (typeof data == 'string') {
 	    if (data.charAt(0) == 'b') {
 	      return exports.decodeBase64Packet(data.substr(1), binaryType);
 	    }
@@ -1180,7 +1008,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 65:
+/***/ 80:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1190,7 +1018,7 @@ webpackJsonp([2,0],{
 	});
 	exports.TaskModal = exports.Task = exports.CategoryDropdown = exports.AddTaskForm = exports.TaskTable = exports.TaskPage = undefined;
 	
-	var _TaskPage = __webpack_require__(312);
+	var _TaskPage = __webpack_require__(347);
 	
 	Object.defineProperty(exports, 'TaskPage', {
 	  enumerable: true,
@@ -1199,7 +1027,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _TaskTable = __webpack_require__(313);
+	var _TaskTable = __webpack_require__(348);
 	
 	Object.defineProperty(exports, 'TaskTable', {
 	  enumerable: true,
@@ -1208,7 +1036,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _AddTaskForm = __webpack_require__(305);
+	var _AddTaskForm = __webpack_require__(340);
 	
 	Object.defineProperty(exports, 'AddTaskForm', {
 	  enumerable: true,
@@ -1217,7 +1045,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _CategoryDropdown = __webpack_require__(306);
+	var _CategoryDropdown = __webpack_require__(341);
 	
 	Object.defineProperty(exports, 'CategoryDropdown', {
 	  enumerable: true,
@@ -1226,7 +1054,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _Task = __webpack_require__(307);
+	var _Task = __webpack_require__(342);
 	
 	Object.defineProperty(exports, 'Task', {
 	  enumerable: true,
@@ -1235,7 +1063,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _TaskModal = __webpack_require__(311);
+	var _TaskModal = __webpack_require__(346);
 	
 	Object.defineProperty(exports, 'TaskModal', {
 	  enumerable: true,
@@ -1244,7 +1072,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _actions = __webpack_require__(42);
+	var _actions = __webpack_require__(50);
 	
 	Object.keys(_actions).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -1256,7 +1084,7 @@ webpackJsonp([2,0],{
 	  });
 	});
 	
-	var _reducer = __webpack_require__(314);
+	var _reducer = __webpack_require__(349);
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -1266,7 +1094,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 66:
+/***/ 81:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1276,7 +1104,7 @@ webpackJsonp([2,0],{
 	});
 	exports.ChangeUserRole = exports.ProfilePage = exports.AdminPage = undefined;
 	
-	var _AdminPage = __webpack_require__(316);
+	var _AdminPage = __webpack_require__(351);
 	
 	Object.defineProperty(exports, 'AdminPage', {
 	  enumerable: true,
@@ -1285,7 +1113,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _ProfilePage = __webpack_require__(317);
+	var _ProfilePage = __webpack_require__(352);
 	
 	Object.defineProperty(exports, 'ProfilePage', {
 	  enumerable: true,
@@ -1294,7 +1122,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _ChangeUserRole = __webpack_require__(315);
+	var _ChangeUserRole = __webpack_require__(350);
 	
 	Object.defineProperty(exports, 'ChangeUserRole', {
 	  enumerable: true,
@@ -1303,7 +1131,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _actions = __webpack_require__(166);
+	var _actions = __webpack_require__(194);
 	
 	Object.keys(_actions).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -1315,7 +1143,7 @@ webpackJsonp([2,0],{
 	  });
 	});
 	
-	var _reducer = __webpack_require__(318);
+	var _reducer = __webpack_require__(353);
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -1325,7 +1153,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 74:
+/***/ 95:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1337,15 +1165,15 @@ webpackJsonp([2,0],{
 	exports.addCategory = addCategory;
 	exports.deleteCategory = deleteCategory;
 	
-	var _actionTypes = __webpack_require__(163);
+	var _actionTypes = __webpack_require__(191);
 	
 	var t = _interopRequireWildcard(_actionTypes);
 	
-	var _checkStatus = __webpack_require__(106);
+	var _checkStatus = __webpack_require__(122);
 	
 	var _checkStatus2 = _interopRequireDefault(_checkStatus);
 	
-	var _parseJSON = __webpack_require__(107);
+	var _parseJSON = __webpack_require__(123);
 	
 	var _parseJSON2 = _interopRequireDefault(_parseJSON);
 	
@@ -1421,7 +1249,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 75:
+/***/ 96:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1431,7 +1259,7 @@ webpackJsonp([2,0],{
 	});
 	exports.DeleteCategoryModal = exports.AddCategoryModal = exports.CategoryPage = undefined;
 	
-	var _CategoryPage = __webpack_require__(298);
+	var _CategoryPage = __webpack_require__(333);
 	
 	Object.defineProperty(exports, 'CategoryPage', {
 	  enumerable: true,
@@ -1440,7 +1268,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _AddCategoryModal = __webpack_require__(296);
+	var _AddCategoryModal = __webpack_require__(331);
 	
 	Object.defineProperty(exports, 'AddCategoryModal', {
 	  enumerable: true,
@@ -1449,7 +1277,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _DeleteCategoryModal = __webpack_require__(297);
+	var _DeleteCategoryModal = __webpack_require__(332);
 	
 	Object.defineProperty(exports, 'DeleteCategoryModal', {
 	  enumerable: true,
@@ -1458,7 +1286,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _actions = __webpack_require__(74);
+	var _actions = __webpack_require__(95);
 	
 	Object.keys(_actions).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -1470,7 +1298,7 @@ webpackJsonp([2,0],{
 	  });
 	});
 	
-	var _reducer = __webpack_require__(299);
+	var _reducer = __webpack_require__(334);
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -1480,7 +1308,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 76:
+/***/ 97:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1489,7 +1317,7 @@ webpackJsonp([2,0],{
 	  value: true
 	});
 	
-	var _Navbar = __webpack_require__(304);
+	var _Navbar = __webpack_require__(339);
 	
 	Object.defineProperty(exports, 'Navbar', {
 	  enumerable: true,
@@ -1498,7 +1326,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _Footer = __webpack_require__(302);
+	var _Footer = __webpack_require__(337);
 	
 	Object.defineProperty(exports, 'Footer', {
 	  enumerable: true,
@@ -1507,7 +1335,7 @@ webpackJsonp([2,0],{
 	  }
 	});
 	
-	var _LoadingSpinner = __webpack_require__(303);
+	var _LoadingSpinner = __webpack_require__(338);
 	
 	Object.defineProperty(exports, 'LoadingSpinner', {
 	  enumerable: true,
@@ -1520,178 +1348,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 77:
-/***/ function(module, exports) {
-
-	
-	/**
-	 * Expose `Emitter`.
-	 */
-	
-	module.exports = Emitter;
-	
-	/**
-	 * Initialize a new `Emitter`.
-	 *
-	 * @api public
-	 */
-	
-	function Emitter(obj) {
-	  if (obj) return mixin(obj);
-	};
-	
-	/**
-	 * Mixin the emitter properties.
-	 *
-	 * @param {Object} obj
-	 * @return {Object}
-	 * @api private
-	 */
-	
-	function mixin(obj) {
-	  for (var key in Emitter.prototype) {
-	    obj[key] = Emitter.prototype[key];
-	  }
-	  return obj;
-	}
-	
-	/**
-	 * Listen on the given `event` with `fn`.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-	
-	Emitter.prototype.on =
-	Emitter.prototype.addEventListener = function(event, fn){
-	  this._callbacks = this._callbacks || {};
-	  (this._callbacks[event] = this._callbacks[event] || [])
-	    .push(fn);
-	  return this;
-	};
-	
-	/**
-	 * Adds an `event` listener that will be invoked a single
-	 * time then automatically removed.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-	
-	Emitter.prototype.once = function(event, fn){
-	  var self = this;
-	  this._callbacks = this._callbacks || {};
-	
-	  function on() {
-	    self.off(event, on);
-	    fn.apply(this, arguments);
-	  }
-	
-	  on.fn = fn;
-	  this.on(event, on);
-	  return this;
-	};
-	
-	/**
-	 * Remove the given callback for `event` or all
-	 * registered callbacks.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-	
-	Emitter.prototype.off =
-	Emitter.prototype.removeListener =
-	Emitter.prototype.removeAllListeners =
-	Emitter.prototype.removeEventListener = function(event, fn){
-	  this._callbacks = this._callbacks || {};
-	
-	  // all
-	  if (0 == arguments.length) {
-	    this._callbacks = {};
-	    return this;
-	  }
-	
-	  // specific event
-	  var callbacks = this._callbacks[event];
-	  if (!callbacks) return this;
-	
-	  // remove all handlers
-	  if (1 == arguments.length) {
-	    delete this._callbacks[event];
-	    return this;
-	  }
-	
-	  // remove specific handler
-	  var cb;
-	  for (var i = 0; i < callbacks.length; i++) {
-	    cb = callbacks[i];
-	    if (cb === fn || cb.fn === fn) {
-	      callbacks.splice(i, 1);
-	      break;
-	    }
-	  }
-	  return this;
-	};
-	
-	/**
-	 * Emit `event` with the given args.
-	 *
-	 * @param {String} event
-	 * @param {Mixed} ...
-	 * @return {Emitter}
-	 */
-	
-	Emitter.prototype.emit = function(event){
-	  this._callbacks = this._callbacks || {};
-	  var args = [].slice.call(arguments, 1)
-	    , callbacks = this._callbacks[event];
-	
-	  if (callbacks) {
-	    callbacks = callbacks.slice(0);
-	    for (var i = 0, len = callbacks.length; i < len; ++i) {
-	      callbacks[i].apply(this, args);
-	    }
-	  }
-	
-	  return this;
-	};
-	
-	/**
-	 * Return array of callbacks for `event`.
-	 *
-	 * @param {String} event
-	 * @return {Array}
-	 * @api public
-	 */
-	
-	Emitter.prototype.listeners = function(event){
-	  this._callbacks = this._callbacks || {};
-	  return this._callbacks[event] || [];
-	};
-	
-	/**
-	 * Check if this emitter has `event` handlers.
-	 *
-	 * @param {String} event
-	 * @return {Boolean}
-	 * @api public
-	 */
-	
-	Emitter.prototype.hasListeners = function(event){
-	  return !! this.listeners(event).length;
-	};
-
-
-/***/ },
-
-/***/ 78:
+/***/ 101:
 /***/ function(module, exports) {
 
 	
@@ -1704,7 +1361,377 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 106:
+/***/ 102:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {
+	/**
+	 * This is the web browser implementation of `debug()`.
+	 *
+	 * Expose `debug()` as the module.
+	 */
+	
+	exports = module.exports = __webpack_require__(426);
+	exports.log = log;
+	exports.formatArgs = formatArgs;
+	exports.save = save;
+	exports.load = load;
+	exports.useColors = useColors;
+	exports.storage = 'undefined' != typeof chrome
+	               && 'undefined' != typeof chrome.storage
+	                  ? chrome.storage.local
+	                  : localstorage();
+	
+	/**
+	 * Colors.
+	 */
+	
+	exports.colors = [
+	  'lightseagreen',
+	  'forestgreen',
+	  'goldenrod',
+	  'dodgerblue',
+	  'darkorchid',
+	  'crimson'
+	];
+	
+	/**
+	 * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+	 * and the Firebug extension (any Firefox version) are known
+	 * to support "%c" CSS customizations.
+	 *
+	 * TODO: add a `localStorage` variable to explicitly enable/disable colors
+	 */
+	
+	function useColors() {
+	  // is webkit? http://stackoverflow.com/a/16459606/376773
+	  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+	  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
+	    // is firebug? http://stackoverflow.com/a/398120/376773
+	    (window.console && (console.firebug || (console.exception && console.table))) ||
+	    // is firefox >= v31?
+	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+	}
+	
+	/**
+	 * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+	 */
+	
+	exports.formatters.j = function(v) {
+	  try {
+	    return JSON.stringify(v);
+	  } catch (err) {
+	    return '[UnexpectedJSONParseError]: ' + err.message;
+	  }
+	};
+	
+	
+	/**
+	 * Colorize log arguments if enabled.
+	 *
+	 * @api public
+	 */
+	
+	function formatArgs() {
+	  var args = arguments;
+	  var useColors = this.useColors;
+	
+	  args[0] = (useColors ? '%c' : '')
+	    + this.namespace
+	    + (useColors ? ' %c' : ' ')
+	    + args[0]
+	    + (useColors ? '%c ' : ' ')
+	    + '+' + exports.humanize(this.diff);
+	
+	  if (!useColors) return args;
+	
+	  var c = 'color: ' + this.color;
+	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+	
+	  // the final "%c" is somewhat tricky, because there could be other
+	  // arguments passed either before or after the %c, so we need to
+	  // figure out the correct index to insert the CSS into
+	  var index = 0;
+	  var lastC = 0;
+	  args[0].replace(/%[a-z%]/g, function(match) {
+	    if ('%%' === match) return;
+	    index++;
+	    if ('%c' === match) {
+	      // we only are interested in the *last* %c
+	      // (the user may have provided their own)
+	      lastC = index;
+	    }
+	  });
+	
+	  args.splice(lastC, 0, c);
+	  return args;
+	}
+	
+	/**
+	 * Invokes `console.log()` when available.
+	 * No-op when `console.log` is not a "function".
+	 *
+	 * @api public
+	 */
+	
+	function log() {
+	  // this hackery is required for IE8/9, where
+	  // the `console.log` function doesn't have 'apply'
+	  return 'object' === typeof console
+	    && console.log
+	    && Function.prototype.apply.call(console.log, console, arguments);
+	}
+	
+	/**
+	 * Save `namespaces`.
+	 *
+	 * @param {String} namespaces
+	 * @api private
+	 */
+	
+	function save(namespaces) {
+	  try {
+	    if (null == namespaces) {
+	      exports.storage.removeItem('debug');
+	    } else {
+	      exports.storage.debug = namespaces;
+	    }
+	  } catch(e) {}
+	}
+	
+	/**
+	 * Load `namespaces`.
+	 *
+	 * @return {String} returns the previously persisted debug modes
+	 * @api private
+	 */
+	
+	function load() {
+	  var r;
+	  try {
+	    return exports.storage.debug;
+	  } catch(e) {}
+	
+	  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+	  if (typeof process !== 'undefined' && 'env' in process) {
+	    return ({"PORT":"80","BASE_URL":"http://localhost","SESSION_SECRET":"n5AzzxZzl9W1pz6FKe","MONGODB_URI":"mongodb://justinclagg:Sc29454$@ds011314.mlab.com:11314/community-twitch-development","REDIS_URL":"redis://rediscloud:3I$peE4IWgf3mcES04@redis-13963.c8.us-east-1-3.ec2.cloud.redislabs.com:13963","TWITCH_STREAMER":"jclagg","TWITCH_CLIENT_ID":"je5tmxn27a05twzo4m5i1ehzj6tkko9","TWITCH_CLIENT_SECRET":"f2yopjs0vdk079d4g87w6aykvhc0a3","TWITCH_CALLBACK":"/auth/twitch/callback","ADDITIONAL_ADMINS":"","ADDITIONAL_SUBSCRIBERS":"jclagg_test","GITLAB_ACCESS_LEVEL":"subscriber","GITLAB_CLIENT_ID":"4af01c2cfe753d61b72f0af4278ac834eb1cd77c8b744f91c45757c9d013bd37","GITLAB_CLIENT_SECRET":"dbf9248c0aae7a6acf80b0a84e4cbc2763eba4fd90d1dba6b4e5716e5a5472d5","GITLAB_GROUP_ID":"Community-Twitch-Development","GITLAB_ACCESS_TOKEN":"7ULvKyr1BoSzq_Wiq4sG","GITLAB_CALLBACK":"/auth/gitlab/callback","BRAND_IMAGE":"/img/twitch_brand_logo.png"}).DEBUG;
+	  }
+	}
+	
+	/**
+	 * Enable namespaces listed in `localStorage.debug` initially.
+	 */
+	
+	exports.enable(load());
+	
+	/**
+	 * Localstorage attempts to return the localstorage.
+	 *
+	 * This is necessary because safari throws
+	 * when a user disables cookies/localstorage
+	 * and you attempt to access it.
+	 *
+	 * @return {LocalStorage}
+	 * @api private
+	 */
+	
+	function localstorage(){
+	  try {
+	    return window.localStorage;
+	  } catch (e) {}
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(45)))
+
+/***/ },
+
+/***/ 121:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {
+	/**
+	 * This is the web browser implementation of `debug()`.
+	 *
+	 * Expose `debug()` as the module.
+	 */
+	
+	exports = module.exports = __webpack_require__(753);
+	exports.log = log;
+	exports.formatArgs = formatArgs;
+	exports.save = save;
+	exports.load = load;
+	exports.useColors = useColors;
+	exports.storage = 'undefined' != typeof chrome
+	               && 'undefined' != typeof chrome.storage
+	                  ? chrome.storage.local
+	                  : localstorage();
+	
+	/**
+	 * Colors.
+	 */
+	
+	exports.colors = [
+	  'lightseagreen',
+	  'forestgreen',
+	  'goldenrod',
+	  'dodgerblue',
+	  'darkorchid',
+	  'crimson'
+	];
+	
+	/**
+	 * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+	 * and the Firebug extension (any Firefox version) are known
+	 * to support "%c" CSS customizations.
+	 *
+	 * TODO: add a `localStorage` variable to explicitly enable/disable colors
+	 */
+	
+	function useColors() {
+	  // is webkit? http://stackoverflow.com/a/16459606/376773
+	  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+	  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
+	    // is firebug? http://stackoverflow.com/a/398120/376773
+	    (window.console && (console.firebug || (console.exception && console.table))) ||
+	    // is firefox >= v31?
+	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+	}
+	
+	/**
+	 * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+	 */
+	
+	exports.formatters.j = function(v) {
+	  try {
+	    return JSON.stringify(v);
+	  } catch (err) {
+	    return '[UnexpectedJSONParseError]: ' + err.message;
+	  }
+	};
+	
+	
+	/**
+	 * Colorize log arguments if enabled.
+	 *
+	 * @api public
+	 */
+	
+	function formatArgs() {
+	  var args = arguments;
+	  var useColors = this.useColors;
+	
+	  args[0] = (useColors ? '%c' : '')
+	    + this.namespace
+	    + (useColors ? ' %c' : ' ')
+	    + args[0]
+	    + (useColors ? '%c ' : ' ')
+	    + '+' + exports.humanize(this.diff);
+	
+	  if (!useColors) return args;
+	
+	  var c = 'color: ' + this.color;
+	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+	
+	  // the final "%c" is somewhat tricky, because there could be other
+	  // arguments passed either before or after the %c, so we need to
+	  // figure out the correct index to insert the CSS into
+	  var index = 0;
+	  var lastC = 0;
+	  args[0].replace(/%[a-z%]/g, function(match) {
+	    if ('%%' === match) return;
+	    index++;
+	    if ('%c' === match) {
+	      // we only are interested in the *last* %c
+	      // (the user may have provided their own)
+	      lastC = index;
+	    }
+	  });
+	
+	  args.splice(lastC, 0, c);
+	  return args;
+	}
+	
+	/**
+	 * Invokes `console.log()` when available.
+	 * No-op when `console.log` is not a "function".
+	 *
+	 * @api public
+	 */
+	
+	function log() {
+	  // this hackery is required for IE8/9, where
+	  // the `console.log` function doesn't have 'apply'
+	  return 'object' === typeof console
+	    && console.log
+	    && Function.prototype.apply.call(console.log, console, arguments);
+	}
+	
+	/**
+	 * Save `namespaces`.
+	 *
+	 * @param {String} namespaces
+	 * @api private
+	 */
+	
+	function save(namespaces) {
+	  try {
+	    if (null == namespaces) {
+	      exports.storage.removeItem('debug');
+	    } else {
+	      exports.storage.debug = namespaces;
+	    }
+	  } catch(e) {}
+	}
+	
+	/**
+	 * Load `namespaces`.
+	 *
+	 * @return {String} returns the previously persisted debug modes
+	 * @api private
+	 */
+	
+	function load() {
+	  var r;
+	  try {
+	    return exports.storage.debug;
+	  } catch(e) {}
+	
+	  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+	  if (typeof process !== 'undefined' && 'env' in process) {
+	    return ({"PORT":"80","BASE_URL":"http://localhost","SESSION_SECRET":"n5AzzxZzl9W1pz6FKe","MONGODB_URI":"mongodb://justinclagg:Sc29454$@ds011314.mlab.com:11314/community-twitch-development","REDIS_URL":"redis://rediscloud:3I$peE4IWgf3mcES04@redis-13963.c8.us-east-1-3.ec2.cloud.redislabs.com:13963","TWITCH_STREAMER":"jclagg","TWITCH_CLIENT_ID":"je5tmxn27a05twzo4m5i1ehzj6tkko9","TWITCH_CLIENT_SECRET":"f2yopjs0vdk079d4g87w6aykvhc0a3","TWITCH_CALLBACK":"/auth/twitch/callback","ADDITIONAL_ADMINS":"","ADDITIONAL_SUBSCRIBERS":"jclagg_test","GITLAB_ACCESS_LEVEL":"subscriber","GITLAB_CLIENT_ID":"4af01c2cfe753d61b72f0af4278ac834eb1cd77c8b744f91c45757c9d013bd37","GITLAB_CLIENT_SECRET":"dbf9248c0aae7a6acf80b0a84e4cbc2763eba4fd90d1dba6b4e5716e5a5472d5","GITLAB_GROUP_ID":"Community-Twitch-Development","GITLAB_ACCESS_TOKEN":"7ULvKyr1BoSzq_Wiq4sG","GITLAB_CALLBACK":"/auth/gitlab/callback","BRAND_IMAGE":"/img/twitch_brand_logo.png"}).DEBUG;
+	  }
+	}
+	
+	/**
+	 * Enable namespaces listed in `localStorage.debug` initially.
+	 */
+	
+	exports.enable(load());
+	
+	/**
+	 * Localstorage attempts to return the localstorage.
+	 *
+	 * This is necessary because safari throws
+	 * when a user disables cookies/localstorage
+	 * and you attempt to access it.
+	 *
+	 * @return {LocalStorage}
+	 * @api private
+	 */
+	
+	function localstorage(){
+	  try {
+	    return window.localStorage;
+	  } catch (e) {}
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(45)))
+
+/***/ },
+
+/***/ 122:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1732,7 +1759,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 107:
+/***/ 123:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1749,30 +1776,30 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 108:
+/***/ 141:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(327)();
+	exports = module.exports = __webpack_require__(413)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "html, body {\n  margin: 0;\n  padding: 0; }\n\nbody {\n  font-family: \"Roboto\", sans-serif;\n  color: #FFF;\n  background-color: #4f4f4f;\n  background-image: url(" + __webpack_require__(713) + ");\n  text-align: center; }\n\nh1, h2, h3 {\n  font-weight: 300; }\n\nh4, h5, h6 {\n  font-weight: 500;\n  margin-bottom: 0px; }\n\n/* Testing Only */\n.test-role-buttons {\n  margin: 0;\n  margin-right: 20px;\n  text-align: right; }\n\n/* Navigation */\n.navbar {\n  margin: 0 !important;\n  background-color: #303030 !important;\n  height: 60px !important; }\n\n.mobile-menu-button {\n  display: inline-block !important; }\n\n.mobile-menu a, .mobile-menu a:active {\n  text-decoration: none; }\n\n.brand-image {\n  display: inline-block;\n  margin-top: 10px; }\n  .brand-image:link {\n    text-decoration: none !important; }\n  @media only screen and (min-width: 700px) {\n    .brand-image {\n      margin-left: 20px; } }\n  @media only screen and (max-width: 700px) {\n    .brand-image {\n      position: absolute;\n      left: 50%;\n      transform: translateX(-50%); } }\n\n.nav-title {\n  font-weight: 500;\n  font-size: 13px;\n  letter-spacing: 3px;\n  color: #FFF; }\n  .nav-title:active {\n    text-decoration: none; }\n\n.nav-links {\n  display: inline-block;\n  position: absolute;\n  margin-left: 30px;\n  margin-top: 7px; }\n\n.nav-user-buttons {\n  padding-top: 5px;\n  padding-right: 10px; }\n\n.page-title {\n  margin-top: 50px;\n  margin-bottom: 50px; }\n\n/* Profile Page */\n.profile-page {\n  margin: 0; }\n\n.profile-card {\n  margin: 50px auto;\n  padding: 5px 30px;\n  min-height: 475px;\n  max-width: 600px;\n  font-size: 18px;\n  text-align: left; }\n\n.profile-gitlab-section {\n  margin-top: 40px; }\n\n/* Admin */\n.admin-page {\n  margin: 0; }\n\n.admin-card {\n  margin: 50px auto;\n  padding: 3px 30px;\n  max-width: 1000px;\n  min-height: 475px;\n  font-size: 18px;\n  text-align: left; }\n\n.admin-submission, .admin-archived-submission {\n  text-decoration: none;\n  color: #FFF; }\n\n.admin-archived-submission {\n  opacity: 0.5; }\n\n.submission-list-time {\n  display: inline-block;\n  box-sizing: border-box;\n  font-size: 12px;\n  width: 55px; }\n\n.submission-list-category {\n  opacity: 0.9;\n  font-weight: 300;\n  padding-left: 15px;\n  padding-right: 10px; }\n\n.submission-list-name {\n  padding-right: 7px; }\n\n.admin-task-form {\n  max-width: 1000px;\n  margin: 20px auto; }\n  .admin-task-form input {\n    height: 40px;\n    padding: 5px;\n    background-color: #303030;\n    color: #FFF;\n    border: 1px solid #4f4f4f; }\n    .admin-task-form input:focus {\n      outline: none; }\n    .admin-task-form input:nth-of-type(1) {\n      width: 30%; }\n    .admin-task-form input:nth-of-type(2) {\n      width: 60%; }\n\n/* Hiding submit buttons with display:none does not work on Safari */\n.hide-btn {\n  width: 0 !important;\n  height: 0 !important;\n  padding: 0 !important;\n  margin: 0 !important;\n  border: none !important; }\n\n.loading-spinner {\n  padding: 20px 0; }\n\n/* Contribute Page */\n.contribute-page {\n  padding: 0 10px; }\n\n.category-container {\n  padding: 0;\n  margin: 0;\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center; }\n  @media only screen and (min-width: 1250px) {\n    .category-container {\n      padding: 0 10%; } }\n  @media only screen and (min-width: 1500px) {\n    .category-container {\n      padding: 0 20%; } }\n\n.category-card {\n  position: relative;\n  margin: 20px 10px 0 10px;\n  width: 275px;\n  height: 160px;\n  line-height: 160px;\n  border-radius: 5%;\n  background-color: #FFF;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);\n  border: none;\n  text-align: center;\n  color: #000;\n  font-size: 30px;\n  text-decoration: none; }\n  .category-card:hover {\n    cursor: pointer;\n    text-decoration: none;\n    color: #000;\n    background-color: #DDD; }\n\n.delete-category-btn {\n  z-index: 10;\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 30px;\n  line-height: 30px;\n  height: 30px;\n  color: #AAA; }\n  .delete-category-btn:hover {\n    color: #000;\n    cursor: pointer; }\n\n.add-category-card {\n  margin: 20px 10px 0 10px;\n  width: 80px;\n  height: 160px;\n  line-height: 160px;\n  text-align: center;\n  color: #AAA;\n  font-size: 60px;\n  background-color: transparent;\n  border: none; }\n  .add-category-card:hover {\n    color: #FFF;\n    cursor: pointer; }\n\n/* Task Page */\n.task-page {\n  margin: 40px 10%; }\n  @media only screen and (max-width: 700px) {\n    .task-page {\n      margin: 0; } }\n\n.task-table {\n  margin: 0 auto;\n  max-width: 1600px;\n  table-layout: auto !important; }\n\n/* !important is needed to override material-ui inline styles */\n.table-super {\n  border-bottom: none !important; }\n  .table-super > * {\n    font-size: 20px !important;\n    column-span: all; }\n\n.table-header {\n  border-bottom: none !important; }\n  .table-header > * {\n    font-size: 14px !important; }\n\n.table-row > * {\n  font-size: 16px !important;\n  white-space: normal !important;\n  word-wrap: break-word;\n  height: 60px !important; }\n  .table-row > *:hover {\n    cursor: pointer; }\n\n.archived-task {\n  opacity: 0.6 !important; }\n\n@media only screen and (max-width: 700px) {\n  .mobile-hidden, .description-col {\n    display: none; } }\n\n@media only screen and (min-width: 700px) {\n  .desktop-hidden {\n    display: none !important; } }\n\n.name-col {\n  width: 30% !important; }\n  @media only screen and (max-width: 700px) {\n    .name-col {\n      width: 70% !important; } }\n\n.description-col {\n  width: 55% !important; }\n\n.submission-col {\n  width: 15% !important; }\n  @media only screen and (max-width: 700px) {\n    .submission-col {\n      width: 30% !important; } }\n\n.admin-modal {\n  text-align: left; }\n\n.task-modal {\n  text-align: left;\n  margin: 0 !important; }\n  .task-modal p {\n    color: rgba(255, 255, 255, 0.8) !important; }\n\n.task-modal-description {\n  margin-bottom: 30px;\n  white-space: pre-wrap; }\n  .task-modal-description a {\n    cursor: pointer;\n    color: #FFF; }\n\n.task-modal-submissions a {\n  text-decoration: none;\n  color: #00e5ff; }\n\n.task-modal-submissions .submission-delete-btn {\n  cursor: pointer;\n  padding: 0 5px; }\n  .task-modal-submissions .submission-delete-btn:hover {\n    color: #FFF; }\n\n.wrap {\n  min-height: 99vh; }\n\n.main {\n  overflow: auto;\n  padding-bottom: 50px; }\n\nfooter {\n  position: relative;\n  clear: both;\n  margin: 0;\n  margin-top: -50px;\n  height: 50px;\n  line-height: 50px;\n  color: #DDD;\n  background-color: #303030;\n  font-size: 14px; }\n  footer p {\n    margin-bottom: 0; }\n    @media only screen and (max-width: 700px) {\n      footer p {\n        margin-top: 50px; } }\n", ""]);
+	exports.push([module.id, "html, body {\n  margin: 0;\n  padding: 0; }\n\nbody {\n  font-family: \"Roboto\", sans-serif;\n  color: #FFF;\n  background-color: #4f4f4f;\n  background-image: url(" + __webpack_require__(763) + ");\n  text-align: center; }\n\nh1, h2, h3 {\n  font-weight: 300; }\n\nh4, h5, h6 {\n  font-weight: 500;\n  margin-bottom: 0px; }\n\n/* Testing Only */\n.test-role-buttons {\n  margin: 0;\n  margin-right: 20px;\n  text-align: right; }\n\n/* Navigation */\n.navbar {\n  margin: 0 !important;\n  background-color: #303030 !important;\n  height: 60px !important; }\n\n.mobile-menu-button {\n  display: inline-block !important; }\n\n.mobile-menu a, .mobile-menu a:active {\n  text-decoration: none; }\n\n.brand-image {\n  display: inline-block;\n  margin-top: 10px; }\n  .brand-image:link {\n    text-decoration: none !important; }\n  @media only screen and (min-width: 700px) {\n    .brand-image {\n      margin-left: 20px; } }\n  @media only screen and (max-width: 700px) {\n    .brand-image {\n      position: absolute;\n      left: 50%;\n      transform: translateX(-50%); } }\n\n.nav-title {\n  font-weight: 500;\n  font-size: 13px;\n  letter-spacing: 3px;\n  color: #FFF; }\n  .nav-title:active {\n    text-decoration: none; }\n\n.nav-links {\n  display: inline-block;\n  position: absolute;\n  margin-left: 30px;\n  margin-top: 7px; }\n\n.nav-user-buttons {\n  padding-top: 5px;\n  padding-right: 10px; }\n\n.page-title {\n  margin-top: 50px;\n  margin-bottom: 50px; }\n\n/* Profile Page */\n.profile-page {\n  margin: 0; }\n\n.profile-card {\n  margin: 50px auto;\n  padding: 5px 30px;\n  min-height: 475px;\n  max-width: 600px;\n  font-size: 18px;\n  text-align: left; }\n\n.profile-gitlab-section {\n  margin-top: 40px; }\n\n/* Admin */\n.admin-page {\n  margin: 0; }\n\n.admin-card {\n  margin: 50px auto;\n  padding: 3px 30px;\n  max-width: 1000px;\n  min-height: 475px;\n  font-size: 18px;\n  text-align: left; }\n\n.admin-submission, .admin-archived-submission {\n  text-decoration: none;\n  color: #FFF; }\n\n.admin-archived-submission {\n  opacity: 0.5; }\n\n.submission-list-time {\n  display: inline-block;\n  box-sizing: border-box;\n  font-size: 12px;\n  width: 55px; }\n\n.submission-list-category {\n  opacity: 0.9;\n  font-weight: 300;\n  padding-left: 15px;\n  padding-right: 10px; }\n\n.submission-list-name {\n  padding-right: 7px; }\n\n.admin-task-form {\n  max-width: 1000px;\n  margin: 20px auto; }\n  .admin-task-form input {\n    height: 40px;\n    padding: 5px;\n    background-color: #303030;\n    color: #FFF;\n    border: 1px solid #4f4f4f; }\n    .admin-task-form input:focus {\n      outline: none; }\n    .admin-task-form input:nth-of-type(1) {\n      width: 30%; }\n    .admin-task-form input:nth-of-type(2) {\n      width: 60%; }\n\n/* Hiding submit buttons with display:none does not work on Safari */\n.hide-btn {\n  width: 0 !important;\n  height: 0 !important;\n  padding: 0 !important;\n  margin: 0 !important;\n  border: none !important; }\n\n.loading-spinner {\n  padding: 20px 0; }\n\n/* Contribute Page */\n.contribute-page {\n  padding: 0 10px; }\n\n.category-container {\n  padding: 0;\n  margin: 0;\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center; }\n  @media only screen and (min-width: 1250px) {\n    .category-container {\n      padding: 0 10%; } }\n  @media only screen and (min-width: 1500px) {\n    .category-container {\n      padding: 0 20%; } }\n\n.category-card {\n  position: relative;\n  margin: 20px 10px 0 10px;\n  width: 275px;\n  height: 160px;\n  line-height: 160px;\n  border-radius: 5%;\n  background-color: #FFF;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);\n  border: none;\n  text-align: center;\n  color: #000;\n  font-size: 30px;\n  text-decoration: none; }\n  .category-card:hover {\n    cursor: pointer;\n    text-decoration: none;\n    color: #000;\n    background-color: #DDD; }\n\n.delete-category-btn {\n  z-index: 10;\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 30px;\n  line-height: 30px;\n  height: 30px;\n  color: #AAA; }\n  .delete-category-btn:hover {\n    color: #000;\n    cursor: pointer; }\n\n.add-category-card {\n  margin: 20px 10px 0 10px;\n  width: 80px;\n  height: 160px;\n  line-height: 160px;\n  text-align: center;\n  color: #AAA;\n  font-size: 60px;\n  background-color: transparent;\n  border: none; }\n  .add-category-card:hover {\n    color: #FFF;\n    cursor: pointer; }\n\n/* Task Page */\n.task-page {\n  margin: 40px 10%; }\n  @media only screen and (max-width: 700px) {\n    .task-page {\n      margin: 0; } }\n\n.task-table {\n  margin: 0 auto;\n  max-width: 1600px;\n  table-layout: auto !important; }\n\n/* !important is needed to override material-ui inline styles */\n.table-super {\n  border-bottom: none !important; }\n  .table-super > * {\n    font-size: 20px !important;\n    column-span: all; }\n\n.table-header {\n  border-bottom: none !important; }\n  .table-header > * {\n    font-size: 14px !important; }\n\n.table-row > * {\n  font-size: 16px !important;\n  white-space: normal !important;\n  word-wrap: break-word;\n  height: 60px !important; }\n  .table-row > *:hover {\n    cursor: pointer; }\n\n.archived-task {\n  opacity: 0.6 !important; }\n\n@media only screen and (max-width: 700px) {\n  .mobile-hidden, .description-col {\n    display: none; } }\n\n@media only screen and (min-width: 700px) {\n  .desktop-hidden {\n    display: none !important; } }\n\n.name-col {\n  width: 30% !important; }\n  @media only screen and (max-width: 700px) {\n    .name-col {\n      width: 70% !important; } }\n\n.description-col {\n  width: 55% !important; }\n\n.submission-col {\n  width: 15% !important; }\n  @media only screen and (max-width: 700px) {\n    .submission-col {\n      width: 30% !important; } }\n\n.admin-modal {\n  text-align: left; }\n\n.task-modal {\n  text-align: left;\n  margin: 0 !important; }\n  .task-modal p {\n    color: rgba(255, 255, 255, 0.8) !important; }\n\n.task-modal-description {\n  margin-bottom: 30px;\n  white-space: pre-wrap; }\n  .task-modal-description a {\n    cursor: pointer;\n    color: #FFF; }\n\n.task-modal-submissions a {\n  text-decoration: none;\n  color: #00e5ff; }\n\n.task-modal-submissions .submission-delete-btn {\n  cursor: pointer;\n  padding: 0 5px; }\n  .task-modal-submissions .submission-delete-btn:hover {\n    color: #FFF; }\n\n.wrap {\n  min-height: 99vh; }\n\n.main {\n  overflow: auto;\n  padding-bottom: 50px; }\n\nfooter {\n  position: relative;\n  clear: both;\n  margin: 0;\n  margin-top: -50px;\n  height: 50px;\n  line-height: 50px;\n  color: #DDD;\n  background-color: #303030;\n  font-size: 14px; }\n  footer p {\n    margin-bottom: 0; }\n    @media only screen and (max-width: 700px) {\n      footer p {\n        margin-top: 50px; } }\n", ""]);
 	
 	// exports
 
 
 /***/ },
 
-/***/ 109:
+/***/ 142:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var parser = __webpack_require__(50);
-	var Emitter = __webpack_require__(77);
+	var parser = __webpack_require__(68);
+	var Emitter = __webpack_require__(144);
 	
 	/**
 	 * Module exports.
@@ -1808,9 +1835,11 @@ webpackJsonp([2,0],{
 	  this.ca = opts.ca;
 	  this.ciphers = opts.ciphers;
 	  this.rejectUnauthorized = opts.rejectUnauthorized;
+	  this.forceNode = opts.forceNode;
 	
 	  // other options for Node.js client
 	  this.extraHeaders = opts.extraHeaders;
+	  this.localAddress = opts.localAddress;
 	}
 	
 	/**
@@ -1926,15 +1955,12 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 110:
+/***/ 143:
 /***/ function(module, exports, __webpack_require__) {
 
-	// browser shim for xmlhttprequest module
+	/* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 	
-	// Indicate to eslint that ActiveXObject is global
-	/* global ActiveXObject */
-	
-	var hasCORS = __webpack_require__(358);
+	var hasCORS = __webpack_require__(444);
 	
 	module.exports = function (opts) {
 	  var xdomain = opts.xdomain;
@@ -1965,15 +1991,186 @@ webpackJsonp([2,0],{
 	
 	  if (!xdomain) {
 	    try {
-	      return new ActiveXObject('Microsoft.XMLHTTP');
+	      return new global[['Active'].concat('Object').join('X')]('Microsoft.XMLHTTP');
 	    } catch (e) { }
 	  }
+	};
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+
+/***/ 144:
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * Expose `Emitter`.
+	 */
+	
+	if (true) {
+	  module.exports = Emitter;
+	}
+	
+	/**
+	 * Initialize a new `Emitter`.
+	 *
+	 * @api public
+	 */
+	
+	function Emitter(obj) {
+	  if (obj) return mixin(obj);
+	};
+	
+	/**
+	 * Mixin the emitter properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	function mixin(obj) {
+	  for (var key in Emitter.prototype) {
+	    obj[key] = Emitter.prototype[key];
+	  }
+	  return obj;
+	}
+	
+	/**
+	 * Listen on the given `event` with `fn`.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.on =
+	Emitter.prototype.addEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+	    .push(fn);
+	  return this;
+	};
+	
+	/**
+	 * Adds an `event` listener that will be invoked a single
+	 * time then automatically removed.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.once = function(event, fn){
+	  function on() {
+	    this.off(event, on);
+	    fn.apply(this, arguments);
+	  }
+	
+	  on.fn = fn;
+	  this.on(event, on);
+	  return this;
+	};
+	
+	/**
+	 * Remove the given callback for `event` or all
+	 * registered callbacks.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.off =
+	Emitter.prototype.removeListener =
+	Emitter.prototype.removeAllListeners =
+	Emitter.prototype.removeEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	
+	  // all
+	  if (0 == arguments.length) {
+	    this._callbacks = {};
+	    return this;
+	  }
+	
+	  // specific event
+	  var callbacks = this._callbacks['$' + event];
+	  if (!callbacks) return this;
+	
+	  // remove all handlers
+	  if (1 == arguments.length) {
+	    delete this._callbacks['$' + event];
+	    return this;
+	  }
+	
+	  // remove specific handler
+	  var cb;
+	  for (var i = 0; i < callbacks.length; i++) {
+	    cb = callbacks[i];
+	    if (cb === fn || cb.fn === fn) {
+	      callbacks.splice(i, 1);
+	      break;
+	    }
+	  }
+	  return this;
+	};
+	
+	/**
+	 * Emit `event` with the given args.
+	 *
+	 * @param {String} event
+	 * @param {Mixed} ...
+	 * @return {Emitter}
+	 */
+	
+	Emitter.prototype.emit = function(event){
+	  this._callbacks = this._callbacks || {};
+	  var args = [].slice.call(arguments, 1)
+	    , callbacks = this._callbacks['$' + event];
+	
+	  if (callbacks) {
+	    callbacks = callbacks.slice(0);
+	    for (var i = 0, len = callbacks.length; i < len; ++i) {
+	      callbacks[i].apply(this, args);
+	    }
+	  }
+	
+	  return this;
+	};
+	
+	/**
+	 * Return array of callbacks for `event`.
+	 *
+	 * @param {String} event
+	 * @return {Array}
+	 * @api public
+	 */
+	
+	Emitter.prototype.listeners = function(event){
+	  this._callbacks = this._callbacks || {};
+	  return this._callbacks['$' + event] || [];
+	};
+	
+	/**
+	 * Check if this emitter has `event` handlers.
+	 *
+	 * @param {String} event
+	 * @return {Boolean}
+	 * @api public
+	 */
+	
+	Emitter.prototype.hasListeners = function(event){
+	  return !! this.listeners(event).length;
 	};
 
 
 /***/ },
 
-/***/ 135:
+/***/ 166:
 /***/ function(module, exports) {
 
 	/**
@@ -2017,7 +2214,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 162:
+/***/ 190:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -2025,12 +2222,11 @@ webpackJsonp([2,0],{
 	 * Module dependencies.
 	 */
 	
-	var debug = __webpack_require__(30)('socket.io-parser');
-	var json = __webpack_require__(707);
-	var isArray = __webpack_require__(288);
-	var Emitter = __webpack_require__(77);
-	var binary = __webpack_require__(706);
-	var isBuf = __webpack_require__(287);
+	var debug = __webpack_require__(414)('socket.io-parser');
+	var json = __webpack_require__(757);
+	var Emitter = __webpack_require__(412);
+	var binary = __webpack_require__(755);
+	var isBuf = __webpack_require__(323);
 	
 	/**
 	 * Protocol version.
@@ -2345,16 +2541,21 @@ webpackJsonp([2,0],{
 	
 	  // look up json data
 	  if (str.charAt(++i)) {
-	    try {
-	      p.data = json.parse(str.substr(i));
-	    } catch(e){
-	      return error();
-	    }
+	    p = tryParse(p, str.substr(i));
 	  }
 	
 	  debug('decoded %s as %j', str, p);
 	  return p;
 	}
+	
+	function tryParse(p, str) {
+	  try {
+	    p.data = json.parse(str);
+	  } catch(e){
+	    return error();
+	  }
+	  return p; 
+	};
 	
 	/**
 	 * Deallocates a parser's resources
@@ -2424,7 +2625,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 163:
+/***/ 191:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2445,7 +2646,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 164:
+/***/ 192:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2487,7 +2688,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 165:
+/***/ 193:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2508,7 +2709,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 166:
+/***/ 194:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2521,15 +2722,15 @@ webpackJsonp([2,0],{
 	exports.logoutUser = logoutUser;
 	exports.unlinkGitlab = unlinkGitlab;
 	
-	var _actionTypes = __webpack_require__(165);
+	var _actionTypes = __webpack_require__(193);
 	
 	var t = _interopRequireWildcard(_actionTypes);
 	
-	var _checkStatus = __webpack_require__(106);
+	var _checkStatus = __webpack_require__(122);
 	
 	var _checkStatus2 = _interopRequireDefault(_checkStatus);
 	
-	var _parseJSON = __webpack_require__(107);
+	var _parseJSON = __webpack_require__(123);
 	
 	var _parseJSON2 = _interopRequireDefault(_parseJSON);
 	
@@ -2606,7 +2807,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 167:
+/***/ 214:
 /***/ function(module, exports) {
 
 	/**
@@ -2636,17 +2837,17 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 168:
+/***/ 215:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies
 	 */
 	
-	var XMLHttpRequest = __webpack_require__(110);
-	var XHR = __webpack_require__(337);
-	var JSONP = __webpack_require__(336);
-	var websocket = __webpack_require__(338);
+	var XMLHttpRequest = __webpack_require__(143);
+	var XHR = __webpack_require__(424);
+	var JSONP = __webpack_require__(423);
+	var websocket = __webpack_require__(425);
 	
 	/**
 	 * Export transports.
@@ -2697,19 +2898,19 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 169:
+/***/ 216:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var Transport = __webpack_require__(109);
-	var parseqs = __webpack_require__(135);
-	var parser = __webpack_require__(50);
-	var inherit = __webpack_require__(78);
-	var yeast = __webpack_require__(290);
-	var debug = __webpack_require__(30)('engine.io-client:polling');
+	var Transport = __webpack_require__(142);
+	var parseqs = __webpack_require__(166);
+	var parser = __webpack_require__(68);
+	var inherit = __webpack_require__(101);
+	var yeast = __webpack_require__(325);
+	var debug = __webpack_require__(102)('engine.io-client:polling');
 	
 	/**
 	 * Module exports.
@@ -2722,7 +2923,7 @@ webpackJsonp([2,0],{
 	 */
 	
 	var hasXHR2 = (function () {
-	  var XMLHttpRequest = __webpack_require__(110);
+	  var XMLHttpRequest = __webpack_require__(143);
 	  var xhr = new XMLHttpRequest({ xdomain: false });
 	  return null != xhr.responseType;
 	})();
@@ -2932,8 +3133,8 @@ webpackJsonp([2,0],{
 	  query = parseqs.encode(query);
 	
 	  // avoid port if default for schema
-	  if (this.port && (('https' === schema && this.port !== 443) ||
-	     ('http' === schema && this.port !== 80))) {
+	  if (this.port && (('https' === schema && Number(this.port) !== 443) ||
+	     ('http' === schema && Number(this.port) !== 80))) {
 	    port = ':' + this.port;
 	  }
 	
@@ -2949,7 +3150,74 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 182:
+/***/ 221:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {
+	/*
+	 * Module requirements.
+	 */
+	
+	var isArray = __webpack_require__(443);
+	
+	/**
+	 * Module exports.
+	 */
+	
+	module.exports = hasBinary;
+	
+	/**
+	 * Checks for binary data.
+	 *
+	 * Right now only Buffer and ArrayBuffer are supported..
+	 *
+	 * @param {Object} anything
+	 * @api public
+	 */
+	
+	function hasBinary(data) {
+	
+	  function _hasBinary(obj) {
+	    if (!obj) return false;
+	
+	    if ( (global.Buffer && global.Buffer.isBuffer && global.Buffer.isBuffer(obj)) ||
+	         (global.ArrayBuffer && obj instanceof ArrayBuffer) ||
+	         (global.Blob && obj instanceof Blob) ||
+	         (global.File && obj instanceof File)
+	        ) {
+	      return true;
+	    }
+	
+	    if (isArray(obj)) {
+	      for (var i = 0; i < obj.length; i++) {
+	          if (_hasBinary(obj[i])) {
+	              return true;
+	          }
+	      }
+	    } else if (obj && 'object' == typeof obj) {
+	      // see: https://github.com/Automattic/has-binary/pull/4
+	      if (obj.toJSON && 'function' == typeof obj.toJSON) {
+	        obj = obj.toJSON();
+	      }
+	
+	      for (var key in obj) {
+	        if (Object.prototype.hasOwnProperty.call(obj, key) && _hasBinary(obj[key])) {
+	          return true;
+	        }
+	      }
+	    }
+	
+	    return false;
+	  }
+	
+	  return _hasBinary(data);
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+
+/***/ 230:
 /***/ function(module, exports) {
 
 	
@@ -2965,7 +3233,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 239:
+/***/ 275:
 /***/ function(module, exports) {
 
 	/**
@@ -3011,7 +3279,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 277:
+/***/ 313:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3036,7 +3304,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 283:
+/***/ 319:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -3044,15 +3312,15 @@ webpackJsonp([2,0],{
 	 * Module dependencies.
 	 */
 	
-	var eio = __webpack_require__(333);
-	var Socket = __webpack_require__(285);
-	var Emitter = __webpack_require__(286);
-	var parser = __webpack_require__(162);
-	var on = __webpack_require__(284);
-	var bind = __webpack_require__(167);
-	var debug = __webpack_require__(30)('socket.io-client:manager');
-	var indexOf = __webpack_require__(182);
-	var Backoff = __webpack_require__(323);
+	var eio = __webpack_require__(420);
+	var Socket = __webpack_require__(321);
+	var Emitter = __webpack_require__(322);
+	var parser = __webpack_require__(190);
+	var on = __webpack_require__(320);
+	var bind = __webpack_require__(214);
+	var debug = __webpack_require__(121)('socket.io-client:manager');
+	var indexOf = __webpack_require__(230);
+	var Backoff = __webpack_require__(408);
 	
 	/**
 	 * IE6+ hasOwnProperty
@@ -3603,7 +3871,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 284:
+/***/ 320:
 /***/ function(module, exports) {
 
 	
@@ -3634,7 +3902,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 285:
+/***/ 321:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -3642,13 +3910,13 @@ webpackJsonp([2,0],{
 	 * Module dependencies.
 	 */
 	
-	var parser = __webpack_require__(162);
-	var Emitter = __webpack_require__(286);
-	var toArray = __webpack_require__(712);
-	var on = __webpack_require__(284);
-	var bind = __webpack_require__(167);
-	var debug = __webpack_require__(30)('socket.io-client:socket');
-	var hasBin = __webpack_require__(356);
+	var parser = __webpack_require__(190);
+	var Emitter = __webpack_require__(322);
+	var toArray = __webpack_require__(762);
+	var on = __webpack_require__(320);
+	var bind = __webpack_require__(214);
+	var debug = __webpack_require__(121)('socket.io-client:socket');
+	var hasBin = __webpack_require__(221);
 	
 	/**
 	 * Module exports.
@@ -4060,15 +4328,17 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 286:
-/***/ function(module, exports) {
+/***/ 322:
+/***/ function(module, exports, __webpack_require__) {
 
 	
 	/**
 	 * Expose `Emitter`.
 	 */
 	
-	module.exports = Emitter;
+	if (true) {
+	  module.exports = Emitter;
+	}
 	
 	/**
 	 * Initialize a new `Emitter`.
@@ -4228,7 +4498,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 287:
+/***/ 323:
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -4249,17 +4519,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 288:
-/***/ function(module, exports) {
-
-	module.exports = Array.isArray || function (arr) {
-	  return Object.prototype.toString.call(arr) == '[object Array]';
-	};
-
-
-/***/ },
-
-/***/ 290:
+/***/ 325:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -4334,7 +4594,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 291:
+/***/ 326:
 /***/ function(module, exports) {
 
 	module.exports = after
@@ -4369,7 +4629,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 294:
+/***/ 329:
 /***/ function(module, exports) {
 
 	/**
@@ -4405,7 +4665,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 295:
+/***/ 330:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4420,23 +4680,23 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(57);
+	var _reactRedux = __webpack_require__(78);
 	
-	var _getMuiTheme = __webpack_require__(235);
+	var _getMuiTheme = __webpack_require__(271);
 	
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 	
-	var _darkBaseTheme = __webpack_require__(558);
+	var _darkBaseTheme = __webpack_require__(585);
 	
 	var _darkBaseTheme2 = _interopRequireDefault(_darkBaseTheme);
 	
-	var _colors = __webpack_require__(70);
+	var _colors = __webpack_require__(89);
 	
-	var _shared = __webpack_require__(76);
+	var _shared = __webpack_require__(97);
 	
-	var _users = __webpack_require__(66);
+	var _users = __webpack_require__(81);
 	
-	var _socket = __webpack_require__(704);
+	var _socket = __webpack_require__(751);
 	
 	var _socket2 = _interopRequireDefault(_socket);
 	
@@ -4451,9 +4711,9 @@ webpackJsonp([2,0],{
 	var socket = _socket2.default.connect(({"PORT":"80","BASE_URL":"http://localhost","SESSION_SECRET":"n5AzzxZzl9W1pz6FKe","MONGODB_URI":"mongodb://justinclagg:Sc29454$@ds011314.mlab.com:11314/community-twitch-development","REDIS_URL":"redis://rediscloud:3I$peE4IWgf3mcES04@redis-13963.c8.us-east-1-3.ec2.cloud.redislabs.com:13963","TWITCH_STREAMER":"jclagg","TWITCH_CLIENT_ID":"je5tmxn27a05twzo4m5i1ehzj6tkko9","TWITCH_CLIENT_SECRET":"f2yopjs0vdk079d4g87w6aykvhc0a3","TWITCH_CALLBACK":"/auth/twitch/callback","ADDITIONAL_ADMINS":"","ADDITIONAL_SUBSCRIBERS":"jclagg_test","GITLAB_ACCESS_LEVEL":"subscriber","GITLAB_CLIENT_ID":"4af01c2cfe753d61b72f0af4278ac834eb1cd77c8b744f91c45757c9d013bd37","GITLAB_CLIENT_SECRET":"dbf9248c0aae7a6acf80b0a84e4cbc2763eba4fd90d1dba6b4e5716e5a5472d5","GITLAB_GROUP_ID":"Community-Twitch-Development","GITLAB_ACCESS_TOKEN":"7ULvKyr1BoSzq_Wiq4sG","GITLAB_CALLBACK":"/auth/gitlab/callback","BRAND_IMAGE":"/img/twitch_brand_logo.png"}).HEROKU_URL);
 	
 	function mapStateToProps(state) {
-		var _state$users = state.users;
-		var isAuthenticated = _state$users.isAuthenticated;
-		var profile = _state$users.profile;
+		var _state$users = state.users,
+		    isAuthenticated = _state$users.isAuthenticated,
+		    profile = _state$users.profile;
 	
 		return {
 			isAuthenticated: isAuthenticated,
@@ -4499,10 +4759,10 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'render',
 			value: function render() {
-				var _props = this.props;
-				var dispatch = _props.dispatch;
-				var isAuthenticated = _props.isAuthenticated;
-				var profile = _props.profile;
+				var _props = this.props,
+				    dispatch = _props.dispatch,
+				    isAuthenticated = _props.isAuthenticated,
+				    profile = _props.profile;
 	
 				return _react2.default.createElement(
 					'div',
@@ -4547,7 +4807,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 296:
+/***/ 331:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4562,19 +4822,19 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Dialog = __webpack_require__(31);
+	var _Dialog = __webpack_require__(37);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _FlatButton = __webpack_require__(25);
+	var _FlatButton = __webpack_require__(33);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
-	var _TextField = __webpack_require__(32);
+	var _TextField = __webpack_require__(38);
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
-	var _actions = __webpack_require__(74);
+	var _actions = __webpack_require__(95);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4623,9 +4883,9 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'addCategory',
 			value: function addCategory() {
-				var _props = this.props;
-				var dispatch = _props.dispatch;
-				var socket = _props.socket;
+				var _props = this.props,
+				    dispatch = _props.dispatch,
+				    socket = _props.socket;
 	
 				var category = this.CategoryField.input.value;
 	
@@ -4681,7 +4941,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 297:
+/***/ 332:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4696,15 +4956,15 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Dialog = __webpack_require__(31);
+	var _Dialog = __webpack_require__(37);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _FlatButton = __webpack_require__(25);
+	var _FlatButton = __webpack_require__(33);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
-	var _actions = __webpack_require__(74);
+	var _actions = __webpack_require__(95);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4795,7 +5055,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 298:
+/***/ 333:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4810,15 +5070,15 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(57);
+	var _reactRedux = __webpack_require__(78);
 	
-	var _reactRouter = __webpack_require__(46);
+	var _reactRouter = __webpack_require__(61);
 	
-	var _ = __webpack_require__(75);
+	var _ = __webpack_require__(96);
 	
-	var _shared = __webpack_require__(76);
+	var _shared = __webpack_require__(97);
 	
-	var _actions = __webpack_require__(74);
+	var _actions = __webpack_require__(95);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4881,12 +5141,12 @@ webpackJsonp([2,0],{
 			value: function render() {
 				var _this3 = this;
 	
-				var _props = this.props;
-				var profile = _props.profile;
-				var dispatch = _props.dispatch;
-				var categories = _props.categories;
-				var fetchingCategories = _props.fetchingCategories;
-				var socket = _props.socket;
+				var _props = this.props,
+				    profile = _props.profile,
+				    dispatch = _props.dispatch,
+				    categories = _props.categories,
+				    fetchingCategories = _props.fetchingCategories,
+				    socket = _props.socket;
 	
 	
 				var CategoryCards = categories.map(function (category, index) {
@@ -4969,7 +5229,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 299:
+/***/ 334:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4980,7 +5240,7 @@ webpackJsonp([2,0],{
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _actionTypes = __webpack_require__(163);
+	var _actionTypes = __webpack_require__(191);
 	
 	var t = _interopRequireWildcard(_actionTypes);
 	
@@ -5045,7 +5305,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 300:
+/***/ 335:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5054,17 +5314,17 @@ webpackJsonp([2,0],{
 		value: true
 	});
 	
-	var _redux = __webpack_require__(105);
+	var _redux = __webpack_require__(120);
 	
-	var _tasks = __webpack_require__(65);
+	var _tasks = __webpack_require__(80);
 	
 	var _tasks2 = _interopRequireDefault(_tasks);
 	
-	var _categories = __webpack_require__(75);
+	var _categories = __webpack_require__(96);
 	
 	var _categories2 = _interopRequireDefault(_categories);
 	
-	var _users = __webpack_require__(66);
+	var _users = __webpack_require__(81);
 	
 	var _users2 = _interopRequireDefault(_users);
 	
@@ -5078,7 +5338,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 301:
+/***/ 336:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5091,17 +5351,17 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(46);
+	var _reactRouter = __webpack_require__(61);
 	
-	var _App = __webpack_require__(295);
+	var _App = __webpack_require__(330);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _tasks = __webpack_require__(65);
+	var _tasks = __webpack_require__(80);
 	
-	var _categories = __webpack_require__(75);
+	var _categories = __webpack_require__(96);
 	
-	var _users = __webpack_require__(66);
+	var _users = __webpack_require__(81);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5116,7 +5376,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 302:
+/***/ 337:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5150,7 +5410,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 303:
+/***/ 338:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5163,7 +5423,7 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _CircularProgress = __webpack_require__(209);
+	var _CircularProgress = __webpack_require__(245);
 	
 	var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
 	
@@ -5177,7 +5437,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 304:
+/***/ 339:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5192,37 +5452,37 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(46);
+	var _reactRouter = __webpack_require__(61);
 	
-	var _AppBar = __webpack_require__(201);
+	var _AppBar = __webpack_require__(236);
 	
 	var _AppBar2 = _interopRequireDefault(_AppBar);
 	
-	var _RaisedButton = __webpack_require__(127);
+	var _RaisedButton = __webpack_require__(158);
 	
 	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 	
-	var _Drawer = __webpack_require__(210);
+	var _Drawer = __webpack_require__(246);
 	
 	var _Drawer2 = _interopRequireDefault(_Drawer);
 	
-	var _MenuItem = __webpack_require__(44);
+	var _MenuItem = __webpack_require__(57);
 	
 	var _MenuItem2 = _interopRequireDefault(_MenuItem);
 	
-	var _Divider = __webpack_require__(90);
+	var _Divider = __webpack_require__(107);
 	
 	var _Divider2 = _interopRequireDefault(_Divider);
 	
-	var _IconButton = __webpack_require__(55);
+	var _IconButton = __webpack_require__(71);
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 	
-	var _menu = __webpack_require__(237);
+	var _menu = __webpack_require__(273);
 	
 	var _menu2 = _interopRequireDefault(_menu);
 	
-	var _users = __webpack_require__(66);
+	var _users = __webpack_require__(81);
 	
 	var users = _interopRequireWildcard(_users);
 	
@@ -5369,7 +5629,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 305:
+/***/ 340:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5384,7 +5644,7 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _actions = __webpack_require__(42);
+	var _actions = __webpack_require__(50);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5416,9 +5676,9 @@ webpackJsonp([2,0],{
 			key: 'onSubmit',
 			value: function onSubmit(event) {
 				event.preventDefault(); // Prevent page refresh
-				var _event$target = event.target;
-				var name = _event$target.name;
-				var description = _event$target.description;
+				var _event$target = event.target,
+				    name = _event$target.name,
+				    description = _event$target.description;
 	
 	
 				if (name.value || description.value) {
@@ -5454,7 +5714,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 306:
+/***/ 341:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5469,13 +5729,13 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(46);
+	var _reactRouter = __webpack_require__(61);
 	
-	var _DropDownMenu = __webpack_require__(91);
+	var _DropDownMenu = __webpack_require__(108);
 	
 	var _DropDownMenu2 = _interopRequireDefault(_DropDownMenu);
 	
-	var _MenuItem = __webpack_require__(44);
+	var _MenuItem = __webpack_require__(57);
 	
 	var _MenuItem2 = _interopRequireDefault(_MenuItem);
 	
@@ -5535,7 +5795,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 307:
+/***/ 342:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5552,29 +5812,29 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Table = __webpack_require__(129);
+	var _Table = __webpack_require__(160);
 	
-	var _TextField = __webpack_require__(32);
+	var _TextField = __webpack_require__(38);
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
-	var _IconMenu = __webpack_require__(213);
+	var _IconMenu = __webpack_require__(249);
 	
 	var _IconMenu2 = _interopRequireDefault(_IconMenu);
 	
-	var _MenuItem = __webpack_require__(44);
+	var _MenuItem = __webpack_require__(57);
 	
 	var _MenuItem2 = _interopRequireDefault(_MenuItem);
 	
-	var _IconButton = __webpack_require__(212);
+	var _IconButton = __webpack_require__(248);
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 	
-	var _moreVert = __webpack_require__(572);
+	var _moreVert = __webpack_require__(599);
 	
 	var _moreVert2 = _interopRequireDefault(_moreVert);
 	
-	var _actions = __webpack_require__(42);
+	var _actions = __webpack_require__(50);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5660,11 +5920,11 @@ webpackJsonp([2,0],{
 			value: function render() {
 				var _this2 = this;
 	
-				var _props = this.props;
-				var task = _props.task;
-				var handleTaskClick = _props.handleTaskClick;
-				var profile = _props.profile;
-				var showArchive = _props.showArchive;
+				var _props = this.props,
+				    task = _props.task,
+				    handleTaskClick = _props.handleTaskClick,
+				    profile = _props.profile,
+				    showArchive = _props.showArchive;
 				var editing = this.state.editing;
 	
 				// Don't show archived tasks when showArchive == false
@@ -5791,7 +6051,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 308:
+/***/ 343:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5808,21 +6068,21 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Dialog = __webpack_require__(31);
+	var _Dialog = __webpack_require__(37);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _FlatButton = __webpack_require__(25);
+	var _FlatButton = __webpack_require__(33);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
-	var _TextField = __webpack_require__(32);
+	var _TextField = __webpack_require__(38);
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
-	var _actions = __webpack_require__(42);
+	var _actions = __webpack_require__(50);
 	
-	var _validURl = __webpack_require__(322);
+	var _validURl = __webpack_require__(357);
 	
 	var _validURl2 = _interopRequireDefault(_validURl);
 	
@@ -5887,13 +6147,13 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'addSubmission',
 			value: function addSubmission() {
-				var _props = this.props;
-				var task = _props.task;
-				var profile = _props.profile;
-				var removeClaim = _props.removeClaim;
-				var setSelectedTask = _props.setSelectedTask;
-				var dispatch = _props.dispatch;
-				var socket = _props.socket;
+				var _props = this.props,
+				    task = _props.task,
+				    profile = _props.profile,
+				    removeClaim = _props.removeClaim,
+				    setSelectedTask = _props.setSelectedTask,
+				    dispatch = _props.dispatch,
+				    socket = _props.socket;
 	
 				var url = this.validUrl(this.SubmissionField.input.value);
 	
@@ -5920,9 +6180,9 @@ webpackJsonp([2,0],{
 			value: function render() {
 				var _this2 = this;
 	
-				var _state = this.state;
-				var open = _state.open;
-				var error = _state.error;
+				var _state = this.state,
+				    open = _state.open,
+				    error = _state.error;
 	
 				return _react2.default.createElement(
 					_Dialog2.default,
@@ -5967,7 +6227,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 309:
+/***/ 344:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5984,15 +6244,15 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Dialog = __webpack_require__(31);
+	var _Dialog = __webpack_require__(37);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _FlatButton = __webpack_require__(25);
+	var _FlatButton = __webpack_require__(33);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
-	var _actions = __webpack_require__(42);
+	var _actions = __webpack_require__(50);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6029,11 +6289,11 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'deleteSubmission',
 			value: function deleteSubmission() {
-				var _props = this.props;
-				var task = _props.task;
-				var setSelectedTask = _props.setSelectedTask;
-				var dispatch = _props.dispatch;
-				var socket = _props.socket;
+				var _props = this.props,
+				    task = _props.task,
+				    setSelectedTask = _props.setSelectedTask,
+				    dispatch = _props.dispatch,
+				    socket = _props.socket;
 				var submission = this.state.submission;
 	
 				var updatedSubmissions = task.submissions.filter(function (sub) {
@@ -6088,7 +6348,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 310:
+/***/ 345:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6103,11 +6363,11 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Dialog = __webpack_require__(31);
+	var _Dialog = __webpack_require__(37);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _FlatButton = __webpack_require__(25);
+	var _FlatButton = __webpack_require__(33);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
@@ -6169,7 +6429,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 311:
+/***/ 346:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6186,35 +6446,35 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _react3 = __webpack_require__(396);
+	var _react3 = __webpack_require__(485);
 	
 	var _react4 = _interopRequireDefault(_react3);
 	
-	var _Dialog = __webpack_require__(31);
+	var _Dialog = __webpack_require__(37);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _TextField = __webpack_require__(32);
+	var _TextField = __webpack_require__(38);
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
-	var _FlatButton = __webpack_require__(25);
+	var _FlatButton = __webpack_require__(33);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
-	var _RequireLoginModal = __webpack_require__(310);
+	var _RequireLoginModal = __webpack_require__(345);
 	
 	var _RequireLoginModal2 = _interopRequireDefault(_RequireLoginModal);
 	
-	var _AddSubmissionModal = __webpack_require__(308);
+	var _AddSubmissionModal = __webpack_require__(343);
 	
 	var _AddSubmissionModal2 = _interopRequireDefault(_AddSubmissionModal);
 	
-	var _DeleteSubmissionModal = __webpack_require__(309);
+	var _DeleteSubmissionModal = __webpack_require__(344);
 	
 	var _DeleteSubmissionModal2 = _interopRequireDefault(_DeleteSubmissionModal);
 	
-	var _actions = __webpack_require__(42);
+	var _actions = __webpack_require__(50);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6291,9 +6551,9 @@ webpackJsonp([2,0],{
 			value: function generateSubmissionsText(submissions) {
 				var _this2 = this;
 	
-				var _props$profile = this.props.profile;
-				var role = _props$profile.role;
-				var username = _props$profile.username;
+				var _props$profile = this.props.profile,
+				    role = _props$profile.role,
+				    username = _props$profile.username;
 	
 	
 				var numberOfSubmissions = '';
@@ -6370,11 +6630,11 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'addClaim',
 			value: function addClaim() {
-				var _props = this.props;
-				var task = _props.task;
-				var category = _props.category;
-				var dispatch = _props.dispatch;
-				var socket = _props.socket;
+				var _props = this.props,
+				    task = _props.task,
+				    category = _props.category,
+				    dispatch = _props.dispatch,
+				    socket = _props.socket;
 				var claims = task.claims;
 				var username = this.props.profile.username;
 	
@@ -6388,11 +6648,11 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'removeClaim',
 			value: function removeClaim() {
-				var _props2 = this.props;
-				var task = _props2.task;
-				var category = _props2.category;
-				var dispatch = _props2.dispatch;
-				var socket = _props2.socket;
+				var _props2 = this.props,
+				    task = _props2.task,
+				    category = _props2.category,
+				    dispatch = _props2.dispatch,
+				    socket = _props2.socket;
 				var claims = task.claims;
 				var username = this.props.profile.username;
 	
@@ -6408,11 +6668,11 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'deleteOwnSubmission',
 			value: function deleteOwnSubmission(submissionToDelete) {
-				var _props3 = this.props;
-				var task = _props3.task;
-				var setSelectedTask = _props3.setSelectedTask;
-				var dispatch = _props3.dispatch;
-				var socket = _props3.socket;
+				var _props3 = this.props,
+				    task = _props3.task,
+				    setSelectedTask = _props3.setSelectedTask,
+				    dispatch = _props3.dispatch,
+				    socket = _props3.socket;
 	
 	
 				var updatedSubmissions = task.submissions.filter(function (sub) {
@@ -6483,10 +6743,10 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'editTask',
 			value: function editTask(updatedTask) {
-				var _props4 = this.props;
-				var category = _props4.category;
-				var socket = _props4.socket;
-				var setSelectedTask = _props4.setSelectedTask;
+				var _props4 = this.props,
+				    category = _props4.category,
+				    socket = _props4.socket,
+				    setSelectedTask = _props4.setSelectedTask;
 	
 				setSelectedTask(updatedTask);
 				this.props.dispatch((0, _actions.editTask)(category, updatedTask, socket));
@@ -6496,18 +6756,18 @@ webpackJsonp([2,0],{
 			value: function render() {
 				var _this3 = this;
 	
-				var _props5 = this.props;
-				var dispatch = _props5.dispatch;
-				var task = _props5.task;
-				var profile = _props5.profile;
-				var isAuthenticated = _props5.isAuthenticated;
-				var socket = _props5.socket;
-				var _state = this.state;
-				var isClaimed = _state.isClaimed;
-				var claimsText = _state.claimsText;
-				var submissionsText = _state.submissionsText;
-				var editDescription = _state.editDescription;
-				var editName = _state.editName;
+				var _props5 = this.props,
+				    dispatch = _props5.dispatch,
+				    task = _props5.task,
+				    profile = _props5.profile,
+				    isAuthenticated = _props5.isAuthenticated,
+				    socket = _props5.socket;
+				var _state = this.state,
+				    isClaimed = _state.isClaimed,
+				    claimsText = _state.claimsText,
+				    submissionsText = _state.submissionsText,
+				    editDescription = _state.editDescription,
+				    editName = _state.editName;
 	
 				// Claim task button
 	
@@ -6640,7 +6900,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 312:
+/***/ 347:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6655,15 +6915,15 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(57);
+	var _reactRedux = __webpack_require__(78);
 	
-	var _ = __webpack_require__(65);
+	var _ = __webpack_require__(80);
 	
-	var _shared = __webpack_require__(76);
+	var _shared = __webpack_require__(97);
 	
-	var _actions = __webpack_require__(42);
+	var _actions = __webpack_require__(50);
 	
-	var _categories = __webpack_require__(75);
+	var _categories = __webpack_require__(96);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6765,14 +7025,14 @@ webpackJsonp([2,0],{
 			value: function render() {
 				var _this3 = this;
 	
-				var _props = this.props;
-				var dispatch = _props.dispatch;
-				var tasks = _props.tasks;
-				var categories = _props.categories;
-				var isAuthenticated = _props.isAuthenticated;
-				var profile = _props.profile;
-				var fetchingTasks = _props.fetchingTasks;
-				var socket = _props.socket;
+				var _props = this.props,
+				    dispatch = _props.dispatch,
+				    tasks = _props.tasks,
+				    categories = _props.categories,
+				    isAuthenticated = _props.isAuthenticated,
+				    profile = _props.profile,
+				    fetchingTasks = _props.fetchingTasks,
+				    socket = _props.socket;
 				var selectedTask = this.state.selectedTask;
 	
 	
@@ -6828,7 +7088,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 313:
+/***/ 348:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6843,13 +7103,13 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Table = __webpack_require__(129);
+	var _Table = __webpack_require__(160);
 	
-	var _Toggle = __webpack_require__(227);
+	var _Toggle = __webpack_require__(263);
 	
 	var _Toggle2 = _interopRequireDefault(_Toggle);
 	
-	var _ = __webpack_require__(65);
+	var _ = __webpack_require__(80);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6884,15 +7144,15 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'render',
 			value: function render() {
-				var _props = this.props;
-				var tasks = _props.tasks;
-				var category = _props.category;
-				var categories = _props.categories;
-				var isAuthenticated = _props.isAuthenticated;
-				var profile = _props.profile;
-				var handleTaskClick = _props.handleTaskClick;
-				var dispatch = _props.dispatch;
-				var socket = _props.socket;
+				var _props = this.props,
+				    tasks = _props.tasks,
+				    category = _props.category,
+				    categories = _props.categories,
+				    isAuthenticated = _props.isAuthenticated,
+				    profile = _props.profile,
+				    handleTaskClick = _props.handleTaskClick,
+				    dispatch = _props.dispatch,
+				    socket = _props.socket;
 				var showArchive = this.state.showArchive;
 	
 				// Generate task rows with newest tasks first
@@ -6982,7 +7242,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 314:
+/***/ 349:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6995,7 +7255,7 @@ webpackJsonp([2,0],{
 	
 	exports.default = tasks;
 	
-	var _actionTypes = __webpack_require__(164);
+	var _actionTypes = __webpack_require__(192);
 	
 	var t = _interopRequireWildcard(_actionTypes);
 	
@@ -7170,7 +7430,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 315:
+/***/ 350:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7187,15 +7447,15 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _DropDownMenu = __webpack_require__(91);
+	var _DropDownMenu = __webpack_require__(108);
 	
 	var _DropDownMenu2 = _interopRequireDefault(_DropDownMenu);
 	
-	var _MenuItem = __webpack_require__(44);
+	var _MenuItem = __webpack_require__(57);
 	
 	var _MenuItem2 = _interopRequireDefault(_MenuItem);
 	
-	var _ = __webpack_require__(66);
+	var _ = __webpack_require__(81);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -7238,11 +7498,6 @@ webpackJsonp([2,0],{
 					'div',
 					{ className: 'test-role-buttons' },
 					_react2.default.createElement(
-						'span',
-						null,
-						'User Role: \xA0'
-					),
-					_react2.default.createElement(
 						_DropDownMenu2.default,
 						{
 							value: this.state.userRole,
@@ -7271,7 +7526,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 316:
+/***/ 351:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7286,21 +7541,21 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(57);
+	var _reactRedux = __webpack_require__(78);
 	
-	var _Paper = __webpack_require__(16);
+	var _Paper = __webpack_require__(23);
 	
 	var _Paper2 = _interopRequireDefault(_Paper);
 	
-	var _Divider = __webpack_require__(90);
+	var _Divider = __webpack_require__(107);
 	
 	var _Divider2 = _interopRequireDefault(_Divider);
 	
-	var _shared = __webpack_require__(76);
+	var _shared = __webpack_require__(97);
 	
-	var _tasks = __webpack_require__(65);
+	var _tasks = __webpack_require__(80);
 	
-	var _formatTime = __webpack_require__(319);
+	var _formatTime = __webpack_require__(354);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -7311,9 +7566,9 @@ webpackJsonp([2,0],{
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	function mapStateToProps(state) {
-		var _state$tasks = state.tasks;
-		var submissions = _state$tasks.submissions;
-		var fetchingSubmissions = _state$tasks.fetchingSubmissions;
+		var _state$tasks = state.tasks,
+		    submissions = _state$tasks.submissions,
+		    fetchingSubmissions = _state$tasks.fetchingSubmissions;
 	
 		return {
 			submissions: submissions,
@@ -7364,12 +7619,12 @@ webpackJsonp([2,0],{
 		}, {
 			key: 'generateSubmission',
 			value: function generateSubmission(displayType, submission, index) {
-				var date = submission.date;
-				var username = submission.username;
-				var name = submission.name;
-				var category = submission.category;
-				var url = submission.url;
-				var archive = submission.archive;
+				var date = submission.date,
+				    username = submission.username,
+				    name = submission.name,
+				    category = submission.category,
+				    url = submission.url,
+				    archive = submission.archive;
 	
 	
 				var time = '';
@@ -7417,10 +7672,10 @@ webpackJsonp([2,0],{
 			value: function render() {
 				var _this3 = this;
 	
-				var _props = this.props;
-				var profile = _props.profile;
-				var submissions = _props.submissions;
-				var fetchingSubmissions = _props.fetchingSubmissions;
+				var _props = this.props,
+				    profile = _props.profile,
+				    submissions = _props.submissions,
+				    fetchingSubmissions = _props.fetchingSubmissions;
 	
 				var todaySubmissions = [];
 				var yesterdaySubmissions = [];
@@ -7520,7 +7775,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 317:
+/***/ 352:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7535,21 +7790,21 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(46);
+	var _reactRouter = __webpack_require__(61);
 	
-	var _Paper = __webpack_require__(16);
+	var _Paper = __webpack_require__(23);
 	
 	var _Paper2 = _interopRequireDefault(_Paper);
 	
-	var _RaisedButton = __webpack_require__(127);
+	var _RaisedButton = __webpack_require__(158);
 	
 	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 	
-	var _userHasAccess = __webpack_require__(321);
+	var _userHasAccess = __webpack_require__(356);
 	
 	var _userHasAccess2 = _interopRequireDefault(_userHasAccess);
 	
-	var _actions = __webpack_require__(166);
+	var _actions = __webpack_require__(194);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -7704,7 +7959,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 318:
+/***/ 353:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7715,7 +7970,7 @@ webpackJsonp([2,0],{
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _actionTypes = __webpack_require__(165);
+	var _actionTypes = __webpack_require__(193);
 	
 	var t = _interopRequireWildcard(_actionTypes);
 	
@@ -7786,7 +8041,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 319:
+/***/ 354:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7829,7 +8084,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 320:
+/***/ 355:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7876,7 +8131,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 321:
+/***/ 356:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7907,7 +8162,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 322:
+/***/ 357:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7940,7 +8195,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 323:
+/***/ 408:
 /***/ function(module, exports) {
 
 	
@@ -8032,7 +8287,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 324:
+/***/ 409:
 /***/ function(module, exports) {
 
 	/*
@@ -8106,7 +8361,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 325:
+/***/ 410:
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -8210,7 +8465,178 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 327:
+/***/ 412:
+/***/ function(module, exports) {
+
+	
+	/**
+	 * Expose `Emitter`.
+	 */
+	
+	module.exports = Emitter;
+	
+	/**
+	 * Initialize a new `Emitter`.
+	 *
+	 * @api public
+	 */
+	
+	function Emitter(obj) {
+	  if (obj) return mixin(obj);
+	};
+	
+	/**
+	 * Mixin the emitter properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	function mixin(obj) {
+	  for (var key in Emitter.prototype) {
+	    obj[key] = Emitter.prototype[key];
+	  }
+	  return obj;
+	}
+	
+	/**
+	 * Listen on the given `event` with `fn`.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.on =
+	Emitter.prototype.addEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	  (this._callbacks[event] = this._callbacks[event] || [])
+	    .push(fn);
+	  return this;
+	};
+	
+	/**
+	 * Adds an `event` listener that will be invoked a single
+	 * time then automatically removed.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.once = function(event, fn){
+	  var self = this;
+	  this._callbacks = this._callbacks || {};
+	
+	  function on() {
+	    self.off(event, on);
+	    fn.apply(this, arguments);
+	  }
+	
+	  on.fn = fn;
+	  this.on(event, on);
+	  return this;
+	};
+	
+	/**
+	 * Remove the given callback for `event` or all
+	 * registered callbacks.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.off =
+	Emitter.prototype.removeListener =
+	Emitter.prototype.removeAllListeners =
+	Emitter.prototype.removeEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	
+	  // all
+	  if (0 == arguments.length) {
+	    this._callbacks = {};
+	    return this;
+	  }
+	
+	  // specific event
+	  var callbacks = this._callbacks[event];
+	  if (!callbacks) return this;
+	
+	  // remove all handlers
+	  if (1 == arguments.length) {
+	    delete this._callbacks[event];
+	    return this;
+	  }
+	
+	  // remove specific handler
+	  var cb;
+	  for (var i = 0; i < callbacks.length; i++) {
+	    cb = callbacks[i];
+	    if (cb === fn || cb.fn === fn) {
+	      callbacks.splice(i, 1);
+	      break;
+	    }
+	  }
+	  return this;
+	};
+	
+	/**
+	 * Emit `event` with the given args.
+	 *
+	 * @param {String} event
+	 * @param {Mixed} ...
+	 * @return {Emitter}
+	 */
+	
+	Emitter.prototype.emit = function(event){
+	  this._callbacks = this._callbacks || {};
+	  var args = [].slice.call(arguments, 1)
+	    , callbacks = this._callbacks[event];
+	
+	  if (callbacks) {
+	    callbacks = callbacks.slice(0);
+	    for (var i = 0, len = callbacks.length; i < len; ++i) {
+	      callbacks[i].apply(this, args);
+	    }
+	  }
+	
+	  return this;
+	};
+	
+	/**
+	 * Return array of callbacks for `event`.
+	 *
+	 * @param {String} event
+	 * @return {Array}
+	 * @api public
+	 */
+	
+	Emitter.prototype.listeners = function(event){
+	  this._callbacks = this._callbacks || {};
+	  return this._callbacks[event] || [];
+	};
+	
+	/**
+	 * Check if this emitter has `event` handlers.
+	 *
+	 * @param {String} event
+	 * @return {Boolean}
+	 * @api public
+	 */
+	
+	Emitter.prototype.hasListeners = function(event){
+	  return !! this.listeners(event).length;
+	};
+
+
+/***/ },
+
+/***/ 413:
 /***/ function(module, exports) {
 
 	/*
@@ -8267,7 +8693,182 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 328:
+/***/ 414:
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * This is the web browser implementation of `debug()`.
+	 *
+	 * Expose `debug()` as the module.
+	 */
+	
+	exports = module.exports = __webpack_require__(415);
+	exports.log = log;
+	exports.formatArgs = formatArgs;
+	exports.save = save;
+	exports.load = load;
+	exports.useColors = useColors;
+	exports.storage = 'undefined' != typeof chrome
+	               && 'undefined' != typeof chrome.storage
+	                  ? chrome.storage.local
+	                  : localstorage();
+	
+	/**
+	 * Colors.
+	 */
+	
+	exports.colors = [
+	  'lightseagreen',
+	  'forestgreen',
+	  'goldenrod',
+	  'dodgerblue',
+	  'darkorchid',
+	  'crimson'
+	];
+	
+	/**
+	 * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+	 * and the Firebug extension (any Firefox version) are known
+	 * to support "%c" CSS customizations.
+	 *
+	 * TODO: add a `localStorage` variable to explicitly enable/disable colors
+	 */
+	
+	function useColors() {
+	  // is webkit? http://stackoverflow.com/a/16459606/376773
+	  return ('WebkitAppearance' in document.documentElement.style) ||
+	    // is firebug? http://stackoverflow.com/a/398120/376773
+	    (window.console && (console.firebug || (console.exception && console.table))) ||
+	    // is firefox >= v31?
+	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+	}
+	
+	/**
+	 * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+	 */
+	
+	exports.formatters.j = function(v) {
+	  return JSON.stringify(v);
+	};
+	
+	
+	/**
+	 * Colorize log arguments if enabled.
+	 *
+	 * @api public
+	 */
+	
+	function formatArgs() {
+	  var args = arguments;
+	  var useColors = this.useColors;
+	
+	  args[0] = (useColors ? '%c' : '')
+	    + this.namespace
+	    + (useColors ? ' %c' : ' ')
+	    + args[0]
+	    + (useColors ? '%c ' : ' ')
+	    + '+' + exports.humanize(this.diff);
+	
+	  if (!useColors) return args;
+	
+	  var c = 'color: ' + this.color;
+	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+	
+	  // the final "%c" is somewhat tricky, because there could be other
+	  // arguments passed either before or after the %c, so we need to
+	  // figure out the correct index to insert the CSS into
+	  var index = 0;
+	  var lastC = 0;
+	  args[0].replace(/%[a-z%]/g, function(match) {
+	    if ('%%' === match) return;
+	    index++;
+	    if ('%c' === match) {
+	      // we only are interested in the *last* %c
+	      // (the user may have provided their own)
+	      lastC = index;
+	    }
+	  });
+	
+	  args.splice(lastC, 0, c);
+	  return args;
+	}
+	
+	/**
+	 * Invokes `console.log()` when available.
+	 * No-op when `console.log` is not a "function".
+	 *
+	 * @api public
+	 */
+	
+	function log() {
+	  // this hackery is required for IE8/9, where
+	  // the `console.log` function doesn't have 'apply'
+	  return 'object' === typeof console
+	    && console.log
+	    && Function.prototype.apply.call(console.log, console, arguments);
+	}
+	
+	/**
+	 * Save `namespaces`.
+	 *
+	 * @param {String} namespaces
+	 * @api private
+	 */
+	
+	function save(namespaces) {
+	  try {
+	    if (null == namespaces) {
+	      exports.storage.removeItem('debug');
+	    } else {
+	      exports.storage.debug = namespaces;
+	    }
+	  } catch(e) {}
+	}
+	
+	/**
+	 * Load `namespaces`.
+	 *
+	 * @return {String} returns the previously persisted debug modes
+	 * @api private
+	 */
+	
+	function load() {
+	  var r;
+	  try {
+	    r = exports.storage.debug;
+	  } catch(e) {}
+	  return r;
+	}
+	
+	/**
+	 * Enable namespaces listed in `localStorage.debug` initially.
+	 */
+	
+	exports.enable(load());
+	
+	/**
+	 * Localstorage attempts to return the localstorage.
+	 *
+	 * This is necessary because safari throws
+	 * when a user disables cookies/localstorage
+	 * and you attempt to access it.
+	 *
+	 * @return {LocalStorage}
+	 * @api private
+	 */
+	
+	function localstorage(){
+	  try {
+	    return window.localStorage;
+	  } catch (e) {}
+	}
+
+
+/***/ },
+
+/***/ 415:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -8283,7 +8884,7 @@ webpackJsonp([2,0],{
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(581);
+	exports.humanize = __webpack_require__(610);
 	
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -8471,7 +9072,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 329:
+/***/ 416:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -8901,20 +9502,20 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 333:
+/***/ 420:
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(334);
+	module.exports = __webpack_require__(421);
 
 
 /***/ },
 
-/***/ 334:
+/***/ 421:
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(335);
+	module.exports = __webpack_require__(422);
 	
 	/**
 	 * Exports parser
@@ -8922,26 +9523,26 @@ webpackJsonp([2,0],{
 	 * @api public
 	 *
 	 */
-	module.exports.parser = __webpack_require__(50);
+	module.exports.parser = __webpack_require__(68);
 
 
 /***/ },
 
-/***/ 335:
+/***/ 422:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 	
-	var transports = __webpack_require__(168);
-	var Emitter = __webpack_require__(77);
-	var debug = __webpack_require__(30)('engine.io-client:socket');
-	var index = __webpack_require__(182);
-	var parser = __webpack_require__(50);
-	var parseuri = __webpack_require__(239);
-	var parsejson = __webpack_require__(582);
-	var parseqs = __webpack_require__(135);
+	var transports = __webpack_require__(215);
+	var Emitter = __webpack_require__(144);
+	var debug = __webpack_require__(102)('engine.io-client:socket');
+	var index = __webpack_require__(230);
+	var parser = __webpack_require__(68);
+	var parseuri = __webpack_require__(275);
+	var parsejson = __webpack_require__(611);
+	var parseqs = __webpack_require__(166);
 	
 	/**
 	 * Module exports.
@@ -9004,6 +9605,7 @@ webpackJsonp([2,0],{
 	  this.transports = opts.transports || ['polling', 'websocket'];
 	  this.readyState = '';
 	  this.writeBuffer = [];
+	  this.prevBufferLen = 0;
 	  this.policyPort = opts.policyPort || 843;
 	  this.rememberUpgrade = opts.rememberUpgrade || false;
 	  this.binaryType = null;
@@ -9023,6 +9625,7 @@ webpackJsonp([2,0],{
 	  this.ca = opts.ca || null;
 	  this.ciphers = opts.ciphers || null;
 	  this.rejectUnauthorized = opts.rejectUnauthorized === undefined ? null : opts.rejectUnauthorized;
+	  this.forceNode = !!opts.forceNode;
 	
 	  // other options for Node.js client
 	  var freeGlobal = typeof global === 'object' && global;
@@ -9030,7 +9633,21 @@ webpackJsonp([2,0],{
 	    if (opts.extraHeaders && Object.keys(opts.extraHeaders).length > 0) {
 	      this.extraHeaders = opts.extraHeaders;
 	    }
+	
+	    if (opts.localAddress) {
+	      this.localAddress = opts.localAddress;
+	    }
 	  }
+	
+	  // set on handshake
+	  this.id = null;
+	  this.upgrades = null;
+	  this.pingInterval = null;
+	  this.pingTimeout = null;
+	
+	  // set on heartbeat
+	  this.pingIntervalTimer = null;
+	  this.pingTimeoutTimer = null;
 	
 	  this.open();
 	}
@@ -9057,9 +9674,9 @@ webpackJsonp([2,0],{
 	 */
 	
 	Socket.Socket = Socket;
-	Socket.Transport = __webpack_require__(109);
-	Socket.transports = __webpack_require__(168);
-	Socket.parser = __webpack_require__(50);
+	Socket.Transport = __webpack_require__(142);
+	Socket.transports = __webpack_require__(215);
+	Socket.parser = __webpack_require__(68);
 	
 	/**
 	 * Creates transport of the given type.
@@ -9105,7 +9722,9 @@ webpackJsonp([2,0],{
 	    ciphers: this.ciphers,
 	    rejectUnauthorized: this.rejectUnauthorized,
 	    perMessageDeflate: this.perMessageDeflate,
-	    extraHeaders: this.extraHeaders
+	    extraHeaders: this.extraHeaders,
+	    forceNode: this.forceNode,
+	    localAddress: this.localAddress
 	  });
 	
 	  return transport;
@@ -9336,7 +9955,8 @@ webpackJsonp([2,0],{
 	 */
 	
 	Socket.prototype.onPacket = function (packet) {
-	  if ('opening' === this.readyState || 'open' === this.readyState) {
+	  if ('opening' === this.readyState || 'open' === this.readyState ||
+	      'closing' === this.readyState) {
 	    debug('socket receive: type "%s", data "%s"', packet.type, packet.data);
 	
 	    this.emit('packet', packet);
@@ -9654,7 +10274,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 336:
+/***/ 423:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -9662,8 +10282,8 @@ webpackJsonp([2,0],{
 	 * Module requirements.
 	 */
 	
-	var Polling = __webpack_require__(169);
-	var inherit = __webpack_require__(78);
+	var Polling = __webpack_require__(216);
+	var inherit = __webpack_require__(101);
 	
 	/**
 	 * Module exports.
@@ -9893,18 +10513,18 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 337:
+/***/ 424:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module requirements.
 	 */
 	
-	var XMLHttpRequest = __webpack_require__(110);
-	var Polling = __webpack_require__(169);
-	var Emitter = __webpack_require__(77);
-	var inherit = __webpack_require__(78);
-	var debug = __webpack_require__(30)('engine.io-client:polling-xhr');
+	var XMLHttpRequest = __webpack_require__(143);
+	var Polling = __webpack_require__(216);
+	var Emitter = __webpack_require__(144);
+	var inherit = __webpack_require__(101);
+	var debug = __webpack_require__(102)('engine.io-client:polling-xhr');
 	
 	/**
 	 * Module exports.
@@ -9928,6 +10548,7 @@ webpackJsonp([2,0],{
 	
 	function XHR (opts) {
 	  Polling.call(this, opts);
+	  this.requestTimeout = opts.requestTimeout;
 	
 	  if (global.location) {
 	    var isSSL = 'https:' === location.protocol;
@@ -9982,6 +10603,7 @@ webpackJsonp([2,0],{
 	  opts.ca = this.ca;
 	  opts.ciphers = this.ciphers;
 	  opts.rejectUnauthorized = this.rejectUnauthorized;
+	  opts.requestTimeout = this.requestTimeout;
 	
 	  // other options for Node.js client
 	  opts.extraHeaders = this.extraHeaders;
@@ -10045,6 +10667,7 @@ webpackJsonp([2,0],{
 	  this.isBinary = opts.isBinary;
 	  this.supportsBinary = opts.supportsBinary;
 	  this.enablesXDR = opts.enablesXDR;
+	  this.requestTimeout = opts.requestTimeout;
 	
 	  // SSL options for Node.js client
 	  this.pfx = opts.pfx;
@@ -10117,9 +10740,17 @@ webpackJsonp([2,0],{
 	      } catch (e) {}
 	    }
 	
+	    try {
+	      xhr.setRequestHeader('Accept', '*/*');
+	    } catch (e) {}
+	
 	    // ie6 check
 	    if ('withCredentials' in xhr) {
 	      xhr.withCredentials = true;
+	    }
+	
+	    if (this.requestTimeout) {
+	      xhr.timeout = this.requestTimeout;
 	    }
 	
 	    if (this.hasXDR()) {
@@ -10291,9 +10922,10 @@ webpackJsonp([2,0],{
 	 * emitted.
 	 */
 	
+	Request.requestsCount = 0;
+	Request.requests = {};
+	
 	if (global.document) {
-	  Request.requestsCount = 0;
-	  Request.requests = {};
 	  if (global.attachEvent) {
 	    global.attachEvent('onunload', unloadHandler);
 	  } else if (global.addEventListener) {
@@ -10313,20 +10945,26 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 338:
+/***/ 425:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 	
-	var Transport = __webpack_require__(109);
-	var parser = __webpack_require__(50);
-	var parseqs = __webpack_require__(135);
-	var inherit = __webpack_require__(78);
-	var yeast = __webpack_require__(290);
-	var debug = __webpack_require__(30)('engine.io-client:websocket');
+	var Transport = __webpack_require__(142);
+	var parser = __webpack_require__(68);
+	var parseqs = __webpack_require__(166);
+	var inherit = __webpack_require__(101);
+	var yeast = __webpack_require__(325);
+	var debug = __webpack_require__(102)('engine.io-client:websocket');
 	var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
+	var NodeWebSocket;
+	if (typeof window === 'undefined') {
+	  try {
+	    NodeWebSocket = __webpack_require__(770);
+	  } catch (e) { }
+	}
 	
 	/**
 	 * Get either the `WebSocket` or `MozWebSocket` globals
@@ -10336,9 +10974,7 @@ webpackJsonp([2,0],{
 	
 	var WebSocket = BrowserWebSocket;
 	if (!WebSocket && typeof window === 'undefined') {
-	  try {
-	    WebSocket = __webpack_require__(720);
-	  } catch (e) { }
+	  WebSocket = NodeWebSocket;
 	}
 	
 	/**
@@ -10360,6 +10996,10 @@ webpackJsonp([2,0],{
 	    this.supportsBinary = false;
 	  }
 	  this.perMessageDeflate = opts.perMessageDeflate;
+	  this.usingBrowserWebSocket = BrowserWebSocket && !opts.forceNode;
+	  if (!this.usingBrowserWebSocket) {
+	    WebSocket = NodeWebSocket;
+	  }
 	  Transport.call(this, opts);
 	}
 	
@@ -10413,9 +11053,12 @@ webpackJsonp([2,0],{
 	  if (this.extraHeaders) {
 	    opts.headers = this.extraHeaders;
 	  }
+	  if (this.localAddress) {
+	    opts.localAddress = this.localAddress;
+	  }
 	
 	  try {
-	    this.ws = BrowserWebSocket ? new WebSocket(uri) : new WebSocket(uri, protocols, opts);
+	    this.ws = this.usingBrowserWebSocket ? new WebSocket(uri) : new WebSocket(uri, protocols, opts);
 	  } catch (err) {
 	    return this.emit('error', err);
 	  }
@@ -10458,23 +11101,6 @@ webpackJsonp([2,0],{
 	};
 	
 	/**
-	 * Override `onData` to use a timer on iOS.
-	 * See: https://gist.github.com/mloughran/2052006
-	 *
-	 * @api private
-	 */
-	
-	if ('undefined' !== typeof navigator &&
-	  /iPad|iPhone|iPod/i.test(navigator.userAgent)) {
-	  WS.prototype.onData = function (data) {
-	    var self = this;
-	    setTimeout(function () {
-	      Transport.prototype.onData.call(self, data);
-	    }, 0);
-	  };
-	}
-	
-	/**
 	 * Writes data to socket.
 	 *
 	 * @param {Array} array of packets.
@@ -10491,7 +11117,7 @@ webpackJsonp([2,0],{
 	  for (var i = 0, l = total; i < l; i++) {
 	    (function (packet) {
 	      parser.encodePacket(packet, self.supportsBinary, function (data) {
-	        if (!BrowserWebSocket) {
+	        if (!self.usingBrowserWebSocket) {
 	          // always create a new object (GH-437)
 	          var opts = {};
 	          if (packet.options) {
@@ -10510,7 +11136,7 @@ webpackJsonp([2,0],{
 	        // have a chance of informing us about it yet, in that case send will
 	        // throw an error
 	        try {
-	          if (BrowserWebSocket) {
+	          if (self.usingBrowserWebSocket) {
 	            // TypeError is thrown when passing the second argument on Safari
 	            self.ws.send(data);
 	          } else {
@@ -10571,8 +11197,8 @@ webpackJsonp([2,0],{
 	  var port = '';
 	
 	  // avoid port if default for schema
-	  if (this.port && (('wss' === schema && this.port !== 443) ||
-	    ('ws' === schema && this.port !== 80))) {
+	  if (this.port && (('wss' === schema && Number(this.port) !== 443) ||
+	    ('ws' === schema && Number(this.port) !== 80))) {
 	    port = ':' + this.port;
 	  }
 	
@@ -10612,7 +11238,370 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 339:
+/***/ 426:
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * This is the common logic for both the Node.js and web browser
+	 * implementations of `debug()`.
+	 *
+	 * Expose `debug()` as the module.
+	 */
+	
+	exports = module.exports = debug.debug = debug;
+	exports.coerce = coerce;
+	exports.disable = disable;
+	exports.enable = enable;
+	exports.enabled = enabled;
+	exports.humanize = __webpack_require__(427);
+	
+	/**
+	 * The currently active debug mode names, and names to skip.
+	 */
+	
+	exports.names = [];
+	exports.skips = [];
+	
+	/**
+	 * Map of special "%n" handling functions, for the debug "format" argument.
+	 *
+	 * Valid key names are a single, lowercased letter, i.e. "n".
+	 */
+	
+	exports.formatters = {};
+	
+	/**
+	 * Previously assigned color.
+	 */
+	
+	var prevColor = 0;
+	
+	/**
+	 * Previous log timestamp.
+	 */
+	
+	var prevTime;
+	
+	/**
+	 * Select a color.
+	 *
+	 * @return {Number}
+	 * @api private
+	 */
+	
+	function selectColor() {
+	  return exports.colors[prevColor++ % exports.colors.length];
+	}
+	
+	/**
+	 * Create a debugger with the given `namespace`.
+	 *
+	 * @param {String} namespace
+	 * @return {Function}
+	 * @api public
+	 */
+	
+	function debug(namespace) {
+	
+	  // define the `disabled` version
+	  function disabled() {
+	  }
+	  disabled.enabled = false;
+	
+	  // define the `enabled` version
+	  function enabled() {
+	
+	    var self = enabled;
+	
+	    // set `diff` timestamp
+	    var curr = +new Date();
+	    var ms = curr - (prevTime || curr);
+	    self.diff = ms;
+	    self.prev = prevTime;
+	    self.curr = curr;
+	    prevTime = curr;
+	
+	    // add the `color` if not set
+	    if (null == self.useColors) self.useColors = exports.useColors();
+	    if (null == self.color && self.useColors) self.color = selectColor();
+	
+	    var args = new Array(arguments.length);
+	    for (var i = 0; i < args.length; i++) {
+	      args[i] = arguments[i];
+	    }
+	
+	    args[0] = exports.coerce(args[0]);
+	
+	    if ('string' !== typeof args[0]) {
+	      // anything else let's inspect with %o
+	      args = ['%o'].concat(args);
+	    }
+	
+	    // apply any `formatters` transformations
+	    var index = 0;
+	    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
+	      // if we encounter an escaped % then don't increase the array index
+	      if (match === '%%') return match;
+	      index++;
+	      var formatter = exports.formatters[format];
+	      if ('function' === typeof formatter) {
+	        var val = args[index];
+	        match = formatter.call(self, val);
+	
+	        // now we need to remove `args[index]` since it's inlined in the `format`
+	        args.splice(index, 1);
+	        index--;
+	      }
+	      return match;
+	    });
+	
+	    // apply env-specific formatting
+	    args = exports.formatArgs.apply(self, args);
+	
+	    var logFn = enabled.log || exports.log || console.log.bind(console);
+	    logFn.apply(self, args);
+	  }
+	  enabled.enabled = true;
+	
+	  var fn = exports.enabled(namespace) ? enabled : disabled;
+	
+	  fn.namespace = namespace;
+	
+	  return fn;
+	}
+	
+	/**
+	 * Enables a debug mode by namespaces. This can include modes
+	 * separated by a colon and wildcards.
+	 *
+	 * @param {String} namespaces
+	 * @api public
+	 */
+	
+	function enable(namespaces) {
+	  exports.save(namespaces);
+	
+	  var split = (namespaces || '').split(/[\s,]+/);
+	  var len = split.length;
+	
+	  for (var i = 0; i < len; i++) {
+	    if (!split[i]) continue; // ignore empty strings
+	    namespaces = split[i].replace(/[\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*?');
+	    if (namespaces[0] === '-') {
+	      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+	    } else {
+	      exports.names.push(new RegExp('^' + namespaces + '$'));
+	    }
+	  }
+	}
+	
+	/**
+	 * Disable debug output.
+	 *
+	 * @api public
+	 */
+	
+	function disable() {
+	  exports.enable('');
+	}
+	
+	/**
+	 * Returns true if the given mode name is enabled, false otherwise.
+	 *
+	 * @param {String} name
+	 * @return {Boolean}
+	 * @api public
+	 */
+	
+	function enabled(name) {
+	  var i, len;
+	  for (i = 0, len = exports.skips.length; i < len; i++) {
+	    if (exports.skips[i].test(name)) {
+	      return false;
+	    }
+	  }
+	  for (i = 0, len = exports.names.length; i < len; i++) {
+	    if (exports.names[i].test(name)) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+	
+	/**
+	 * Coerce `val`.
+	 *
+	 * @param {Mixed} val
+	 * @return {Mixed}
+	 * @api private
+	 */
+	
+	function coerce(val) {
+	  if (val instanceof Error) return val.stack || val.message;
+	  return val;
+	}
+
+
+/***/ },
+
+/***/ 427:
+/***/ function(module, exports) {
+
+	/**
+	 * Helpers.
+	 */
+	
+	var s = 1000
+	var m = s * 60
+	var h = m * 60
+	var d = h * 24
+	var y = d * 365.25
+	
+	/**
+	 * Parse or format the given `val`.
+	 *
+	 * Options:
+	 *
+	 *  - `long` verbose formatting [false]
+	 *
+	 * @param {String|Number} val
+	 * @param {Object} options
+	 * @throws {Error} throw an error if val is not a non-empty string or a number
+	 * @return {String|Number}
+	 * @api public
+	 */
+	
+	module.exports = function (val, options) {
+	  options = options || {}
+	  var type = typeof val
+	  if (type === 'string' && val.length > 0) {
+	    return parse(val)
+	  } else if (type === 'number' && isNaN(val) === false) {
+	    return options.long ?
+				fmtLong(val) :
+				fmtShort(val)
+	  }
+	  throw new Error('val is not a non-empty string or a valid number. val=' + JSON.stringify(val))
+	}
+	
+	/**
+	 * Parse the given `str` and return milliseconds.
+	 *
+	 * @param {String} str
+	 * @return {Number}
+	 * @api private
+	 */
+	
+	function parse(str) {
+	  str = String(str)
+	  if (str.length > 10000) {
+	    return
+	  }
+	  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str)
+	  if (!match) {
+	    return
+	  }
+	  var n = parseFloat(match[1])
+	  var type = (match[2] || 'ms').toLowerCase()
+	  switch (type) {
+	    case 'years':
+	    case 'year':
+	    case 'yrs':
+	    case 'yr':
+	    case 'y':
+	      return n * y
+	    case 'days':
+	    case 'day':
+	    case 'd':
+	      return n * d
+	    case 'hours':
+	    case 'hour':
+	    case 'hrs':
+	    case 'hr':
+	    case 'h':
+	      return n * h
+	    case 'minutes':
+	    case 'minute':
+	    case 'mins':
+	    case 'min':
+	    case 'm':
+	      return n * m
+	    case 'seconds':
+	    case 'second':
+	    case 'secs':
+	    case 'sec':
+	    case 's':
+	      return n * s
+	    case 'milliseconds':
+	    case 'millisecond':
+	    case 'msecs':
+	    case 'msec':
+	    case 'ms':
+	      return n
+	    default:
+	      return undefined
+	  }
+	}
+	
+	/**
+	 * Short format for `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {String}
+	 * @api private
+	 */
+	
+	function fmtShort(ms) {
+	  if (ms >= d) {
+	    return Math.round(ms / d) + 'd'
+	  }
+	  if (ms >= h) {
+	    return Math.round(ms / h) + 'h'
+	  }
+	  if (ms >= m) {
+	    return Math.round(ms / m) + 'm'
+	  }
+	  if (ms >= s) {
+	    return Math.round(ms / s) + 's'
+	  }
+	  return ms + 'ms'
+	}
+	
+	/**
+	 * Long format for `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {String}
+	 * @api private
+	 */
+	
+	function fmtLong(ms) {
+	  return plural(ms, d, 'day') ||
+	    plural(ms, h, 'hour') ||
+	    plural(ms, m, 'minute') ||
+	    plural(ms, s, 'second') ||
+	    ms + ' ms'
+	}
+	
+	/**
+	 * Pluralization helper.
+	 */
+	
+	function plural(ms, n, name) {
+	  if (ms < n) {
+	    return
+	  }
+	  if (ms < n * 1.5) {
+	    return Math.floor(ms / n) + ' ' + name
+	  }
+	  return Math.ceil(ms / n) + ' ' + name + 's'
+	}
+
+
+/***/ },
+
+/***/ 428:
 /***/ function(module, exports) {
 
 	
@@ -10638,73 +11627,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 340:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {
-	/*
-	 * Module requirements.
-	 */
-	
-	var isArray = __webpack_require__(341);
-	
-	/**
-	 * Module exports.
-	 */
-	
-	module.exports = hasBinary;
-	
-	/**
-	 * Checks for binary data.
-	 *
-	 * Right now only Buffer and ArrayBuffer are supported..
-	 *
-	 * @param {Object} anything
-	 * @api public
-	 */
-	
-	function hasBinary(data) {
-	
-	  function _hasBinary(obj) {
-	    if (!obj) return false;
-	
-	    if ( (global.Buffer && global.Buffer.isBuffer(obj)) ||
-	         (global.ArrayBuffer && obj instanceof ArrayBuffer) ||
-	         (global.Blob && obj instanceof Blob) ||
-	         (global.File && obj instanceof File)
-	        ) {
-	      return true;
-	    }
-	
-	    if (isArray(obj)) {
-	      for (var i = 0; i < obj.length; i++) {
-	          if (_hasBinary(obj[i])) {
-	              return true;
-	          }
-	      }
-	    } else if (obj && 'object' == typeof obj) {
-	      if (obj.toJSON) {
-	        obj = obj.toJSON();
-	      }
-	
-	      for (var key in obj) {
-	        if (Object.prototype.hasOwnProperty.call(obj, key) && _hasBinary(obj[key])) {
-	          return true;
-	        }
-	      }
-	    }
-	
-	    return false;
-	  }
-	
-	  return _hasBinary(data);
-	}
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-
-/***/ 341:
+/***/ 443:
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -10714,84 +11637,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 356:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {
-	/*
-	 * Module requirements.
-	 */
-	
-	var isArray = __webpack_require__(357);
-	
-	/**
-	 * Module exports.
-	 */
-	
-	module.exports = hasBinary;
-	
-	/**
-	 * Checks for binary data.
-	 *
-	 * Right now only Buffer and ArrayBuffer are supported..
-	 *
-	 * @param {Object} anything
-	 * @api public
-	 */
-	
-	function hasBinary(data) {
-	
-	  function _hasBinary(obj) {
-	    if (!obj) return false;
-	
-	    if ( (global.Buffer && global.Buffer.isBuffer && global.Buffer.isBuffer(obj)) ||
-	         (global.ArrayBuffer && obj instanceof ArrayBuffer) ||
-	         (global.Blob && obj instanceof Blob) ||
-	         (global.File && obj instanceof File)
-	        ) {
-	      return true;
-	    }
-	
-	    if (isArray(obj)) {
-	      for (var i = 0; i < obj.length; i++) {
-	          if (_hasBinary(obj[i])) {
-	              return true;
-	          }
-	      }
-	    } else if (obj && 'object' == typeof obj) {
-	      // see: https://github.com/Automattic/has-binary/pull/4
-	      if (obj.toJSON && 'function' == typeof obj.toJSON) {
-	        obj = obj.toJSON();
-	      }
-	
-	      for (var key in obj) {
-	        if (Object.prototype.hasOwnProperty.call(obj, key) && _hasBinary(obj[key])) {
-	          return true;
-	        }
-	      }
-	    }
-	
-	    return false;
-	  }
-	
-	  return _hasBinary(data);
-	}
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-
-/***/ 357:
-/***/ function(module, exports) {
-
-	module.exports = Array.isArray || function (arr) {
-	  return Object.prototype.toString.call(arr) == '[object Array]';
-	};
-
-
-/***/ },
-
-/***/ 358:
+/***/ 444:
 /***/ function(module, exports) {
 
 	
@@ -10815,20 +11661,20 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 389:
+/***/ 478:
 /***/ function(module, exports, __webpack_require__) {
 
 	// the whatwg-fetch polyfill installs the fetch() function
 	// on the global object (window or self)
 	//
 	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(289);
+	__webpack_require__(324);
 	module.exports = self.fetch.bind(self);
 
 
 /***/ },
 
-/***/ 391:
+/***/ 480:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10839,7 +11685,7 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _linkify = __webpack_require__(184);
+	var _linkify = __webpack_require__(233);
 	
 	var linkify = _interopRequireWildcard(_linkify);
 	
@@ -10871,17 +11717,15 @@ webpackJsonp([2,0],{
 				continue;
 			}
 	
-			var _opts$resolve = opts.resolve(token);
-	
-			var href = _opts$resolve.href;
-			var formatted = _opts$resolve.formatted;
-			var formattedHref = _opts$resolve.formattedHref;
-			var tagName = _opts$resolve.tagName;
-			var className = _opts$resolve.className;
-			var target = _opts$resolve.target;
-			var attributes = _opts$resolve.attributes;
-			var events = _opts$resolve.events;
-	
+			var _opts$resolve = opts.resolve(token),
+			    href = _opts$resolve.href,
+			    formatted = _opts$resolve.formatted,
+			    formattedHref = _opts$resolve.formattedHref,
+			    tagName = _opts$resolve.tagName,
+			    className = _opts$resolve.className,
+			    target = _opts$resolve.target,
+			    attributes = _opts$resolve.attributes,
+			    events = _opts$resolve.events;
 	
 			var props = {
 				key: 'linkified-' + ++linkId,
@@ -10912,7 +11756,7 @@ webpackJsonp([2,0],{
 	
 	// Recursively linkify the contents of the given React Element instance
 	function linkifyReactElement(element, opts) {
-		var elementId = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+		var elementId = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 	
 		if (_react2.default.Children.count(element.props.children) === 0) {
 			// No need to clone if the element had no children
@@ -10968,15 +11812,15 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 396:
+/***/ 485:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(391).default;
+	module.exports = __webpack_require__(480).default;
 
 
 /***/ },
 
-/***/ 558:
+/***/ 585:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10985,11 +11829,11 @@ webpackJsonp([2,0],{
 	  value: true
 	});
 	
-	var _colors = __webpack_require__(70);
+	var _colors = __webpack_require__(89);
 	
-	var _colorManipulator = __webpack_require__(27);
+	var _colorManipulator = __webpack_require__(39);
 	
-	var _spacing = __webpack_require__(236);
+	var _spacing = __webpack_require__(272);
 	
 	var _spacing2 = _interopRequireDefault(_spacing);
 	
@@ -11018,7 +11862,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 572:
+/***/ 599:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11031,11 +11875,11 @@ webpackJsonp([2,0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _pure = __webpack_require__(13);
+	var _pure = __webpack_require__(20);
 	
 	var _pure2 = _interopRequireDefault(_pure);
 	
-	var _SvgIcon = __webpack_require__(10);
+	var _SvgIcon = __webpack_require__(16);
 	
 	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
 	
@@ -11056,7 +11900,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 581:
+/***/ 610:
 /***/ function(module, exports) {
 
 	/**
@@ -11188,7 +12032,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 582:
+/***/ 611:
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -11227,7 +12071,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 693:
+/***/ 740:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11237,9 +12081,9 @@ webpackJsonp([2,0],{
 	});
 	exports.printBuffer = printBuffer;
 	
-	var _helpers = __webpack_require__(277);
+	var _helpers = __webpack_require__(313);
 	
-	var _diff = __webpack_require__(695);
+	var _diff = __webpack_require__(742);
 	
 	var _diff2 = _interopRequireDefault(_diff);
 	
@@ -11275,7 +12119,15 @@ webpackJsonp([2,0],{
 	  var duration = options.duration;
 	
 	  return function (action, time, took) {
-	    return 'action @ ' + (timestamp ? time : '') + ' ' + action.type + ' ' + (duration ? '(in ' + took.toFixed(2) + ' ms)' : '');
+	    var parts = ['action'];
+	    if (timestamp) {
+	      parts.push('@ ' + time);
+	    }
+	    parts.push(action.type);
+	    if (duration) {
+	      parts.push('(in ' + took.toFixed(2) + ' ms)');
+	    }
+	    return parts.join(' ');
 	  };
 	}
 	
@@ -11361,7 +12213,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 694:
+/***/ 741:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -11413,7 +12265,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 695:
+/***/ 742:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11423,7 +12275,7 @@ webpackJsonp([2,0],{
 	});
 	exports.default = diffLogger;
 	
-	var _deepDiff = __webpack_require__(329);
+	var _deepDiff = __webpack_require__(416);
 	
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 	
@@ -11510,7 +12362,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 696:
+/***/ 743:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11521,11 +12373,11 @@ webpackJsonp([2,0],{
 	  value: true
 	});
 	
-	var _core = __webpack_require__(693);
+	var _core = __webpack_require__(740);
 	
-	var _helpers = __webpack_require__(277);
+	var _helpers = __webpack_require__(313);
 	
-	var _defaults = __webpack_require__(694);
+	var _defaults = __webpack_require__(741);
 	
 	var _defaults2 = _interopRequireDefault(_defaults);
 	
@@ -11629,7 +12481,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 704:
+/***/ 751:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -11637,10 +12489,10 @@ webpackJsonp([2,0],{
 	 * Module dependencies.
 	 */
 	
-	var url = __webpack_require__(705);
-	var parser = __webpack_require__(162);
-	var Manager = __webpack_require__(283);
-	var debug = __webpack_require__(30)('socket.io-client');
+	var url = __webpack_require__(752);
+	var parser = __webpack_require__(190);
+	var Manager = __webpack_require__(319);
+	var debug = __webpack_require__(121)('socket.io-client');
 	
 	/**
 	 * Module exports.
@@ -11739,13 +12591,13 @@ webpackJsonp([2,0],{
 	 * @api public
 	 */
 	
-	exports.Manager = __webpack_require__(283);
-	exports.Socket = __webpack_require__(285);
+	exports.Manager = __webpack_require__(319);
+	exports.Socket = __webpack_require__(321);
 
 
 /***/ },
 
-/***/ 705:
+/***/ 752:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -11753,8 +12605,8 @@ webpackJsonp([2,0],{
 	 * Module dependencies.
 	 */
 	
-	var parseuri = __webpack_require__(239);
-	var debug = __webpack_require__(30)('socket.io-client:url');
+	var parseuri = __webpack_require__(275);
+	var debug = __webpack_require__(121)('socket.io-client:url');
 	
 	/**
 	 * Module exports.
@@ -11828,7 +12680,370 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 706:
+/***/ 753:
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * This is the common logic for both the Node.js and web browser
+	 * implementations of `debug()`.
+	 *
+	 * Expose `debug()` as the module.
+	 */
+	
+	exports = module.exports = debug.debug = debug;
+	exports.coerce = coerce;
+	exports.disable = disable;
+	exports.enable = enable;
+	exports.enabled = enabled;
+	exports.humanize = __webpack_require__(754);
+	
+	/**
+	 * The currently active debug mode names, and names to skip.
+	 */
+	
+	exports.names = [];
+	exports.skips = [];
+	
+	/**
+	 * Map of special "%n" handling functions, for the debug "format" argument.
+	 *
+	 * Valid key names are a single, lowercased letter, i.e. "n".
+	 */
+	
+	exports.formatters = {};
+	
+	/**
+	 * Previously assigned color.
+	 */
+	
+	var prevColor = 0;
+	
+	/**
+	 * Previous log timestamp.
+	 */
+	
+	var prevTime;
+	
+	/**
+	 * Select a color.
+	 *
+	 * @return {Number}
+	 * @api private
+	 */
+	
+	function selectColor() {
+	  return exports.colors[prevColor++ % exports.colors.length];
+	}
+	
+	/**
+	 * Create a debugger with the given `namespace`.
+	 *
+	 * @param {String} namespace
+	 * @return {Function}
+	 * @api public
+	 */
+	
+	function debug(namespace) {
+	
+	  // define the `disabled` version
+	  function disabled() {
+	  }
+	  disabled.enabled = false;
+	
+	  // define the `enabled` version
+	  function enabled() {
+	
+	    var self = enabled;
+	
+	    // set `diff` timestamp
+	    var curr = +new Date();
+	    var ms = curr - (prevTime || curr);
+	    self.diff = ms;
+	    self.prev = prevTime;
+	    self.curr = curr;
+	    prevTime = curr;
+	
+	    // add the `color` if not set
+	    if (null == self.useColors) self.useColors = exports.useColors();
+	    if (null == self.color && self.useColors) self.color = selectColor();
+	
+	    var args = new Array(arguments.length);
+	    for (var i = 0; i < args.length; i++) {
+	      args[i] = arguments[i];
+	    }
+	
+	    args[0] = exports.coerce(args[0]);
+	
+	    if ('string' !== typeof args[0]) {
+	      // anything else let's inspect with %o
+	      args = ['%o'].concat(args);
+	    }
+	
+	    // apply any `formatters` transformations
+	    var index = 0;
+	    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
+	      // if we encounter an escaped % then don't increase the array index
+	      if (match === '%%') return match;
+	      index++;
+	      var formatter = exports.formatters[format];
+	      if ('function' === typeof formatter) {
+	        var val = args[index];
+	        match = formatter.call(self, val);
+	
+	        // now we need to remove `args[index]` since it's inlined in the `format`
+	        args.splice(index, 1);
+	        index--;
+	      }
+	      return match;
+	    });
+	
+	    // apply env-specific formatting
+	    args = exports.formatArgs.apply(self, args);
+	
+	    var logFn = enabled.log || exports.log || console.log.bind(console);
+	    logFn.apply(self, args);
+	  }
+	  enabled.enabled = true;
+	
+	  var fn = exports.enabled(namespace) ? enabled : disabled;
+	
+	  fn.namespace = namespace;
+	
+	  return fn;
+	}
+	
+	/**
+	 * Enables a debug mode by namespaces. This can include modes
+	 * separated by a colon and wildcards.
+	 *
+	 * @param {String} namespaces
+	 * @api public
+	 */
+	
+	function enable(namespaces) {
+	  exports.save(namespaces);
+	
+	  var split = (namespaces || '').split(/[\s,]+/);
+	  var len = split.length;
+	
+	  for (var i = 0; i < len; i++) {
+	    if (!split[i]) continue; // ignore empty strings
+	    namespaces = split[i].replace(/[\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*?');
+	    if (namespaces[0] === '-') {
+	      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+	    } else {
+	      exports.names.push(new RegExp('^' + namespaces + '$'));
+	    }
+	  }
+	}
+	
+	/**
+	 * Disable debug output.
+	 *
+	 * @api public
+	 */
+	
+	function disable() {
+	  exports.enable('');
+	}
+	
+	/**
+	 * Returns true if the given mode name is enabled, false otherwise.
+	 *
+	 * @param {String} name
+	 * @return {Boolean}
+	 * @api public
+	 */
+	
+	function enabled(name) {
+	  var i, len;
+	  for (i = 0, len = exports.skips.length; i < len; i++) {
+	    if (exports.skips[i].test(name)) {
+	      return false;
+	    }
+	  }
+	  for (i = 0, len = exports.names.length; i < len; i++) {
+	    if (exports.names[i].test(name)) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+	
+	/**
+	 * Coerce `val`.
+	 *
+	 * @param {Mixed} val
+	 * @return {Mixed}
+	 * @api private
+	 */
+	
+	function coerce(val) {
+	  if (val instanceof Error) return val.stack || val.message;
+	  return val;
+	}
+
+
+/***/ },
+
+/***/ 754:
+/***/ function(module, exports) {
+
+	/**
+	 * Helpers.
+	 */
+	
+	var s = 1000
+	var m = s * 60
+	var h = m * 60
+	var d = h * 24
+	var y = d * 365.25
+	
+	/**
+	 * Parse or format the given `val`.
+	 *
+	 * Options:
+	 *
+	 *  - `long` verbose formatting [false]
+	 *
+	 * @param {String|Number} val
+	 * @param {Object} options
+	 * @throws {Error} throw an error if val is not a non-empty string or a number
+	 * @return {String|Number}
+	 * @api public
+	 */
+	
+	module.exports = function (val, options) {
+	  options = options || {}
+	  var type = typeof val
+	  if (type === 'string' && val.length > 0) {
+	    return parse(val)
+	  } else if (type === 'number' && isNaN(val) === false) {
+	    return options.long ?
+				fmtLong(val) :
+				fmtShort(val)
+	  }
+	  throw new Error('val is not a non-empty string or a valid number. val=' + JSON.stringify(val))
+	}
+	
+	/**
+	 * Parse the given `str` and return milliseconds.
+	 *
+	 * @param {String} str
+	 * @return {Number}
+	 * @api private
+	 */
+	
+	function parse(str) {
+	  str = String(str)
+	  if (str.length > 10000) {
+	    return
+	  }
+	  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str)
+	  if (!match) {
+	    return
+	  }
+	  var n = parseFloat(match[1])
+	  var type = (match[2] || 'ms').toLowerCase()
+	  switch (type) {
+	    case 'years':
+	    case 'year':
+	    case 'yrs':
+	    case 'yr':
+	    case 'y':
+	      return n * y
+	    case 'days':
+	    case 'day':
+	    case 'd':
+	      return n * d
+	    case 'hours':
+	    case 'hour':
+	    case 'hrs':
+	    case 'hr':
+	    case 'h':
+	      return n * h
+	    case 'minutes':
+	    case 'minute':
+	    case 'mins':
+	    case 'min':
+	    case 'm':
+	      return n * m
+	    case 'seconds':
+	    case 'second':
+	    case 'secs':
+	    case 'sec':
+	    case 's':
+	      return n * s
+	    case 'milliseconds':
+	    case 'millisecond':
+	    case 'msecs':
+	    case 'msec':
+	    case 'ms':
+	      return n
+	    default:
+	      return undefined
+	  }
+	}
+	
+	/**
+	 * Short format for `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {String}
+	 * @api private
+	 */
+	
+	function fmtShort(ms) {
+	  if (ms >= d) {
+	    return Math.round(ms / d) + 'd'
+	  }
+	  if (ms >= h) {
+	    return Math.round(ms / h) + 'h'
+	  }
+	  if (ms >= m) {
+	    return Math.round(ms / m) + 'm'
+	  }
+	  if (ms >= s) {
+	    return Math.round(ms / s) + 's'
+	  }
+	  return ms + 'ms'
+	}
+	
+	/**
+	 * Long format for `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {String}
+	 * @api private
+	 */
+	
+	function fmtLong(ms) {
+	  return plural(ms, d, 'day') ||
+	    plural(ms, h, 'hour') ||
+	    plural(ms, m, 'minute') ||
+	    plural(ms, s, 'second') ||
+	    ms + ' ms'
+	}
+	
+	/**
+	 * Pluralization helper.
+	 */
+	
+	function plural(ms, n, name) {
+	  if (ms < n) {
+	    return
+	  }
+	  if (ms < n * 1.5) {
+	    return Math.floor(ms / n) + ' ' + name
+	  }
+	  return Math.ceil(ms / n) + ' ' + name + 's'
+	}
+
+
+/***/ },
+
+/***/ 755:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -11837,8 +13052,8 @@ webpackJsonp([2,0],{
 	 * Module requirements
 	 */
 	
-	var isArray = __webpack_require__(288);
-	var isBuf = __webpack_require__(287);
+	var isArray = __webpack_require__(756);
+	var isBuf = __webpack_require__(323);
 	
 	/**
 	 * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -11977,14 +13192,24 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 707:
+/***/ 756:
+/***/ function(module, exports) {
+
+	module.exports = Array.isArray || function (arr) {
+	  return Object.prototype.toString.call(arr) == '[object Array]';
+	};
+
+
+/***/ },
+
+/***/ 757:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 	;(function () {
 	  // Detect the `define` function exposed by asynchronous module loaders. The
 	  // strict `define` check is necessary for compatibility with `r.js`.
-	  var isLoader = "function" === "function" && __webpack_require__(718);
+	  var isLoader = "function" === "function" && __webpack_require__(768);
 	
 	  // A set of types used to distinguish objects from primitives.
 	  var objectTypes = {
@@ -12883,11 +14108,11 @@ webpackJsonp([2,0],{
 	  }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(94)(module), (function() { return this; }())))
 
 /***/ },
 
-/***/ 710:
+/***/ 760:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -13140,23 +14365,23 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 711:
+/***/ 761:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(108);
+	var content = __webpack_require__(141);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(710)(content, {});
+	var update = __webpack_require__(760)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(108, function() {
-				var newContent = __webpack_require__(108);
+			module.hot.accept(141, function() {
+				var newContent = __webpack_require__(141);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -13167,7 +14392,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 712:
+/***/ 762:
 /***/ function(module, exports) {
 
 	module.exports = toArray
@@ -13187,14 +14412,14 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 713:
+/***/ 763:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "786f8590279aec82a2320df123e0b8db.jpg";
 
 /***/ },
 
-/***/ 718:
+/***/ 768:
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -13203,7 +14428,7 @@ webpackJsonp([2,0],{
 
 /***/ },
 
-/***/ 719:
+/***/ 769:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -13439,11 +14664,11 @@ webpackJsonp([2,0],{
 	
 	}(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(94)(module), (function() { return this; }())))
 
 /***/ },
 
-/***/ 720:
+/***/ 770:
 /***/ function(module, exports) {
 
 	/* (ignored) */

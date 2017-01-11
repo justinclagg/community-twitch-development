@@ -6,18 +6,18 @@
 
 module.exports = function requireRole(requiredRole) {
 	return (req, res, next) => {
-		const userRole = req.user.role;
-		if (userRole === requiredRole) {
-			next();
+		if (req.user) {
+			const userRole = req.user.role;
+			if (userRole === requiredRole) {
+				return next();
+			}
+			else if (requiredRole === 'subscriber' && userRole === 'admin') {
+				return next();
+			}
+			else if (requiredRole === 'member' && (userRole === 'subscriber' || userRole === 'admin')) {
+				return next();
+			}
 		}
-		else if (requiredRole === 'subscriber' && userRole === 'admin') {
-			next();
-		}
-		else if (requiredRole === 'member' && (userRole === 'subscriber' || userRole === 'admin')) {
-			next();
-		}
-		else {
-			res.status(403).send();
-		}
+		return res.status(403).send();
 	};
 };

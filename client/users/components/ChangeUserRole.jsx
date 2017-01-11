@@ -26,7 +26,6 @@ class ChangeUserRole extends Component {
 	render() {
 		return (
 			<div className='test-role-buttons'>
-				<span>User Role: &nbsp;</span>
 				<DropDownMenu
 					value={this.state.userRole}
 					onChange={this.updateUserRole}
