@@ -54,36 +54,29 @@ module.exports = (passport) => {
 				}
 				
 				// Save or update user
-				User.findOne({ '_id': profile.id }, (err, user) => {
-					if (err) {
-						return done(err);
-					}
-					else if (user) {
-						// Current user, update role if needed
-						if (user.role !== currentUserRole) {
-							user.role = currentUserRole;
-							user.save(err => {
-								if (err) return done(err);
+				User.findOne({ '_id': profile.id })
+					.then(user => {
+						if (user) {
+							// Current user, update role if needed
+							if (user.role !== currentUserRole) {
+								user.role = currentUserRole;
+								user.save().then(() => done(null, user));
+							}
+							else {
 								return done(null, user);
-							});
+							}
 						}
 						else {
-							return done(null, user);
+							// New user, store in database
+							let newUser = new User();
+							newUser._id = profile.id;
+							newUser.username = profile.displayName;
+							newUser.email = profile.email;
+							newUser.role = currentUserRole;
+							newUser.save().then(() => done(null, newUser));
 						}
-					}
-					else {
-						// New user, store in database
-						let newUser = new User();
-						newUser._id = profile.id;
-						newUser.username = profile.displayName;
-						newUser.email = profile.email;
-						newUser.role = currentUserRole;
-						newUser.save(err => {
-							if (err) return done(err);
-							return done(null, newUser);
-						});
-					}
-				});
+					})
+					.catch(err => done(err));
 			});
 		})
 	);
@@ -109,19 +102,14 @@ module.exports = (passport) => {
 			})
 			.then(response => {
 				if (response.ok || response.status == 409) { // Status 409 means user is already in GitLab group
-					User.findOne({ _id: req.user._id }, (err, user) => {
-						if (err) {
-							return done(err);
-						}
-						else if (user) {
-							// Add Gitlab id to user profile
-							user.gitlabId = profile.id;
-							user.save(err => {
-								if (err) throw err;
-								return done(null, user);
-							});
-						}
-					});
+					User.findOne({ _id: req.user._id })
+						.then(user => {
+							if (user) {
+								// Add Gitlab id to user profile
+								user.gitlabId = profile.id;
+								user.save().then(() => done(null, user));
+							}
+						});
 				}
 				else {
 					return done();

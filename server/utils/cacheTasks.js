@@ -11,10 +11,13 @@ const Task = require('../models/taskSchema.js');
 
 module.exports = function cacheTasks(cache, category) {
 	// Get all tasks in given category
-	Task.find({ category }, (err, tasks) => {
-		if (err) return console.log(`Database error getting tasks: ${err}`);
-		cache.set(category, JSON.stringify(tasks), (err) => {
-			if (err) return console.log(err);
+	Task.find({ category })
+		.then(tasks => {
+			cache.set(category, JSON.stringify(tasks), (err) => {
+				throw new Error(err);
+			});
+		})
+		.catch(err => {
+			throw new Error(`Error caching tasks - ${err}`);
 		});
-	});
 };

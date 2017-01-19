@@ -20,25 +20,22 @@ module.exports = (cache, app) => {
 		// Add a new category
 		.post(
 			requireRole('admin'),
-			(req, res, next) => {
-				Task.findOne({ name: req.body.category, category: null }, (err, category) => {
-					if (err) {
-						res.status(500).send(`Database error adding category: ${err}`);						
-					}
-					else if (category) {
-						res.status(500).send('Category already exists');
-					}
-					else {
+			(req, res) => {
+				Task.findOne({ name: req.body.category, category: null })
+					.then(category => {
+						if (category) throw new Error('Category already exists');
+					})
+					.then(() => {
 						// New category, store in database and cache
 						let newCategory = new Task();
 						newCategory.name = req.body.category;
 						newCategory.category = null;
-						newCategory.save(err => {
-							if (err) return next(err);
-							cacheCategories(cache, res);
-						});
-					}
-				});
+						newCategory.save()
+							.then(() => cacheCategories(cache, res));
+					})
+					.catch(err => {
+						res.status(500).send(`Error adding category - ${err}`);
+					});
 			}
 		)
 		// Delete a category
@@ -46,17 +43,17 @@ module.exports = (cache, app) => {
 			requireRole('admin'),
 			(req, res, next) => {
 				// Delete all tasks within category
-				Task.remove({ category: req.body.category }, (err) => {
-					if (err) return next(err);
-					cacheTasks(cache, req.body.category);
-				});
+				Task.remove({ category: req.body.category })
+					.then(() => cacheTasks(cache, req.body.category))
+					.catch(err => {
+						return next(err);
+					});
 				// Delete category
-				Task.findOneAndRemove({ name: req.body.category, category: null }, (err) => {
-					if (err) return next(err);
-					cacheCategories(cache, res);
-				});
+				Task.findOneAndRemove({ name: req.body.category, category: null })
+					.then(() => cacheCategories(cache, res))
+					.catch(err => {
+						return next(err);
+					});
 			}
 		);
-
-
 };

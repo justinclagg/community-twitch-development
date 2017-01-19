@@ -45,7 +45,7 @@ describe('Task routes', function () {
 	});
 
 	describe('POST task', function () {
-		it('should post a task', function (done) {
+		it('should post a task and receive that task with an _id', function (done) {
 			server.request.user = adminUser;
 			chai.request(server)
 				.post(taskRoute)

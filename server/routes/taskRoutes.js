@@ -13,13 +13,16 @@ module.exports = (cache, app) => {
 					res.status(200).send(JSON.parse(result));
 				}
 				else {
-					Task.find({ category: req.params.category }, (err, tasks) => {
-						if (err) return next(err);
-						res.status(200).send(tasks);
-						cache.set(req.params.category, JSON.stringify(tasks), (err) => {
-							if (err) return next(err);
+					Task.find({ category: req.params.category })
+						.then(tasks => {
+							res.status(200).send(tasks);
+							cache.set(req.params.category, JSON.stringify(tasks), (err) => {
+								if (err) return next(err);
+							});
+						})
+						.catch(err => {
+							return next(err);
 						});
-					});
 				}
 			});
 		})
@@ -27,23 +30,29 @@ module.exports = (cache, app) => {
 		.post(
 			requireRole('admin'),
 			(req, res, next) => {
-				let newTask = new Task(req.body);
-				newTask.save((err, newTask) => {
-					if (err) return next(err);
-					res.status(201).send(newTask);
-					cacheTasks(cache, req.params.category);
-				});
+				const newTask = new Task(req.body);
+				newTask.save()
+					.then(task => {
+						res.status(201).send(task);
+						cacheTasks(cache, req.params.category);
+					})
+					.catch(err => {
+						return next(err);
+					});
 			}
 		)
 		// Delete task
 		.delete(
 			requireRole('admin'),
 			(req, res, next) => {
-				Task.findOneAndRemove({ _id: req.body._id }, (err) => {
-					if (err) return next(err);
-					res.status(201).send();
-					cacheTasks(cache, req.params.category);
-				});
+				Task.findOneAndRemove({ _id: req.body._id })
+					.then(() => {
+						res.status(201).send();
+						cacheTasks(cache, req.params.category);
+					})
+					.catch(err => {
+						return next(err);
+					});
 			}
 		)
 		// Edit task
@@ -55,13 +64,14 @@ module.exports = (cache, app) => {
 					{ $set: {
 						name: req.body.name,
 						description: req.body.description
-					}},
-					(err) => {
-						if (err) return next(err);
+					}})
+					.then(() => {
 						res.status(201).send();
 						cacheTasks(cache, req.params.category);
-					}
-				);
+					})
+					.catch(err => {
+						return next(err);
+					});
 			}
 		);
 	
@@ -72,13 +82,14 @@ module.exports = (cache, app) => {
 		(req, res, next) => {
 			Task.update(
 				{ _id: req.body._id },
-				{ $set: { claims: req.body.claims } }, 
-				(err) => {
-					if (err) return next(err);
+				{ $set: { claims: req.body.claims } })
+				.then(() => {
 					res.status(201).send();
 					cacheTasks(cache, req.params.category);
-				}
-			);
+				})
+				.catch(err => {
+					return next(err);
+				}); 
 		}
 	);
 
@@ -91,13 +102,14 @@ module.exports = (cache, app) => {
 			(req, res, next) => {
 				Task.update(
 					{ _id: req.body._id },
-					{ $set: { submissions: req.body.submissions } }, 
-					(err) => {
-						if (err) return next(err);
+					{ $set: { submissions: req.body.submissions } })
+					.then(() => {
 						res.status(201).send();
 						cacheTasks(cache, req.params.category);
-					}
-				);
+					})
+					.catch(err => {
+						return next(err);
+					});
 			}
 		)
 		// Delete any submission (admin only)
@@ -106,13 +118,14 @@ module.exports = (cache, app) => {
 			(req, res, next) => {
 				Task.update(
 					{ _id: req.body._id },
-					{ $set: { submissions: req.body.submissions } }, 
-					(err) => {
-						if (err) return next(err);
+					{ $set: { submissions: req.body.submissions } })
+					.then(() => {
 						res.status(201).send();
 						cacheTasks(cache, req.params.category);
-					}
-				);
+					})
+					.catch(err => {
+						return next(err);
+					});
 			}
 		);
 	
@@ -124,13 +137,14 @@ module.exports = (cache, app) => {
 				if (req.body.submissionUsername === req.user.username) {
 					Task.update(
 						{ _id: req.body._id },
-						{ $set: { submissions: req.body.submissions } }, 
-						(err) => {
-							if (err) return next(err);
+						{ $set: { submissions: req.body.submissions } })
+						.then(() => {
 							res.status(201).send();
 							cacheTasks(cache, req.params.category);
-						}
-					);
+						})
+						.catch(err => {
+							return next(err);
+						});
 				}
 				else {
 					res.status(401).send();
@@ -148,13 +162,14 @@ module.exports = (cache, app) => {
 				{ _id: req.body._id },
 				{ $set: {
 					archive: req.body.archive
-				}},
-				(err) => {
-					if (err) return next(err);
+				}})
+				.then(() => {
 					res.status(201).send();
 					cacheTasks(cache, req.params.category);
-				}
-			);
+				})
+				.catch(err => {
+					return next(err);
+				});
 		}
 	);
 
@@ -164,10 +179,13 @@ module.exports = (cache, app) => {
 		// Get all tasks that have a submission
 		requireRole('admin'),
 		(req, res, next) => {
-			Task.find({ submissions: {$gt: []} }, (err, tasks) => {
-				if (err) return next(err);
-				res.status(200).send(tasks);
-			});
+			Task.find({ submissions: {$gt: []} })
+				.then(tasks => {
+					res.status(200).send(tasks);
+				})
+				.catch(err => {
+					return next(err);
+				});
 		}
 	);
 };

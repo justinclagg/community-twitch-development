@@ -43,7 +43,7 @@ module.exports = (cache, app, passport) => {
 
 	app.post('/auth/gitlab/unlink',
 		requireRole(process.env.GITLAB_ACCESS_LEVEL),
-		(req, res, next) => {
+		(req, res) => {
 			const { GITLAB_GROUP_ID, GITLAB_ACCESS_TOKEN } = process.env;
 			fetch(`https://gitlab.com/api/v3/groups/${GITLAB_GROUP_ID}/members/${req.user.gitlabId}`, {
 				method: 'DELETE',
@@ -51,28 +51,20 @@ module.exports = (cache, app, passport) => {
 			})
 			.then(response => {
 				if (response.ok) {
-					User.findOne({ _id: req.user._id }, (err, user) => {
-						if (err) {
-							res.status(500).send();
-						}
-						else if (user) {
+					User.findOne({ _id: req.user._id })
+						.then(user => {
+							if (!user) throw new Error('User not found');
 							user.gitlabId = '';
-							user.save(err => {
-								if (err) return next(err);
-								res.status(201).send(user);
-							});
-						}
-						else {
-							res.status(500).send();
-						}
-					});
+							user.save()
+								.then(() => res.status(201).send(user));
+						});
 				}
 				else {
-					res.status(500).send('Error removing gitlab permissions');
+					throw new Error('Error using Gitlab API');
 				}
 			})
 			.catch(err => {
-				console.log(`Fetch error: ${err}`);
+				res.status(500).send(`Error removing gitlab permissions - ${err}`);
 			});
 		}
 	);

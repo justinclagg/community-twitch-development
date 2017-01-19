@@ -19,13 +19,12 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
-const Promise = require('es6-promise').Promise;
 
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 const MongoStore = require('connect-mongo')(session);
 mongoose.connect(process.env.MONGODB_URI, { config: { autoIndex: false } });
-mongoose.Promise = Promise; // Replaces mpromise (deprecated)
+mongoose.Promise = global.Promise; // Use native promises for mongoose
 
 const app = express();
 const server = require('http').Server(app);
