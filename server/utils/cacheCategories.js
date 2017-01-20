@@ -7,17 +7,14 @@ const Task = require('../models/taskSchema.js');
  * @param {object} [res] - Optional response to client
  */
 
-module.exports = function cacheCategories(cache, res) {
+module.exports = function cacheCategories(cache) {
 	// Get all categories (task with category of null)
 	Task.find({ category: null })
 		.then(categories => {
 			let categoryList = categories.map(category => category.name);
-			cache.set('categoryList', categoryList.toString(), (err) => {
-				if (err) return console.log(err);
-				if (res) res.status(201).send(categoryList);
-			});
+			return cache.setAsync('categoryList', categoryList.toString());
 		})
 		.catch(err => {
-			res.status(500).send(`Error caching categories - ${err}`);
+			throw new Error(`Error caching categories - ${err}`);
 		});
 };

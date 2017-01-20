@@ -8,14 +8,19 @@ module.exports = (cache, app) => {
 	app.route('/live/categories')
 		// Get a list of categories
 		.get((req, res) => {
-			cache.get('categoryList', (err, result) => {
-				if (result) {
-					res.status(200).send(result.split(','));
-				}
-				else {
-					cacheCategories(cache, res);
-				}
-			});
+			cache.getAsync('categoryList')
+				.then(result => {
+					if (result) {
+						res.status(200).send(result.split(','));
+					}
+					else {
+						cacheCategories(cache);
+						res.status(200).send();
+					}
+				})
+				.catch(err => {
+					res.status(500).send(`Error getting categories - ${err}`);					
+				});
 		})
 		// Add a new category
 		.post(
@@ -30,8 +35,11 @@ module.exports = (cache, app) => {
 						let newCategory = new Task();
 						newCategory.name = req.body.category;
 						newCategory.category = null;
-						newCategory.save()
-							.then(() => cacheCategories(cache, res));
+						return newCategory.save();
+					})
+					.then(() => {
+						res.status(201).send();
+						cacheCategories(cache);
 					})
 					.catch(err => {
 						res.status(500).send(`Error adding category - ${err}`);
@@ -50,7 +58,10 @@ module.exports = (cache, app) => {
 					});
 				// Delete category
 				Task.findOneAndRemove({ name: req.body.category, category: null })
-					.then(() => cacheCategories(cache, res))
+					.then(() => {
+						res.status(200).send();
+						cacheCategories(cache);
+					})
 					.catch(err => {
 						return next(err);
 					});

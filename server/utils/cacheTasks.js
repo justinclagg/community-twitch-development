@@ -13,9 +13,7 @@ module.exports = function cacheTasks(cache, category) {
 	// Get all tasks in given category
 	Task.find({ category })
 		.then(tasks => {
-			cache.set(category, JSON.stringify(tasks), (err) => {
-				throw new Error(err);
-			});
+			return cache.setAsync(category, JSON.stringify(tasks));
 		})
 		.catch(err => {
 			throw new Error(`Error caching tasks - ${err}`);

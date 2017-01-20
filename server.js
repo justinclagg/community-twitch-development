@@ -26,6 +26,10 @@ const MongoStore = require('connect-mongo')(session);
 mongoose.connect(process.env.MONGODB_URI, { config: { autoIndex: false } });
 mongoose.Promise = global.Promise; // Use native promises for mongoose
 
+const redis = require('redis');
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -113,7 +117,7 @@ io.on('connection', (socket) => {
 
 /* Redis */
 
-const cache = require('redis').createClient(process.env.REDIS_URL, {
+const cache = redis.createClient(process.env.REDIS_URL, {
 	no_ready_check: true,
 	retry_strategy: function (options) {
 		if (options.error && options.error.code === 'ECONNREFUSED') {

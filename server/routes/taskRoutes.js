@@ -7,24 +7,24 @@ module.exports = (cache, app) => {
 
 	app.route('/live/tasks/:category')
 		// Get tasks within category
-		.get((req, res, next) => {
-			cache.get(req.params.category, (err, result) => {
-				if (result) {
-					res.status(200).send(JSON.parse(result));
-				}
-				else {
-					Task.find({ category: req.params.category })
-						.then(tasks => {
-							res.status(200).send(tasks);
-							cache.set(req.params.category, JSON.stringify(tasks), (err) => {
-								if (err) return next(err);
+		.get((req, res) => {
+			cache.getAsync(req.params.category)
+				.then(result => {
+					if (result) {
+						// Send cached tasks
+						res.status(200).send(JSON.parse(result));
+					}
+					else {
+						Task.find({ category: req.params.category })
+							.then(tasks => {
+								cache.setAsync(req.params.category, JSON.stringify(tasks));
+								res.status(200).send(tasks);
 							});
-						})
-						.catch(err => {
-							return next(err);
-						});
-				}
-			});
+					}
+				})
+				.catch(err => {
+					res.status(500).send(`Error getting tasks - ${err}`);
+				});
 		})
 		// Add task to category
 		.post(
