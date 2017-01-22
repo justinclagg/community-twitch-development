@@ -75,9 +75,9 @@ module.exports = (passport) => {
 							newUser.role = currentUserRole;
 							newUser.save().then(() => done(null, newUser));
 						}
-					})
-					.catch(err => done(err));
-			});
+					});
+			})
+			.catch(err => done(err));
 		})
 	);
 
@@ -100,19 +100,15 @@ module.exports = (passport) => {
 					'PRIVATE-TOKEN': GITLAB_ACCESS_TOKEN
 				}
 			})
-			.then(response => {
-				if (response.ok || response.status == 409) { // Status 409 means user is already in GitLab group
-					User.findOne({ _id: req.user._id })
-						.then(user => {
-							if (user) {
-								// Add Gitlab id to user profile
-								user.gitlabId = profile.id;
-								user.save().then(() => done(null, user));
-							}
-						});
-				}
-				else {
-					return done();
+			.then(res => {
+				if (!(res.ok || res.status == 409)) return done(); // Status 409 means user is already in GitLab group
+				return User.findOne({ _id: req.user._id });
+			})
+			.then(user => {
+				if (user) {
+					// Add Gitlab id to user profile
+					user.gitlabId = profile.id;
+					user.save().then(() => done(null, user));
 				}
 			})
 			.catch(err => {

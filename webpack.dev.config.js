@@ -35,7 +35,7 @@ module.exports = {
 	},
 	plugins: [
 		new Dotenv({
-			path: './.env',
+			path: './.env.dev',
 			safe: false
 		}),
 		new webpack.optimize.OccurenceOrderPlugin(),

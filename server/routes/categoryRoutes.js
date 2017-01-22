@@ -49,22 +49,18 @@ module.exports = (cache, app) => {
 		// Delete a category
 		.delete(
 			requireRole('admin'),
-			(req, res, next) => {
-				// Delete all tasks within category
-				Task.remove({ category: req.body.category })
-					.then(() => cacheTasks(cache, req.body.category))
-					.catch(err => {
-						return next(err);
-					});
-				// Delete category
-				Task.findOneAndRemove({ name: req.body.category, category: null })
-					.then(() => {
-						res.status(200).send();
-						cacheCategories(cache);
-					})
-					.catch(err => {
-						return next(err);
-					});
+			(req, res) => {
+				Promise.all([
+					Task.remove({ category: req.body.category }),
+					Task.findOneAndRemove({ name: req.body.category, category: null })
+				]).then(() => {
+					res.status(200).send();
+					cacheCategories(cache);
+					cacheTasks(cache, req.body.category);
+				})
+				.catch(err => {
+					res.status(500).send(`Error deleting category - ${err}`);					
+				});
 			}
 		);
 };

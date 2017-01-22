@@ -32,7 +32,7 @@ describe('Task routes', function () {
 		Task.remove({}, (err) => done(err));
 	});
 
-	describe('GET tasks', function () {
+	describe('GET tasks', function () { // Not working as expected. Add some tasks by default for tests?
 		it('should get all tasks within a category', function (done) {
 			chai.request(server)
 				.get(taskRoute)

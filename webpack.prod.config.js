@@ -37,7 +37,7 @@ module.exports = {
 			'process.env.NODE_ENV': JSON.stringify('production')
 		}),
 		new Dotenv({
-			path: './.env',
+			path: './.env.prod',
 			safe: false
 		}),
 		new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false }, output: { comments: false } }),

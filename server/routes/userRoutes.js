@@ -50,19 +50,15 @@ module.exports = (cache, app, passport) => {
 				headers: { 'PRIVATE-TOKEN': GITLAB_ACCESS_TOKEN }
 			})
 			.then(response => {
-				if (response.ok) {
-					User.findOne({ _id: req.user._id })
-						.then(user => {
-							if (!user) throw new Error('User not found');
-							user.gitlabId = '';
-							user.save()
-								.then(() => res.status(201).send(user));
-						});
-				}
-				else {
-					throw new Error('Error using Gitlab API');
-				}
+				if (!response.ok) throw new Error('Error connecting to Gitlab');
+				return User.findOne({ _id: req.user._id });
 			})
+			.then(user => {
+				if (!user) throw new Error('User not found');
+				user.gitlabId = '';
+				return user.save();
+			})
+			.then(user => res.status(200).send(user))
 			.catch(err => {
 				res.status(500).send(`Error removing gitlab permissions - ${err}`);
 			});

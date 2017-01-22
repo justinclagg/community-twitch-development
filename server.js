@@ -9,7 +9,7 @@ else if (process.env.NODE_ENV === 'test') {
 	parseDotenv(env);
 }
 else {
-	const env = require('dotenv').config();
+	const env = require('dotenv').config({path: './.env.dev'});
 	const parseDotenv = require('./server/utils/parseDotenv.js').parseDotenv;
 	parseDotenv(env);
 }
