@@ -42,7 +42,7 @@ class ProfilePage extends Component {
 					gitlabSection = (
 						<div className="profile-gitlab-section">
 							<p>Connect your GitLab account to gain access to the project repository.</p>
-							<a href="/auth/gitlab">
+							<a href="/user/auth/gitlab">
 								<RaisedButton label="Connect GitLab" primary={true} />
 							</a>
 						</div>

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import validUrl from '../../client/utils/validUrl';
+import validUrl from '../validUrl';
 
-describe('Validate inputed URLs', function() {
+describe('validUrl()', function() {
 	it('Return the URL if valid', function() {
 		const validUrls = [
 			'https://www.google.com',

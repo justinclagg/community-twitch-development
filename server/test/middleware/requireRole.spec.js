@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import requireRole from '../../server/middleware/requireRole';
+import requireRole from '../../middleware/requireRole';
 
 describe('requireRole()', function () {
 	it('should call next if user has access', function () {

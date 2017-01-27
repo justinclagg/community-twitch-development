@@ -1,17 +1,17 @@
 const path = require('path');
+const router = require('express').Router();
 
-module.exports = (cache, app, passport) => {
+router.use('/task', require('./task'));
+router.use('/category', require('./category'));
+router.use('/user', require('./user'));
 
-	app.get('/', (req, res) => {
-		res.sendFile(path.resolve('./public/templates/index.html'));
-	});
+router.get('/', (req, res) => {
+	res.sendFile(path.resolve('./public/templates/index.html'));
+});
 
-	require('./taskRoutes')(cache, app);
-	require('./categoryRoutes')(cache, app);
-	require('./userRoutes')(cache, app, passport);
+// Allows for browserHistory routing. Place after all API routes
+router.get('/*', (req, res) => {
+	res.sendFile(path.resolve('./public/templates/index.html'));
+});
 
-	// Allows for browserHistory routing. Place after all API routes
-	app.get('/*', (req, res) => {
-		res.sendFile(path.resolve('./public/templates/index.html'));
-	});
-};
+module.exports = router;

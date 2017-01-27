@@ -1,16 +1,16 @@
 /* Configure Environment Variables */
 if (process.env.NODE_ENV === 'production') {
-	const parseHerokuEnv = require('./server/utils/parseHerokuEnv.js');
+	const parseHerokuEnv = require('./utils/parseHerokuEnv.js');
 	parseHerokuEnv();
 }
 else if (process.env.NODE_ENV === 'test') {
 	const env = require('dotenv').config({path: './.env.test'});
-	const parseDotenv = require('./server/utils/parseDotenv.js').parseDotenv;	
+	const parseDotenv = require('./utils/parseDotenv.js').parseDotenv;	
 	parseDotenv(env);
 }
 else {
 	const env = require('dotenv').config({path: './.env.dev'});
-	const parseDotenv = require('./server/utils/parseDotenv.js').parseDotenv;
+	const parseDotenv = require('./utils/parseDotenv.js').parseDotenv;
 	parseDotenv(env);
 }
 
@@ -56,7 +56,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-require('./server/middleware/passport.js')(passport);
+require('./middleware/passport.js')(passport);
 
 if (process.env.NODE_ENV === 'production') {
 	// Production only middleware
@@ -75,7 +75,7 @@ else if (process.env.NODE_ENV === 'development') {
 	const webpack = require('webpack');
 	const webpackDevMiddleware = require('webpack-dev-middleware');
 	const webpackHotMiddleware = require('webpack-hot-middleware');
-	const webpackConfig = require('./webpack.dev.config.js');
+	const webpackConfig = require('../webpack.dev.config.js');
 	const compiler = webpack(webpackConfig);
 	app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
 	app.use(webpackHotMiddleware(compiler));
@@ -86,16 +86,19 @@ else if (process.env.NODE_ENV === 'development') {
 
 /* MongoDB */
 
-db.on('error', (err) => {
-	console.log(`Database error: ${err}`);
-	mongoose.connect(process.env.MONGODB_URI, { config: { autoIndex: false } });
-});
-
 db.once('open', () => {
 	server.listen(process.env.PORT, (err) => {
 		if (err) throw `Error starting server: ${err}`;
 		console.log(`Node server on port ${process.env.PORT}`);
 	});
+});
+
+db.on('disconnected', () => {
+	mongoose.connect(process.env.MONGODB_URI, { config: { autoIndex: false } });
+});
+
+db.on('error', (err) => {
+	console.log(`Database error: ${err}`);
 });
 
 /* Socket.io */
@@ -117,25 +120,7 @@ io.on('connection', (socket) => {
 
 /* Redis */
 
-const cache = redis.createClient(process.env.REDIS_URL, {
-	no_ready_check: true,
-	retry_strategy: function (options) {
-		if (options.error && options.error.code === 'ECONNREFUSED') {
-			// End reconnecting on a specific error and flush all commands with a individual error
-			return new Error('The server refused the connection');
-		}
-		if (options.total_retry_time > 1000 * 60 * 60) {
-			// End reconnecting after a specific timeout and flush all commands with a individual error
-			return new Error('Retry time exhausted');
-		}
-		if (options.attempt > 10) {
-			// End reconnecting with built in error
-			return undefined;
-		}
-		// reconnect after
-		return Math.max(options.attempt * 100, 3000);
-	}
-});
+const cache = require('./config/redisConfig.js');
 
 cache.on('connect', () => {
 	console.log('Redis is connected');
@@ -151,6 +136,6 @@ cache.on('end', () => {
 
 /* Routes */
 
-require('./server/routes')(cache, app, passport);
+app.use(require('./routes'));
 
 module.exports = app;

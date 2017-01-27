@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import reducer from '../../client/tasks';
-import * as t from '../../client/tasks/actionTypes';
+import reducer from '..';
+import * as t from '../actionTypes';
 
 describe('Task reducer', function () {
 	const initialState = {

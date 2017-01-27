@@ -19,13 +19,13 @@ module.exports = (passport) => {
 
 	/* Twitch authentication */
 
-	const { TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET, BASE_URL, TWITCH_CALLBACK } = process.env;	
+	const { TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET, BASE_URL } = process.env;	
 
 	passport.use(
 		new TwitchtvStrategy({
 			clientID: TWITCH_CLIENT_ID,
 			clientSecret: TWITCH_CLIENT_SECRET,
-			callbackURL: BASE_URL + TWITCH_CALLBACK,
+			callbackURL: BASE_URL + '/user/auth/twitch/callback',
 			scope: 'user_read user_subscriptions',
 			force_verify: true
 		},
@@ -83,13 +83,13 @@ module.exports = (passport) => {
 
 	/* Gitlab authentication */
 
-	const { GITLAB_CLIENT_ID, GITLAB_CLIENT_SECRET, GITLAB_CALLBACK, GITLAB_GROUP_ID, GITLAB_ACCESS_TOKEN  } = process.env;
+	const { GITLAB_CLIENT_ID, GITLAB_CLIENT_SECRET, GITLAB_GROUP_ID, GITLAB_ACCESS_TOKEN  } = process.env;
 
 	passport.use(
 		new GitLabStrategy({
 			clientID: GITLAB_CLIENT_ID,
 			clientSecret: GITLAB_CLIENT_SECRET,
-			callbackURL: BASE_URL + GITLAB_CALLBACK,
+			callbackURL: BASE_URL + '/user/auth/gitlab/callback',
 			passReqToCallback: true
 		},
 		(req, accessToken, refreshToken, profile, done) => {

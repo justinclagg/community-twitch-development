@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import userHasAccess from '../../client/utils/userHasAccess';
+import userHasAccess from '../userHasAccess';
 
 const roles = ['admin', 'subscriber', 'member'];
 
-describe('User access check', function() {
+describe('userHasAccess()', function() {
 	it('Users have access to their level and lower', function() {
 		roles.forEach(role => {
 			expect(userHasAccess({ role: 'admin' }, role)).to.be.true;

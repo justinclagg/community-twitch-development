@@ -13,7 +13,7 @@ export function fetchTasks(category) {
 	return (dispatch) => {
 		dispatch({ type: t.FETCH });
 		category = encodeURIComponent(category);
-		return fetch(`/live/tasks/${category}`)
+		return fetch(`/task/${category}`)
 			.then(checkStatus)
 			.then(parseJSON)
 			.then(tasks => {
@@ -48,7 +48,7 @@ export function addTask(category, name, description, socket) {
 			submissions: [],
 			archive: false
 		};
-		return fetch(`/live/tasks/${category}`, {
+		return fetch(`/task/${category}`, {
 			method: 'POST',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -76,7 +76,7 @@ export function addTask(category, name, description, socket) {
  */
 export function deleteTask(category, _id, socket) {
 	return (dispatch) => {
-		return fetch(`/live/tasks/${category}`, {
+		return fetch(`/task/${category}`, {
 			method: 'DELETE',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -108,7 +108,7 @@ export function editTask(category, task, socket) {
 			name: task.name,
 			description: task.description
 		};
-		return fetch(`/live/tasks/${category}`, {
+		return fetch(`/task/${category}`, {
 			method: 'PUT',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -139,7 +139,7 @@ export function toggleArchive(task, socket) {
 			_id: task._id,
 			archive: !task.archive
 		};
-		fetch(`/live/archive/${task.category}`, {
+		fetch(`/task/archive/${task.category}`, {
 			method: 'PUT',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -170,7 +170,7 @@ export function editClaims(category, task, socket) {
 			_id: task._id,
 			claims: task.claims
 		};
-		fetch(`/live/claims/${category}`, {
+		fetch(`/task/claims/${category}`, {
 			method: 'PUT',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -203,7 +203,7 @@ export function editSubmissions(task, updatedSubmissions, updatedTask, socket) {
 			_id,
 			submissions: updatedSubmissions
 		};
-		fetch(`/live/submissions/${category}`, {
+		fetch(`/task/submissions/${category}`, {
 			method: 'PUT',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -235,7 +235,7 @@ export function deleteSubmission(task, updatedSubmissions, updatedTask, socket) 
 			_id,
 			submissions: updatedSubmissions
 		};
-		fetch(`/live/submissions/${category}`, {
+		fetch(`/task/submissions/${category}`, {
 			method: 'DELETE',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -269,7 +269,7 @@ export function deleteOwnSubmission(task, updatedSubmissions, submissionUsername
 			submissions: updatedSubmissions,
 			submissionUsername
 		};
-		fetch(`/live/ownSubmission/${category}`, {
+		fetch(`/task/ownSubmission/${category}`, {
 			method: 'DELETE',
 			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
@@ -294,7 +294,7 @@ export function deleteOwnSubmission(task, updatedSubmissions, submissionUsername
 export function fetchSubmissions() {
 	return (dispatch) => {
 		dispatch({ type: t.FETCH_SUBMISSIONS });
-		fetch('/live/admin/submissions', {
+		fetch('/task/admin/submissions', {
 			method: 'GET',
 			credentials: 'same-origin'
 		})

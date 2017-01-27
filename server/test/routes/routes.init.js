@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import server from '../../server';
-import Task from '../../server/models/taskSchema';
+import server from '../../';
+import Task from '../../models/Task';
 
 chai.use(chaiHttp);
 
@@ -25,7 +25,7 @@ describe('Task routes', function () {
 	const subscriberUser = { role: 'subscriber' };
 	const memberUser = { role: 'member' };
 
-	const taskRoute = `/live/tasks/${category}`;
+	const taskRoute = `/task/${category}`;
 
 	beforeEach(function(done) {
 		server.request.user = {};

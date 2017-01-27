@@ -65,7 +65,7 @@ class Navbar extends Component {
 									<MenuItem label="Logout" onTouchTap={this.logoutUser}>Logout</MenuItem>
 								</div>
 								:
-								<a href="/auth/twitch">
+								<a href="/user/auth/twitch">
 									<MenuItem>Login with Twitch</MenuItem>
 								</a>
 							}
@@ -82,7 +82,7 @@ class Navbar extends Component {
 								<RaisedButton label="Logout" onTouchTap={this.logoutUser} />
 							</div>
 							:
-							<a href="/auth/twitch">
+							<a href="/user/auth/twitch">
 								<img src="/img/twitch_login_button.png" height="35px" />
 							</a>
 						}

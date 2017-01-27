@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import parseJSON from '../../client/utils/parseJSON';
+import parseJSON from '../parseJSON';
 
-describe('Parse JSON from server', function() {
+describe('parseJSON()', function() {
 	it('Parse the response body to a JSON format', function() {
 		// This doesn't properly test the Fetch API Response object
 		const bodyObj = { testData: 'test'};

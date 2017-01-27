@@ -10,7 +10,7 @@ import parseJSON from '../utils/parseJSON.js';
 export function fetchCategories() {
 	return (dispatch) => {
 		dispatch({ type: t.FETCH });
-		fetch('/live/categories')
+		fetch('/category')
 			.then(checkStatus)
 			.then(parseJSON)
 			.then(categories => {
@@ -31,7 +31,7 @@ export function fetchCategories() {
  */
 export function addCategory(category, socket) {
 	return (dispatch) => {
-		fetch('/live/categories', {
+		fetch('/category', {
 			method: 'POST',
 			credentials: 'same-origin',
 			headers: {
@@ -59,7 +59,7 @@ export function addCategory(category, socket) {
  */
 export function deleteCategory(category, socket) {
 	return (dispatch) => {
-		fetch('/live/categories/', {
+		fetch('/category/', {
 			method: 'DELETE',
 			credentials: 'same-origin',
 			headers: {

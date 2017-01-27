@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import checkStatus from '../../client/utils/checkStatus';
+import checkStatus from '../checkStatus';
 
-describe('Check server response status', function() {
+describe('checkStatus()', function() {
 	it('Return the server response if status is 200-299', function() {
 		const lowerBound = { status: 200 };
 		const upperBound = { status: 299 };

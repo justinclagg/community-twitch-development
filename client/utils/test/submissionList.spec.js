@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import submissionList from '../../client/utils/submissionList';
+import submissionList from '../submissionList';
 
 describe('submissionList()', function () {
 	let tasks = [

@@ -24,7 +24,7 @@ export function changeUserRole(updatedProfile) {
  */
 export function checkLogin() {
 	return (dispatch) => {
-		fetch('/auth/checkLogin', {
+		fetch('/user/auth/checkLogin', {
 			method: 'post',
 			credentials: 'same-origin'
 		})
@@ -44,7 +44,7 @@ export function checkLogin() {
  */
 export function logoutUser() {
 	return (dispatch) => {
-		fetch('/auth/logout', {
+		fetch('/user/auth/logout', {
 			method: 'POST',
 			credentials: 'same-origin'
 		})
@@ -64,7 +64,7 @@ export function logoutUser() {
  */
 export function unlinkGitlab() {
 	return (dispatch) => {
-		fetch('/auth/gitlab/unlink', {
+		fetch('/user/auth/gitlab/unlink', {
 			method: 'POST',
 			credentials: 'same-origin'
 		})

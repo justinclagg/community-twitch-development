@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
-import * as t from '../../client/tasks/actionTypes';
-import * as a from '../../client/tasks/actions';
+import * as t from '../actionTypes';
+import * as a from '../actions';
 import fetchMock from 'fetch-mock';
 
 const mockStore = configureMockStore([promise(), thunk]);
@@ -20,7 +20,7 @@ describe('Task actions', function () {
 	};
 	const existingTask = { ...newTask, _id: '1' };
 	const { category } = existingTask;
-	const taskRoute = `/live/tasks/${category}`;
+	const taskRoute = `/task/${category}`;
 	const socket = { emit: function () { } };
 
 	afterEach(function () {
@@ -32,7 +32,7 @@ describe('Task actions', function () {
 			const categoryURI = encodeURIComponent(category);
 			const tasks = [existingTask];
 
-			fetchMock.get(`/live/tasks/${categoryURI}`, tasks);
+			fetchMock.get(`/task/${categoryURI}`, tasks);
 
 			const expected = [
 				{ type: t.FETCH },

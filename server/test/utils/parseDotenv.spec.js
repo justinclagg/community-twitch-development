@@ -1,8 +1,8 @@
 const chai = require('chai');
 const assert = chai.assert;
-const parseKey = require('../../server/utils/parseDotenv').parseKey;
+const parseKey = require('../../utils/parseDotenv').parseKey;
 
-describe('Format environment variables from the dotenv object', function() {
+describe('parseDotenv()', function() {
 	it('Case sensitive variables', function() {
 		const key = 'TWITCH_STREAMER';
 		const value = 'jClagg';
