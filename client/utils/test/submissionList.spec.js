@@ -1,5 +1,6 @@
-import { expect } from 'chai';
+import chai from 'chai';
 import submissionList from '../submissionList';
+chai.should();
 
 describe('submissionList()', function () {
     let tasks = [
@@ -42,14 +43,14 @@ describe('submissionList()', function () {
     const submissions = submissionList(tasks);
 
     it('Return an array of submissions from the given tasks', function () {
-        expect(submissions).to.be.an('array');
-        expect(submissions[0]).to.be.an('object')
+        submissions.should.be.an('array');
+        submissions[0].should.be.an('object')
             .that.has.all.keys('date', 'username', 'url', 'name', 'category', 'archive');
     });
 
     it('Should be ordered from newest to oldest', function () {
         for (let i = 0; i < submissions.length - 1; i++) {
-            expect(submissions[i].date >= submissions[i + 1].date);
+            (submissions[i].date).should.be.at.least(submissions[i + 1].date);
         }
     });
 });

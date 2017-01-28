@@ -1,6 +1,7 @@
-import { expect } from 'chai';
+import chai from 'chai';
 import reducer from '..';
 import * as t from '../actionTypes';
+chai.should();
 
 describe('Task reducer', function () {
     const initialState = {
@@ -12,20 +13,12 @@ describe('Task reducer', function () {
     };
 
     it('should default to initial state', function () {
-        expect(reducer(undefined, {})).to.deep.equal(initialState);
+        reducer(undefined, {}).should.deep.equal(initialState);
     });
 
     it('should handle FETCH', function () {
-        expect(
-            reducer(undefined, {
-                type: t.FETCH
-            })
-        ).to.deep.equal(
-            {
-                ...initialState,
-                fetchingTasks: true
-            }
-            );
+        reducer(undefined, { type: t.FETCH })
+            .should.deep.equal({ ...initialState, fetchingTasks: true });
     });
 
     it('should handle DELETE_SUCCESS and remove task with the given id', function () {
@@ -33,17 +26,8 @@ describe('Task reducer', function () {
             ...initialState,
             tasks: [{ _id: '1' }, { _id: '2' }]
         };
-        expect(
-            reducer(initial, {
-                type: t.DELETE_SUCCESS,
-                payload: '1'
-            })
-        ).to.deep.equal(
-            {
-                ...initialState,
-                tasks: [{ _id: '2' }]
-            }
-            );
+        reducer(initial, { type: t.DELETE_SUCCESS, payload: '1' })
+            .should.deep.equal({ ...initialState, tasks: [{ _id: '2' }] });
     });
 
 

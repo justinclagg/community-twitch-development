@@ -10,7 +10,27 @@ function newTask() {
 }
 
 function existingTask() {
-    return { ...newTask(), _id: '1' };
+    return {
+        _id: '1',
+        category: 'Test category',
+        name: 'name',
+        description: 'description',
+        claims: [],
+        submissions: [],
+        archive: false
+    };
+}
+
+function updatedTask() {
+    return {
+        _id: '1',
+        category: 'Test category',
+        name: 'updated name',
+        description: 'updated description',
+        claims: ['user'],
+        submissions: [{}],
+        archive: true
+    };
 }
 
 function request() {
@@ -34,6 +54,7 @@ function response() {
 module.exports = {
     newTask,
     existingTask,
+    updatedTask,
     request,
     response
 };

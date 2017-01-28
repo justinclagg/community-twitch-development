@@ -1,5 +1,6 @@
-import { expect } from 'chai';
+import chai from 'chai';
 import validUrl from '../validUrl';
+chai.should();
 
 describe('validUrl()', function () {
     it('Return the URL if valid', function () {
@@ -10,7 +11,7 @@ describe('validUrl()', function () {
             'https://google.com'
         ];
         validUrls.forEach(url => {
-            expect(validUrl(url)).to.equal(url);
+            validUrl(url).should.equal(url);
         });
         // Add HTTP protocol if missing
         const missingProtocol = [
@@ -18,7 +19,7 @@ describe('validUrl()', function () {
             'www.google.com'
         ];
         missingProtocol.forEach(url => {
-            expect(validUrl(url)).to.equal('http://' + url);
+            validUrl(url).should.equal('http://' + url);
         });
     });
     it('Return false for invalid URL', function () {
@@ -29,7 +30,7 @@ describe('validUrl()', function () {
             'google.com@test'
         ];
         invalidUrls.forEach(url => {
-            expect(validUrl(url)).to.be.false;
+            validUrl(url).should.be.false;
         });
     });
 });

@@ -1,11 +1,12 @@
 import 'isomorphic-fetch';
-import { expect } from 'chai';
+import chai from 'chai';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import * as t from '../actionTypes';
 import * as a from '../actions';
 import fetchMock from 'fetch-mock';
+chai.should();
 
 const mockStore = configureMockStore([promise(), thunk]);
 
@@ -42,7 +43,7 @@ describe('Task actions', function () {
             const store = mockStore({ tasks: [] });
             return store.dispatch(a.fetchTasks(category))
                 .then(() => {
-                    expect(store.getActions()).to.deep.equal(expected);
+                    store.getActions().should.deep.equal(expected);
                 });
         });
     });
@@ -50,7 +51,7 @@ describe('Task actions', function () {
     describe('clearTasks()', function () {
         it('should create an action to clear the task array', function () {
             const expected = { type: t.CLEAR };
-            expect(a.clearTasks()).to.deep.equal(expected);
+            a.clearTasks().should.deep.equal(expected);
         });
     });
 
@@ -62,7 +63,7 @@ describe('Task actions', function () {
             const store = mockStore({});
             return store.dispatch(a.addTask(category, newTask.name, newTask.description, socket))
                 .then(() => {
-                    expect(store.getActions()).to.deep.equal(expected);
+                    store.getActions().should.deep.equal(expected);
                 });
         });
     });
@@ -75,7 +76,7 @@ describe('Task actions', function () {
             const store = mockStore({});
             return store.dispatch(a.deleteTask(category, _id, socket))
                 .then(() => {
-                    expect(store.getActions()).to.deep.equal(expected);
+                    store.getActions().should.deep.equal(expected);
                 });
         });
     });
@@ -92,25 +93,9 @@ describe('Task actions', function () {
             const store = mockStore({});
             return store.dispatch(a.editTask(category, existingTask, socket))
                 .then(() => {
-                    expect(store.getActions()).to.deep.equal(expected);
+                    store.getActions().should.deep.equal(expected);
                 });
         });
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 });

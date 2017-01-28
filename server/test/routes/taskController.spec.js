@@ -1,9 +1,11 @@
 const chai = require('chai');
-const expect = chai.expect;
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
+const sinonStubPromise = require('sinon-stub-promise');
+sinonStubPromise(sinon);
 chai.use(sinonChai);
-require('sinon-as-promised');
+chai.should();
+
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
@@ -30,8 +32,8 @@ describe('Task Routes', function () {
             response = factories.response();
             statusSpy = sinon.spy(response, 'status');
             sendSpy = sinon.spy(response, 'send');
-            getAsyncStub = sinon.stub(redisClient, 'getAsync');
-            setAsyncStub = sinon.stub(redisClient, 'setAsync');
+            getAsyncStub = sinon.stub(redisClient, 'getAsync').returnsPromise();
+            setAsyncStub = sinon.stub(redisClient, 'setAsync').returnsPromise();
         });
 
         afterEach(function () {
@@ -44,38 +46,35 @@ describe('Task Routes', function () {
         it('should get cached tasks from a category if available', function () {
             const cachedTasks = JSON.stringify([factories.existingTask()]);
             getAsyncStub.resolves(cachedTasks);
-            return taskController.getAllInCategory()(request, response)
-                .then(() => {
-                    expect(statusSpy).to.be.calledOnce.calledWithExactly(200);
-                    expect(sendSpy).to.be.calledOnce.calledWithExactly(JSON.parse(cachedTasks));
-                });
+
+            taskController.getAllInCategory()(request, response);
+
+            statusSpy.should.be.calledOnce.calledWithExactly(200);
+            sendSpy.should.be.calledOnce.calledWithExactly(JSON.parse(cachedTasks));
         });
 
         it('gets tasks from database and caches if no cache found', function () {
             const existingTask = factories.existingTask();
             getAsyncStub.resolves();
-            const getTasksInCategoryStub = sinon.stub(Task, 'getTasksInCategory');
+            const getTasksInCategoryStub = sinon.stub(Task, 'getTasksInCategory').returnsPromise();
             getTasksInCategoryStub.resolves([existingTask]);
 
-            return taskController.getAllInCategory()(request, response)
-                .then(() => {
-                    expect(getTasksInCategoryStub).to.be.calledOnce.calledWithExactly(request.params.category);
-                    expect(setAsyncStub).to.be.calledWithExactly(request.params.category, JSON.stringify([existingTask]));
-                    expect(statusSpy).to.be.calledOnce.calledWithExactly(200);
-                    expect(sendSpy).to.be.calledOnce.calledWithExactly([existingTask]);
-                });
+            taskController.getAllInCategory()(request, response);
+
+            getTasksInCategoryStub.should.be.calledOnce.calledWithExactly(request.params.category);
+            setAsyncStub.should.be.calledWithExactly(request.params.category, JSON.stringify([existingTask]));
+            statusSpy.should.be.calledOnce.calledWithExactly(200);
+            sendSpy.should.be.calledOnce.calledWithExactly([existingTask]);
         });
 
         it('should handle errors and send a response', function () {
             const testError = new Error('test');
-            getAsyncStub.rejects(testError);
+            getAsyncStub.rejects(testError.message);
 
-            return taskController.getAllInCategory()(request, response)
-                .then().catch(err => {
-                    expect(err).to.equal(testError);
-                    expect(statusSpy).to.be.calledOnce.calledWithExactly(500);
-                    expect(sendSpy).to.be.calledOnce.calledWithExactly(`Error getting tasks - ${testError.message}`);
-                });
+            taskController.getAllInCategory()(request, response);
+
+            statusSpy.should.be.calledOnce.calledWithExactly(500);
+            sendSpy.should.be.calledOnce.calledWithExactly(`Error getting tasks - ${testError.message}`);
         });
 
     });
@@ -88,9 +87,9 @@ describe('Task Routes', function () {
         beforeEach(function () {
             request = factories.request();
             response = factories.response();
-            createStub = sinon.stub(Task, 'createAndSave');
             statusSpy = sinon.spy(response, 'status');
             sendSpy = sinon.spy(response, 'send');
+            createStub = sinon.stub(Task, 'createAndSave').returnsPromise();
         });
 
         afterEach(function () {
@@ -108,24 +107,21 @@ describe('Task Routes', function () {
             createStub.resolves(existingTask);
             cacheTasksStub = sinon.stub(cache, 'tasks');
 
-            return taskController.add()(request, response)
-                .then(() => {
-                    expect(statusSpy).to.be.calledOnce.calledWithExactly(201);
-                    expect(sendSpy).to.be.calledOnce.calledWithExactly(existingTask);
-                    expect(cacheTasksStub).to.be.calledOnce;
-                });
+            taskController.add()(request, response);
+
+            statusSpy.should.be.calledOnce.calledWithExactly(201);
+            sendSpy.should.be.calledOnce.calledWithExactly(existingTask);
+            cacheTasksStub.should.be.calledOnce;
         });
 
         it('should handle errors and send a response', function () {
             const testError = new Error('test');
-            createStub.rejects(testError);
+            createStub.rejects(testError.message);
 
-            return taskController.add()(request, response)
-                .then().catch(err => {
-                    expect(err).to.equal(testError);
-                    expect(statusSpy).to.be.calledOnce.calledWithExactly(500);
-                    expect(sendSpy).to.be.calledOnce.calledWithExactly(`Error posting task - ${testError.message}`);
-                });
+            taskController.add()(request, response);
+            
+            statusSpy.should.be.calledOnce.calledWithExactly(500);
+            sendSpy.should.be.calledOnce.calledWithExactly(`Error posting task - ${testError.message}`);
         });
 
     });

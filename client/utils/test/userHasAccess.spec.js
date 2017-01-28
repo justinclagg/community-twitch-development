@@ -1,20 +1,21 @@
-import { expect } from 'chai';
+import chai from 'chai';
 import userHasAccess from '../userHasAccess';
+chai.should();
 
 const roles = ['admin', 'subscriber', 'member'];
 
 describe('userHasAccess()', function () {
     it('Users have access to their level and lower', function () {
         roles.forEach(role => {
-            expect(userHasAccess({ role: 'admin' }, role)).to.be.true;
+            userHasAccess({ role: 'admin' }, role).should.be.true;
         });
-        expect(userHasAccess({ role: 'subscriber' }, 'subscriber')).to.be.true;
-        expect(userHasAccess({ role: 'subscriber' }, 'member')).to.be.true;
-        expect(userHasAccess({ role: 'member' }, 'member')).to.be.true;
+        userHasAccess({ role: 'subscriber' }, 'subscriber').should.be.true;
+        userHasAccess({ role: 'subscriber' }, 'member').should.be.true;
+        userHasAccess({ role: 'member' }, 'member').should.be.true;
     });
     it('Users can\'t access above their level', function () {
-        expect(userHasAccess({ role: 'subscriber' }, 'admin')).to.be.false;
-        expect(userHasAccess({ role: 'member' }, 'subscriber')).to.be.false;
-        expect(userHasAccess({ role: 'member' }, 'admin')).to.be.false;
+        userHasAccess({ role: 'subscriber' }, 'admin').should.be.false;
+        userHasAccess({ role: 'member' }, 'subscriber').should.be.false;
+        userHasAccess({ role: 'member' }, 'admin').should.be.false;
     });
 });

@@ -1,5 +1,6 @@
-import { expect } from 'chai';
+import chai from 'chai';
 import parseJSON from '../parseJSON';
+chai.should();
 
 describe('parseJSON()', function () {
     it('Parse the response body to a JSON format', function () {
@@ -12,6 +13,6 @@ describe('parseJSON()', function () {
                 return JSON.parse(this.body);
             }
         };
-        expect(parseJSON(response)).to.deep.equal(bodyObj);
+        parseJSON(response).should.deep.equal(bodyObj);
     });
 });
