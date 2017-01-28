@@ -30,7 +30,7 @@ function tasks(category) {
 
 function categories() {
     // Get all categories (task with category of null)
-    Task.find({ category: null })
+    return Task.find({ category: true })
         .then(categories => {
             let categoryList = categories.map(category => category.name);
             return redisClient.setAsync('categoryList', categoryList.toString());

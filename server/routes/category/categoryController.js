@@ -10,8 +10,8 @@ function getAll() {
                     res.status(200).send(result.split(','));
                 }
                 else {
-                    redisClient.categories(cache);
-                    res.status(200).send();
+                    cache.categories()
+                        .then(getAll()(req, res));
                 }
             })
             .catch(err => {
@@ -30,7 +30,7 @@ function add() {
             })
             .then(() => {
                 // New category, store in database and cache
-                return Task.createAndSave({ name: category, category: null });
+                return Task.createAndSave({ name: category, category: true, archive: false });
             })
             .then(() => {
                 res.status(201).send();

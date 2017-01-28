@@ -2,7 +2,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const sinonStubPromise = require('sinon-stub-promise');
-sinonStubPromise(sinon);
+sinonStubPromise(sinon); // Promise stubs run synchronously for testing
 chai.use(sinonChai);
 chai.should();
 
@@ -10,6 +10,39 @@ const Task = require('../../models/Task.js');
 const factories = require('../factories.js');
 
 describe('Task model', function () {
+
+    describe('model validation', function () {
+        it('category is required', function (done) {
+            const taskProps = factories.newTask();
+            const taskWithoutCategory = new Task({ ...taskProps, category: null });
+
+            taskWithoutCategory.validate(err => {
+                err.should.exist;
+                done();
+            });
+        });
+
+        it('archive is required', function (done) {
+            const taskProps = factories.newTask();
+            const taskWithoutArchive = new Task({ ...taskProps, archive: null });
+
+            taskWithoutArchive.validate(err => {
+                err.should.exist;
+                done();
+            });
+        });
+
+        it('name is required', function (done) {
+            const taskProps = factories.newTask();
+            const taskWithoutName = new Task({ ...taskProps, name: null });
+
+            taskWithoutName.validate(err => {
+                err.should.exist;
+                done();
+            });
+        });
+
+    });
 
     describe('createAndSave()', function () {
         it('saves a new task and returns the saved task', sinon.test(function () {
@@ -110,9 +143,19 @@ describe('Task model', function () {
 
             Task.setArchive(_id, archive);
 
-            updateStub.should.be.calledWithExactly({ _id }, { $set: { archive } });            
+            updateStub.should.be.calledWithExactly({ _id }, { $set: { archive } });
         }));
     });
 
+    describe('getAllSubmissions()', function () {
+        it('gets all tasks that have a submission', sinon.test(function () {
+            const findStub = this.stub(Task, 'find').returnsPromise();
+            findStub.resolves([]);
+
+            Task.getAllSubmissions();
+
+            findStub.should.be.calledWithExactly({ submissions: { $gt: [] } });
+        }));
+    });
 
 });

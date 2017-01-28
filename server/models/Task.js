@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Task = new Schema({
-    category: String,
-    name: String,
+    category: { type: Schema.Types.Mixed, required: true },
+    name: { type: String, required: true },
     description: String,
     claims: Array,
     submissions: Array,
-    archive: Boolean
+    archive: { type: Boolean, required: true }
 });
 
 /* Static task methods */
@@ -66,11 +66,11 @@ Task.statics.getAllSubmissions = function () {
 /* Static category methods */
 
 Task.statics.getCategory = function (category) {
-    return this.findOne({ name: category, category: null });
+    return this.findOne({ name: category, category: true });
 };
 
 Task.statics.removeCategory = function (name) {
-    return this.findOneAndRemove({ name, category: null });
+    return this.findOneAndRemove({ name, category: true });
 };
 
 Task.statics.removeAllInCategory = function (category) {

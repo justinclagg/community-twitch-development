@@ -21,6 +21,16 @@ function existingTask() {
     };
 }
 
+function newUser() {
+    return {
+        _id: '1',
+        username: 'userName',
+        email: 'email@email.com',
+        role: 'role',
+        gitlabId: '2',
+    };
+}
+
 function updatedTask() {
     return {
         _id: '1',
@@ -55,6 +65,7 @@ module.exports = {
     newTask,
     existingTask,
     updatedTask,
+    newUser,
     request,
     response
 };
