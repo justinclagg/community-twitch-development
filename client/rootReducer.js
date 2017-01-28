@@ -4,7 +4,7 @@ import categories from './categories';
 import users from './users';
 
 export default combineReducers({
-	tasks,
-	categories,
-	users
+    tasks,
+    categories,
+    users
 });

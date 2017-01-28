@@ -11,14 +11,14 @@ const redisClient = require('../config/redisConfig.js');
  */
 
 function tasks(category) {
-	// Get all tasks in given category
-	return Task.find({ category })
-		.then(tasks => {
-			return redisClient.setAsync(category, JSON.stringify(tasks));
-		})
-		.catch(err => {
-			throw new Error(`Error caching tasks - ${err}`);
-		});
+    // Get all tasks in given category
+    return Task.find({ category })
+        .then(tasks => {
+            return redisClient.setAsync(category, JSON.stringify(tasks));
+        })
+        .catch(err => {
+            throw new Error(`Error caching tasks - ${err}`);
+        });
 }
 
 /**
@@ -29,18 +29,18 @@ function tasks(category) {
  */
 
 function categories() {
-	// Get all categories (task with category of null)
-	Task.find({ category: null })
-		.then(categories => {
-			let categoryList = categories.map(category => category.name);
-			return redisClient.setAsync('categoryList', categoryList.toString());
-		})
-		.catch(err => {
-			throw new Error(`Error caching categories - ${err}`);
-		});
+    // Get all categories (task with category of null)
+    Task.find({ category: null })
+        .then(categories => {
+            let categoryList = categories.map(category => category.name);
+            return redisClient.setAsync('categoryList', categoryList.toString());
+        })
+        .catch(err => {
+            throw new Error(`Error caching categories - ${err}`);
+        });
 }
 
 module.exports = {
-	tasks,
-	categories
+    tasks,
+    categories
 };

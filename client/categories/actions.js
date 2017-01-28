@@ -8,18 +8,18 @@ import parseJSON from '../utils/parseJSON.js';
  * @returns {array} categories - Array of category names
  */
 export function fetchCategories() {
-	return (dispatch) => {
-		dispatch({ type: t.FETCH });
-		fetch('/category')
-			.then(checkStatus)
-			.then(parseJSON)
-			.then(categories => {
-				dispatch({ type: t.FETCH_SUCCESS, payload: categories });
-			})
-			.catch(err => {
-				dispatch({ type: t.FETCH_FAILURE, payload: err });
-			});
-	};
+    return (dispatch) => {
+        dispatch({ type: t.FETCH });
+        fetch('/category')
+            .then(checkStatus)
+            .then(parseJSON)
+            .then(categories => {
+                dispatch({ type: t.FETCH_SUCCESS, payload: categories });
+            })
+            .catch(err => {
+                dispatch({ type: t.FETCH_FAILURE, payload: err });
+            });
+    };
 }
 
 /**
@@ -30,24 +30,24 @@ export function fetchCategories() {
  * @returns {string} category
  */
 export function addCategory(category, socket) {
-	return (dispatch) => {
-		fetch('/category', {
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ category })
-		})
-			.then(checkStatus)
-			.then(() => {
-				dispatch({ type: t.ADD_SUCCESS, payload: category });
-				socket.emit('categories');
-			})
-			.catch(err => {
-				dispatch({ type: t.ADD_FAILURE, payload: err });
-			});
-	};
+    return (dispatch) => {
+        fetch('/category', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ category })
+        })
+            .then(checkStatus)
+            .then(() => {
+                dispatch({ type: t.ADD_SUCCESS, payload: category });
+                socket.emit('categories');
+            })
+            .catch(err => {
+                dispatch({ type: t.ADD_FAILURE, payload: err });
+            });
+    };
 }
 
 /**
@@ -58,22 +58,22 @@ export function addCategory(category, socket) {
  * @returns {string} category
  */
 export function deleteCategory(category, socket) {
-	return (dispatch) => {
-		fetch('/category/', {
-			method: 'DELETE',
-			credentials: 'same-origin',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ category })
-		})
-			.then(checkStatus)
-			.then(() => {
-				dispatch({ type: t.DELETE_SUCCESS, payload: category });
-				socket.emit('categories');
-			})
-			.catch(err => {
-				dispatch({ type: t.DELETE_FAILURE, payload: err });
-			});
-	};
+    return (dispatch) => {
+        fetch('/category/', {
+            method: 'DELETE',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ category })
+        })
+            .then(checkStatus)
+            .then(() => {
+                dispatch({ type: t.DELETE_SUCCESS, payload: category });
+                socket.emit('categories');
+            })
+            .catch(err => {
+                dispatch({ type: t.DELETE_FAILURE, payload: err });
+            });
+    };
 }

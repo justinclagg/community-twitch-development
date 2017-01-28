@@ -6,23 +6,23 @@
  */
 
 export default function submissionList(tasks) {
-	let submissionList = [];
+    let submissionList = [];
 
-	tasks.forEach(task => {
-		// Add the task name, category, and archive status to each submission
-		let taskSubmissions = task.submissions.map(submission => {
-			return {
-				...submission,
-				name: task.name,
-				category: task.category,
-				archive: task.archive
-			};
-		});
-		// Flatten array of submissions and combine with submissionList
-		submissionList = [...submissionList, ...taskSubmissions];
-	});
-	// Order submissions from newest to oldest
-	submissionList.sort((a, b) => b.date - a.date);
+    tasks.forEach(task => {
+        // Add the task name, category, and archive status to each submission
+        let taskSubmissions = task.submissions.map(submission => {
+            return {
+                ...submission,
+                name: task.name,
+                category: task.category,
+                archive: task.archive
+            };
+        });
+        // Flatten array of submissions and combine with submissionList
+        submissionList = [...submissionList, ...taskSubmissions];
+    });
+    // Order submissions from newest to oldest
+    submissionList.sort((a, b) => b.date - a.date);
 
-	return submissionList;
+    return submissionList;
 }

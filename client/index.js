@@ -20,19 +20,19 @@ require('./css/main.scss');
 // Apply middleware
 let middleware;
 if (process.env.NODE_ENV === 'production') {
-	middleware = applyMiddleware(promise(), thunk);
+    middleware = applyMiddleware(promise(), thunk);
 }
 else {
-	const logger = require('redux-logger');
-	middleware = applyMiddleware(logger(), promise(), thunk);
+    const logger = require('redux-logger');
+    middleware = applyMiddleware(logger(), promise(), thunk);
 }
 
 const store = createStore(rootReducer, middleware);
 const rootElement = document.getElementById('app');
 
 render(
-	<Provider store={store}>
-		<Router history={browserHistory} routes={routes} />
-	</Provider>
-	, rootElement
+    <Provider store={store}>
+        <Router history={browserHistory} routes={routes} />
+    </Provider>
+    , rootElement
 );

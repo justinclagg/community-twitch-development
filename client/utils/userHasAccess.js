@@ -7,16 +7,16 @@
  */
 
 export default function userHasAccess(profile, role) {
-	if (profile.role === role) {
-		return true;
-	}
-	else if (role === 'subscriber' && profile.role === 'admin') {
-		return true;
-	}
-	else if (role === 'member' && (profile.role === 'subscriber' || profile.role === 'admin')) {
-		return true;
-	}
-	else {
-		return false;
-	}
+    if (profile.role === role) {
+        return true;
+    }
+    else if (role === 'subscriber' && profile.role === 'admin') {
+        return true;
+    }
+    else if (role === 'member' && (profile.role === 'subscriber' || profile.role === 'admin')) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }

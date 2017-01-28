@@ -6,81 +6,81 @@ import { Task, CategoryDropdown } from '..';
 
 class TaskTable extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			showArchive: false
-		};
-		this.toggleShowArchive = this.toggleShowArchive.bind(this);
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            showArchive: false
+        };
+        this.toggleShowArchive = this.toggleShowArchive.bind(this);
+    }
 
-	toggleShowArchive() {
-		this.setState((prevState) => {
-			return { showArchive: !prevState.showArchive };
-		});
-	}
+    toggleShowArchive() {
+        this.setState((prevState) => {
+            return { showArchive: !prevState.showArchive };
+        });
+    }
 
-	render() {
-		const { tasks, category, categories, isAuthenticated, profile, handleTaskClick, dispatch, socket } = this.props;
-		const { showArchive } = this.state;
+    render() {
+        const { tasks, category, categories, isAuthenticated, profile, handleTaskClick, dispatch, socket } = this.props;
+        const { showArchive } = this.state;
 
-		// Generate task rows with newest tasks first
-		let taskList = [];
-		for (let i = tasks.length - 1; i >= 0; i--) {
-			taskList.push(
-				<Task
-					task={tasks[i]}
-					category={category}
-					showArchive={showArchive}
-					handleTaskClick={handleTaskClick}
-					isAuthenticated={isAuthenticated}
-					profile={profile}
-					dispatch={dispatch}
-					socket={socket}
-					key={i}
-					/>
-			);
-		}
+        // Generate task rows with newest tasks first
+        let taskList = [];
+        for (let i = tasks.length - 1; i >= 0; i--) {
+            taskList.push(
+                <Task
+                    task={tasks[i]}
+                    category={category}
+                    showArchive={showArchive}
+                    handleTaskClick={handleTaskClick}
+                    isAuthenticated={isAuthenticated}
+                    profile={profile}
+                    dispatch={dispatch}
+                    socket={socket}
+                    key={i}
+                    />
+            );
+        }
 
-		return (
-			<Table className="task-table" selectable={false}>
-				<TableBody displayRowCheckbox={false} showRowHover={true}>
-					<TableRow className="table-super">
-						<TableHeaderColumn>
-							<CategoryDropdown category={category} categories={categories} />
-						</TableHeaderColumn>
-						<TableHeaderColumn className="mobile-hidden"></TableHeaderColumn>
-						<TableHeaderColumn>
-							<Toggle
-								label="Archive"
-								onToggle={this.toggleShowArchive}
-								labelStyle={{ fontSize: '14px', fontWeight: 'normal' }}
-								labelPosition="left"
-								style={{ marginTop: '20px', maxWidth: '100px' }}
-								/>
-						</TableHeaderColumn>
-					</TableRow>
-					<TableRow className="table-header">
-						<TableHeaderColumn className="name-col">Name</TableHeaderColumn>
-						<TableHeaderColumn className="description-col">Description</TableHeaderColumn>
-						<TableHeaderColumn className="submission-col">Submissions</TableHeaderColumn>
-					</TableRow>
-					{taskList}
-				</TableBody>
-			</Table>
-		);
-	}
+        return (
+            <Table className="task-table" selectable={false}>
+                <TableBody displayRowCheckbox={false} showRowHover={true}>
+                    <TableRow className="table-super">
+                        <TableHeaderColumn>
+                            <CategoryDropdown category={category} categories={categories} />
+                        </TableHeaderColumn>
+                        <TableHeaderColumn className="mobile-hidden"></TableHeaderColumn>
+                        <TableHeaderColumn>
+                            <Toggle
+                                label="Archive"
+                                onToggle={this.toggleShowArchive}
+                                labelStyle={{ fontSize: '14px', fontWeight: 'normal' }}
+                                labelPosition="left"
+                                style={{ marginTop: '20px', maxWidth: '100px' }}
+                                />
+                        </TableHeaderColumn>
+                    </TableRow>
+                    <TableRow className="table-header">
+                        <TableHeaderColumn className="name-col">Name</TableHeaderColumn>
+                        <TableHeaderColumn className="description-col">Description</TableHeaderColumn>
+                        <TableHeaderColumn className="submission-col">Submissions</TableHeaderColumn>
+                    </TableRow>
+                    {taskList}
+                </TableBody>
+            </Table>
+        );
+    }
 }
 
 TaskTable.propTypes = {
-	tasks: PropTypes.array.isRequired,
-	category: PropTypes.string.isRequired,
-	categories: PropTypes.array.isRequired,
-	handleTaskClick: PropTypes.func.isRequired,
-	dispatch: PropTypes.func.isRequired,
-	socket: PropTypes.object.isRequired,
-	isAuthenticated: PropTypes.bool.isRequired,
-	profile: PropTypes.object.isRequired
+    tasks: PropTypes.array.isRequired,
+    category: PropTypes.string.isRequired,
+    categories: PropTypes.array.isRequired,
+    handleTaskClick: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    socket: PropTypes.object.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
+    profile: PropTypes.object.isRequired
 };
 
 export default TaskTable;

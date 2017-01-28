@@ -10,31 +10,31 @@ router.get('/auth/twitch', user.login());
 router.get('/auth/twitch/callback', user.handleTwitchCallback());
 
 router.post('/auth/checkLogin',
-	authenticate(),
-	user.sendProfile()
+    authenticate(),
+    user.sendProfile()
 );
 
 /* User Logout */
 
 router.post('/auth/logout',
-	authenticate(),
-	user.logout()
+    authenticate(),
+    user.logout()
 );
 
 /* Gitlab */
 
 router.get('/auth/gitlab',
-	requireRole(process.env.GITLAB_ACCESS_LEVEL),
-	user.linkGitlab()
+    requireRole(process.env.GITLAB_ACCESS_LEVEL),
+    user.linkGitlab()
 );
 
 router.get('/auth/gitlab/callback',
-	user.handleGitlabCallback()
+    user.handleGitlabCallback()
 );
 
 router.post('/auth/gitlab/unlink',
-	requireRole(process.env.GITLAB_ACCESS_LEVEL),
-	user.unlinkGitlab()
+    requireRole(process.env.GITLAB_ACCESS_LEVEL),
+    user.unlinkGitlab()
 );
 
 module.exports = router;

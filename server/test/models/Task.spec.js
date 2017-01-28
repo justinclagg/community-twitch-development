@@ -10,54 +10,54 @@ const factories = require('../factories.js');
 
 describe('Task model', function () {
 
-	describe('createAndSave()', function () {
+    describe('createAndSave()', function () {
 
-		let createStub;
+        let createStub;
 
-		beforeEach(function () {
-			createStub = sinon.stub(Task, 'create');
-		});
+        beforeEach(function () {
+            createStub = sinon.stub(Task, 'create');
+        });
 
-		afterEach(function () {
-			createStub.restore();
-		});
+        afterEach(function () {
+            createStub.restore();
+        });
 
-		it('saves a new task and returns the saved task', function () {
-			const newTask = factories.newTask();
-			const existingTask = factories.existingTask();
-			createStub.resolves(existingTask);
+        it('saves a new task and returns the saved task', function () {
+            const newTask = factories.newTask();
+            const existingTask = factories.existingTask();
+            createStub.resolves(existingTask);
 
-			Task.createAndSave(newTask)
-				.then(task => {
-					expect(task).to.deep.equal(existingTask);
-					expect(createStub).to.be.calledWithExactly(newTask);
-				});
-		});
-	});
+            Task.createAndSave(newTask)
+                .then(task => {
+                    expect(task).to.deep.equal(existingTask);
+                    expect(createStub).to.be.calledWithExactly(newTask);
+                });
+        });
+    });
 
-	describe('getTasksInCategory()', function () {
+    describe('getTasksInCategory()', function () {
 
-		let findStub;
+        let findStub;
 
-		beforeEach(function () {
-			findStub = sinon.stub(Task, 'find');
-		});
+        beforeEach(function () {
+            findStub = sinon.stub(Task, 'find');
+        });
 
-		afterEach(function () {
-			findStub.restore();
-		});
+        afterEach(function () {
+            findStub.restore();
+        });
 
-		it('gets all tasks within the given category', function () {
-			const category = factories.existingTask().category;
-			findStub.resolves([]);
-			
-			Task.getTasksInCategory(category)
-				.then(tasks => {
-					expect(tasks).to.be.an('array');
-					expect(findStub).to.be.calledWithExactly({ category });
-				});
-		});
-	});
+        it('gets all tasks within the given category', function () {
+            const category = factories.existingTask().category;
+            findStub.resolves([]);
+
+            Task.getTasksInCategory(category)
+                .then(tasks => {
+                    expect(tasks).to.be.an('array');
+                    expect(findStub).to.be.calledWithExactly({ category });
+                });
+        });
+    });
 
 
 

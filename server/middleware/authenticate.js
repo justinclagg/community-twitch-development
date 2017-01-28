@@ -3,12 +3,12 @@
  */
 
 module.exports = function authenticate() {
-	return (req, res, next) => {
-		if (req.isAuthenticated()) {
-			next();
-		}
-		else {
-			res.status(401).send();
-		}
-	};
+    return (req, res, next) => {
+        if (req.isAuthenticated()) {
+            next();
+        }
+        else {
+            res.status(401).send();
+        }
+    };
 };
