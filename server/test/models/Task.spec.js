@@ -47,9 +47,7 @@ describe('Task model', function () {
     describe('createAndSave()', function () {
         it('saves a new task and returns the saved task', sinon.test(function () {
             const newTask = factories.newTask();
-            const existingTask = factories.existingTask();
             const createStub = this.stub(Task, 'create').returnsPromise();
-            createStub.resolves(existingTask);
 
             Task.createAndSave(newTask);
 
@@ -59,10 +57,8 @@ describe('Task model', function () {
 
     describe('getTasksInCategory()', function () {
         it('gets all tasks within the given category', sinon.test(function () {
-            const existingTask = factories.existingTask();
             const category = factories.existingTask().category;
             const findStub = this.stub(Task, 'find').returnsPromise();
-            findStub.resolves([existingTask]);
 
             Task.getTasksInCategory(category);
 
@@ -74,7 +70,6 @@ describe('Task model', function () {
         it('removes a task', sinon.test(function () {
             const _id = factories.existingTask()._id;
             const findOneAndRemoveStub = this.stub(Task, 'findOneAndRemove').returnsPromise();
-            findOneAndRemoveStub.resolves();
 
             Task.removeOne(_id);
 
@@ -87,7 +82,6 @@ describe('Task model', function () {
             const updatedTask = factories.updatedTask();
             const { _id, name, description } = updatedTask;
             const updateStub = this.stub(Task, 'update').returnsPromise();
-            updateStub.resolves();
 
             Task.editNameAndDescription(_id, name, description);
 
@@ -100,7 +94,6 @@ describe('Task model', function () {
             const updatedTask = factories.updatedTask();
             const { _id, claims } = updatedTask;
             const updateStub = this.stub(Task, 'update').returnsPromise();
-            updateStub.resolves();
 
             Task.editClaims(_id, claims);
 
@@ -113,7 +106,6 @@ describe('Task model', function () {
             const updatedTask = factories.updatedTask();
             const { _id, submissions } = updatedTask;
             const updateStub = this.stub(Task, 'update').returnsPromise();
-            updateStub.resolves();
 
             Task.addSubmission(_id, submissions);
 
@@ -126,7 +118,6 @@ describe('Task model', function () {
             const updatedTask = factories.updatedTask();
             const { _id, submissions } = updatedTask;
             const updateStub = this.stub(Task, 'update').returnsPromise();
-            updateStub.resolves();
 
             Task.addSubmission(_id, submissions);
 
@@ -139,7 +130,6 @@ describe('Task model', function () {
             const updatedTask = factories.updatedTask();
             const { _id, archive } = updatedTask;
             const updateStub = this.stub(Task, 'update').returnsPromise();
-            updateStub.resolves();
 
             Task.setArchive(_id, archive);
 
@@ -150,11 +140,43 @@ describe('Task model', function () {
     describe('getAllSubmissions()', function () {
         it('gets all tasks that have a submission', sinon.test(function () {
             const findStub = this.stub(Task, 'find').returnsPromise();
-            findStub.resolves([]);
 
             Task.getAllSubmissions();
 
             findStub.should.be.calledWithExactly({ submissions: { $gt: [] } });
+        }));
+    });
+
+    describe('getCategory()', function () {
+        it('get a category', sinon.test(function () {
+            const { category } = factories.existingTask();
+            const findOneStub = this.stub(Task, 'findOne').returnsPromise();
+
+            Task.getCategory(category);
+
+            findOneStub.should.be.calledWithExactly({ name: category, category: true });
+        }));
+    });
+
+    describe('removeCategory()', function () {
+        it('delete a category', sinon.test(function () {
+            const { category } = factories.existingTask();
+            const findOneAndRemoveStub = this.stub(Task, 'findOneAndRemove').returnsPromise();
+
+            Task.removeCategory(category);
+
+            findOneAndRemoveStub.should.be.calledWithExactly({ name: category, category: true });
+        }));
+    });
+
+    describe('removeAllInCategory()', function () {
+        it('remove all tasks within a category', sinon.test(function () {
+            const { category } = factories.existingTask();
+            const removeStub = this.stub(Task, 'remove').returnsPromise();
+
+            Task.removeAllInCategory(category);
+
+            removeStub.should.be.calledWithExactly({ category });
         }));
     });
 

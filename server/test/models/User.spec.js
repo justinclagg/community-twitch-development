@@ -41,7 +41,7 @@ describe('User model', function () {
                 done();
             });
         });
-        
+
         it('role is required', function (done) {
             const userProps = factories.newUser();
             const userWithoutRole = new User({ ...userProps, role: null });
@@ -51,6 +51,70 @@ describe('User model', function () {
                 done();
             });
         });
+    });
+
+    describe('getUser()', function () {
+        it('returns a user profile', sinon.test(function () {
+            const { _id } = factories.newUser();
+            const findOneStub = this.stub(User, 'findOne').returnsPromise();
+
+            User.getUser(_id);
+
+            findOneStub.should.be.calledWithExactly({ _id });
+        }));
+    });
+
+    describe('createAndSave()', function () {
+        it('creates and saves a new user with the given properties', sinon.test(function () {
+            const userProps = factories.newUser();
+            const createStub = this.stub(User, 'create').returnsPromise();
+
+            User.createAndSave(userProps);
+
+            createStub.should.be.calledWithExactly(userProps);
+        }));
+    });
+
+    describe('unlinkGitlab()', function () {
+        it('removes the gitlab id from a user profile', sinon.test(function () {
+            const userProps = factories.newUser();
+            const updatedProps = { ...userProps, gitlabId: '' };
+            const user = new User(userProps);
+            const saveStub = this.stub(user, 'save').returnsPromise();
+
+            user.unlinkGitlab();
+
+            saveStub.should.be.calledOnce;
+            user.toObject().should.deep.equal(updatedProps);
+        }));
+    });
+
+    describe('linkGitlab()', function () {
+        it('removes the gitlab id from a user profile', sinon.test(function () {
+            const userProps = { ...factories.newUser(), gitlabId: '' };
+            const updatedProps = factories.newUser();
+            const user = new User(userProps);
+            const saveStub = this.stub(user, 'save').returnsPromise();
+
+            user.linkGitlab(updatedProps.gitlabId);
+
+            saveStub.should.be.calledOnce;
+            user.toObject().should.deep.equal(updatedProps);
+        }));
+    });
+
+    describe('updateRole()', function () {
+        it('changes the user role to the one given', sinon.test(function () {
+            const userProps = factories.newUser();
+            const updatedProps = { ...userProps, role: 'subscriber' };
+            const user = new User(userProps);
+            const saveStub = this.stub(user, 'save').returnsPromise();
+
+            user.updateRole(updatedProps.role);
+
+            saveStub.should.be.calledOnce;
+            user.toObject().should.deep.equal(updatedProps);
+        }));
     });
 
 });
