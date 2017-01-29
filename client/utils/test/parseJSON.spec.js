@@ -3,6 +3,7 @@ import parseJSON from '../parseJSON';
 chai.should();
 
 describe('parseJSON()', function () {
+
     it('Parse the response body to a JSON format', function () {
         // This doesn't properly test the Fetch API Response object
         const bodyObj = { testData: 'test' };
@@ -13,6 +14,7 @@ describe('parseJSON()', function () {
                 return JSON.parse(this.body);
             }
         };
+        
         parseJSON(response).should.deep.equal(bodyObj);
     });
 });

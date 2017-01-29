@@ -18,10 +18,12 @@ describe('validUrl()', function () {
             'google.com',
             'www.google.com'
         ];
+
         missingProtocol.forEach(url => {
             validUrl(url).should.equal('http://' + url);
         });
     });
+
     it('Return false for invalid URL', function () {
         const invalidUrls = [
             'googlecom',
@@ -29,6 +31,7 @@ describe('validUrl()', function () {
             'google/com',
             'google.com@test'
         ];
+        
         invalidUrls.forEach(url => {
             validUrl(url).should.be.false;
         });
