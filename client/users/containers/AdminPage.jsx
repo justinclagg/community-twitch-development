@@ -16,7 +16,7 @@ function mapStateToProps(state) {
     };
 }
 
-class AdminPage extends Component {
+export class AdminPage extends Component {
 
     constructor(props) {
         super(props);

@@ -14,7 +14,7 @@ function mapStateToProps(store) {
     };
 }
 
-class CategoryPage extends Component {
+export class CategoryPage extends Component {
 
     constructor(props) {
         super(props);

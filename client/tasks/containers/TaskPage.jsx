@@ -16,7 +16,7 @@ function mapStateToProps(store) {
     };
 }
 
-class TaskPage extends Component {
+export class TaskPage extends Component {
 
     constructor(props) {
         super(props);

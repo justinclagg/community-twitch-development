@@ -9,7 +9,7 @@ import { Navbar, Footer } from './shared';
 import { checkLogin, ChangeUserRole } from './users';
 
 import io from 'socket.io-client';
-const socket = io.connect(process.env.HEROKU_URL);
+const socket = io.connect(process.env.BASE_URL);
 
 function mapStateToProps(state) {
     const { isAuthenticated, profile } = state.users;
@@ -19,7 +19,7 @@ function mapStateToProps(state) {
     };
 }
 
-class App extends Component {
+export class App extends Component {
 
     constructor(props) {
         super(props);
