@@ -4,8 +4,13 @@ import { withRouter } from 'react-router';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
-class CategoryDropdown extends Component {
+export class CategoryDropdown extends Component {
 
+    constructor(props) {
+        super(props);
+        this.onMenuItemClick = this.onMenuItemClick.bind(this);
+    }
+    
     onMenuItemClick(event, index, value) {
         this.props.router.push(`/contribute/${encodeURIComponent(value)}`);
     }
@@ -19,7 +24,7 @@ class CategoryDropdown extends Component {
         return (
             <DropDownMenu
                 value={this.props.category}
-                onChange={this.onMenuItemClick.bind(this)}
+                onChange={this.onMenuItemClick}
                 labelStyle={{ paddingLeft: 0, fontSize: '20px' }}
                 underlineStyle={{ borderTop: 'none' }}
                 >
