@@ -61,12 +61,32 @@ describe('Task reducer', function () {
     });
 
     it('should handle ADD_SUCCESS and add the given task', function () {
-
+        const existingTask = factories.existingTask();
+        
+        expect(
+            reducer(defaultState, {
+                type: t.ADD_SUCCESS,
+                payload: existingTask
+            })
+        ).to.deep.equal({
+            ...defaultState,
+            tasks: [...defaultState.tasks, existingTask]
+        });
     });
 
     
     it('should handle ADD_FAILURE', function () {
-        
+        const err = new Error();
+
+        expect(
+            reducer(defaultState, {
+                type: t.ADD_FAILURE,
+                payload: err
+            })
+        ).to.deep.equal({
+            ...defaultState,
+            error: err
+        });
     });
 
     it('should handle DELETE_SUCCESS and remove task with the given id', function () {
@@ -90,17 +110,65 @@ describe('Task reducer', function () {
 
     
     it('should handle DELETE_FAILURE', function () {
-        
+        const err = new Error();
+
+        expect(
+            reducer(defaultState, {
+                type: t.DELETE_FAILURE,
+                payload: err
+            })
+        ).to.deep.equal({
+            ...defaultState,
+            error: err
+        });
     });
 
     
     it('should handle EDIT_SUCCESS and edit the task with the given id', function () {
-        
+        const existingTask = factories.existingTask();
+        const { _id } = existingTask;
+        const otherTask = factories.otherTask();
+        const newName = otherTask.name;
+        const newDescription = otherTask.description;
+        const initialState = {
+            ...defaultState,
+            tasks: [existingTask]
+        };
+
+        expect(
+            reducer(initialState, {
+                type: t.EDIT_SUCCESS,
+                payload: {
+                    _id,
+                    name: newName,
+                    description: newDescription
+                }
+            })
+        ).to.deep.equal({
+            ...initialState,
+            tasks: [
+                {
+                    ...existingTask,
+                    name: newName,
+                    description: newDescription
+                }
+            ]
+        });
     });
     
     
     it('should handle EDIT_FAILURE', function () {
-        
+        const err = new Error();
+
+        expect(
+            reducer(defaultState, {
+                type: t.EDIT_FAILURE,
+                payload: err
+            })
+        ).to.deep.equal({
+            ...defaultState,
+            error: err
+        });
     });
     
 

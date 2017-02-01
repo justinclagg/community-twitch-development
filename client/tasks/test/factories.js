@@ -25,6 +25,22 @@ export const existingTask = () => {
     };
 };
 
+export const otherTask = () => {
+    return {
+        _id: '2',
+        category: 'Other Category',
+        name: 'other name',
+        description: 'other description',
+        claims: ['claim 1'],
+        submissions: [{
+            date: new Date(),
+            username: 'username',
+            url: 'justinclagg.com'
+        }],
+        archive: true
+    };
+};
+
 export const defaultState = () => {
     return {
         tasks: [],
