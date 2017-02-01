@@ -6,6 +6,7 @@
  */
 
 function parseDotenv(env) {
+    env = env.parsed; // dotenv 4.0.0 wrapped environment variables in a parsed object
     Object.keys(env).forEach(key => {
         process.env[key] = parseKey(key, env[key]);
     });

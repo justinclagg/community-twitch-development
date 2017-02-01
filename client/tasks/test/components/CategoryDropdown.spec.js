@@ -5,7 +5,7 @@ import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
-import * as testData from '../testData';
+import * as factories from '../factories';
 import { CategoryDropdown } from '../../components/CategoryDropdown.jsx';
 
 describe('CategoryDropdown', function () {
@@ -13,11 +13,10 @@ describe('CategoryDropdown', function () {
     let wrapper, props;
 
     function shallowRender() {
-        const { categories, category, router } = testData;
         props = {
-            categories,
-            category,
-            router
+            categories: factories.categories,
+            category: factories.category,
+            router: factories.router()
         };
         wrapper = shallow(<CategoryDropdown {...props} />);
     }

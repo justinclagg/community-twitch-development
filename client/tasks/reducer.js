@@ -9,7 +9,8 @@ const initialState = {
 };
 
 export default function tasks(state = initialState, action) {
-    switch (action.type) {
+
+    switch (action.type) {        
         case t.FETCH:
             return {
                 ...state,
@@ -61,12 +62,12 @@ export default function tasks(state = initialState, action) {
                 ...state,
                 tasks: state.tasks.map(task => {
                     return task._id === action.payload._id ?
-                        {
-                            ...task,
-                            name: action.payload.name,
-                            description: action.payload.description
-                        } :
-                        task;
+                    {
+                        ...task,
+                        name: action.payload.name,
+                        description: action.payload.description
+                    } :
+                    task;
                 })
             };
 
@@ -81,11 +82,11 @@ export default function tasks(state = initialState, action) {
                 ...state,
                 tasks: state.tasks.map(task => {
                     return task._id === action.payload._id ?
-                        {
-                            ...task,
-                            archive: action.payload.archive
-                        } :
-                        task;
+                    {
+                        ...task,
+                        archive: action.payload.archive
+                    } :
+                    task;
                 })
             };
 
@@ -106,11 +107,11 @@ export default function tasks(state = initialState, action) {
                 ...state,
                 tasks: state.tasks.map(task => {
                     return task._id === action.payload._id ?
-                        {
-                            ...task,
-                            claims: action.payload.claims
-                        } :
-                        task;
+                    {
+                        ...task,
+                        claims: action.payload.claims
+                    } :
+                    task;
                 })
             };
 
@@ -125,11 +126,11 @@ export default function tasks(state = initialState, action) {
                 ...state,
                 tasks: state.tasks.map(task => {
                     return task._id === action.payload._id ?
-                        {
-                            ...task,
-                            submissions: action.payload.submissions
-                        } :
-                        task;
+                    {
+                        ...task,
+                        submissions: action.payload.submissions
+                    } :
+                    task;
                 })
             };
 
@@ -144,11 +145,11 @@ export default function tasks(state = initialState, action) {
                 ...state,
                 tasks: state.tasks.map(task => {
                     return task._id === action.payload._id ?
-                        {
-                            ...task,
-                            submissions: action.payload.submissions
-                        } :
-                        task;
+                    {
+                        ...task,
+                        submissions: action.payload.submissions
+                    } :
+                    task;
                 })
             };
 
@@ -163,11 +164,11 @@ export default function tasks(state = initialState, action) {
                 ...state,
                 tasks: state.tasks.map(task => {
                     return task._id === action.payload._id ?
-                        {
-                            ...task,
-                            submissions: action.payload.submissions
-                        } :
-                        task;
+                    {
+                        ...task,
+                        submissions: action.payload.submissions
+                    } :
+                    task;
                 })
             };
 
