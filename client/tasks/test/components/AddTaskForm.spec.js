@@ -67,26 +67,26 @@ describe('AddTaskForm', function () {
                 value: ''
             }
         };
-        let dispatchAddTask = this.stub(AddTaskForm.prototype, 'dispatchAddTask');
-        shallowRender();
+        let wrapperInstance = wrapper.instance();
+        let addTask = this.stub(wrapperInstance, 'addTask');
 
-        wrapper.instance().onSubmit(event);
+        wrapperInstance.onSubmit(event);
 
-        expect(dispatchAddTask)
+        expect(addTask)
             .to.be.calledOnce
-            .calledWithExactly('name', '');
-        
-        dispatchAddTask.restore();
+            .calledWithExactly(props.category, 'name', '');
+
+        addTask.restore();
 
         // Call onSubmit() without a name value
         event.target.name.value = '';
         event.target.description.value = 'description';
-        dispatchAddTask = this.stub(AddTaskForm.prototype, 'dispatchAddTask');
-        shallowRender();
+        wrapperInstance = wrapper.instance();
+        addTask = this.stub(wrapperInstance, 'addTask');
 
-        wrapper.instance().onSubmit(event);
+        wrapperInstance.onSubmit(event);
 
-        expect(dispatchAddTask)
+        expect(addTask)
             .to.not.be.called;
     }));
 
@@ -110,12 +110,12 @@ describe('AddTaskForm', function () {
         expect(focus).to.be.calledOnce;
     }));
 
-    it('dispatchAddTask() should dispatch addTask', sinon.test(function () {
+    it('addTask() should dispatch addTask', sinon.test(function () {
         const addTask = this.stub(actions, 'addTask');
         const dispatch = this.stub(props, 'dispatch');
         shallowRender();
 
-        wrapper.instance().dispatchAddTask('name', 'description');
+        wrapper.instance().addTask(props.category, 'name', 'description');
 
         expect(addTask)
             .to.be.calledOnce
