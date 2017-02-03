@@ -50,7 +50,7 @@ describe('CategoryDropdown', function () {
     });
 
     it('DropDownMenu change event should trigger onMenuItemClick()', sinon.test(function () {
-        const onMenuItemClick = this.spy(CategoryDropdown.prototype, 'onMenuItemClick');
+        const onMenuItemClick = this.stub(CategoryDropdown.prototype, 'onMenuItemClick');
         shallowRender();
         const DropDownMenu = wrapper.find('DropDownMenu');
 

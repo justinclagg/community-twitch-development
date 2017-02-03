@@ -40,7 +40,7 @@ function add() {
 
 function remove() {
     return (req, res) => {
-        return Task.removeOne(req.params._id)
+        return Task.removeOne(req.body._id)
             .then(() => {
                 res.status(201).send();
                 cache.tasks(req.params.category);

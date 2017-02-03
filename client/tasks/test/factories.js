@@ -62,3 +62,14 @@ export const socket = () => {
         emit: () => { }
     };
 };
+
+export const dispatch = () => { 
+    return () => {};
+};
+
+export const submissionEvent = () => {
+    return {
+        preventDefault: () => { },
+        target: {}
+    };
+};

@@ -6,7 +6,14 @@ class AddTaskForm extends Component {
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
-        this.addTask = (category, name, description) => props.dispatch(addTask(category, name, description, props.socket));
+        this.dispatchAddTask = this.dispatchAddTask.bind(this);
+    }
+
+    dispatchAddTask(name, description) {
+        const { dispatch, category, socket } = this.props;
+        dispatch(
+            addTask(category, name, description, socket)
+        );
     }
 
     // Submits new task and clears form
@@ -14,8 +21,8 @@ class AddTaskForm extends Component {
         event.preventDefault(); // Prevent page refresh
         const { name, description } = event.target;
 
-        if (name.value || description.value) {
-            this.addTask(this.props.category, name.value, description.value);
+        if (name.value) {
+            this.dispatchAddTask(name.value, description.value);
             name.value = '';
             description.value = '';
             name.focus();
