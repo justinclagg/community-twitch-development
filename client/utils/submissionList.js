@@ -10,16 +10,15 @@ export default function submissionList(tasks) {
 
     tasks.forEach(task => {
         // Add the task name, category, and archive status to each submission
-        let taskSubmissions = task.submissions.map(submission => {
-            return {
+        // then add it to the submissionList
+        task.submissions.map(submission => {
+            submissionList.push({
                 ...submission,
                 name: task.name,
                 category: task.category,
                 archive: task.archive
-            };
+            });
         });
-        // Flatten array of submissions and combine with submissionList
-        submissionList = [...submissionList, ...taskSubmissions];
     });
     // Order submissions from newest to oldest
     submissionList.sort((a, b) => b.date - a.date);
