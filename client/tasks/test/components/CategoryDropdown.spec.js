@@ -8,7 +8,7 @@ chai.use(sinonChai);
 import * as factories from '../factories';
 import { CategoryDropdown } from '../../components/CategoryDropdown.jsx';
 
-describe('CategoryDropdown', function () {
+describe('CategoryDropdown component', function () {
 
     let wrapper, props;
 

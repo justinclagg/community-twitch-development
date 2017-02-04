@@ -72,23 +72,25 @@ describe('Task actions', function () {
     describe('addTask()', function () {
 
         it('sends a new task and creates ADD_SUCCESS', function () {
-            const expected = [{ type: t.ADD_SUCCESS, payload: existingTask }];
+            const newTaskProps = factories.newTaskProps();
+            const expected = [{ type: t.ADD_SUCCESS, payload: newTask }];
             const store = mockStore({});
-            fetchMock.post(taskRoute, existingTask);
+            fetchMock.post(taskRoute, newTask);
 
-            return store.dispatch(a.addTask(category, newTask.name, newTask.description, socket))
+            return store.dispatch(a.addTask(category, newTaskProps.name, newTaskProps.description, socket))
                 .then(() => {
                     expect(store.getActions()).to.deep.equal(expected);
                 });
         });
 
         it('creates ADD_FAILURE if post is not successful', function () {
+            const newTaskProps = factories.newTaskProps();
             const err = new Error();
             const expected = [{ type: t.ADD_FAILURE, payload: err }];
             const store = mockStore({});
             fetchMock.post(taskRoute, { throws: err });
 
-            return store.dispatch(a.addTask(category, newTask.name, newTask.description, socket))
+            return store.dispatch(a.addTask(category, newTaskProps.name, newTaskProps.description, socket))
                 .then(() => {
                     expect(store.getActions()).to.deep.equal(expected);
                 });

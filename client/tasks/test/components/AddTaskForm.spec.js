@@ -9,7 +9,7 @@ import * as factories from '../factories';
 import AddTaskForm from '../../components/AddTaskForm.jsx';
 import * as actions from '../../actions';
 
-describe('AddTaskForm', function () {
+describe('AddTaskForm component', function () {
 
     let wrapper, props;
 
