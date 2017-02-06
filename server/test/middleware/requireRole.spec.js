@@ -1,35 +1,37 @@
-const chai = require('chai');
+const { expect } = require('chai');
 const sinon = require('sinon');
-chai.should();
 
+const factories = require('../factories');
 const requireRole = require('../../middleware/requireRole');
 
 describe('requireRole()', function () {
+
     it('should call next if user has access', function () {
-        const request = { user: { role: 'admin' } };
-        const response = {};
-        const nextSpy = sinon.spy();
-        
-        requireRole('admin')(request, response, nextSpy);
-        requireRole('subscriber')(request, response, nextSpy);
-        requireRole('member')(request, response, nextSpy);
-        nextSpy.calledThrice.should.be.true;
+        const request = factories.request();
+        const response = factories.response();
+        const next = sinon.spy();
+        request.user.role = 'admin';
+
+        requireRole('admin')(request, response, next);
+        requireRole('subscriber')(request, response, next);
+        requireRole('member')(request, response, next);
+
+        expect(next.calledThrice).to.be.true;
     });
 
     it('should send status 403 if user does not have access', function () {
-        const request = { user: { role: 'member' } };
-        const response = {
-            status: function (responseStatus) {
-                return this; // chainable function
-            },
-            send: function () { }
-        };
-        const statusSpy = sinon.spy(response, 'status');
-        const nextSpy = sinon.spy();
+        const request = factories.request();
+        const response = factories.response();
+        const next = sinon.spy();
+        const status = sinon.spy(response, 'status');
+        request.user.role = 'member';
 
-        requireRole('admin')(request, response, nextSpy);
-        requireRole('subscriber')(request, response, nextSpy);
-        nextSpy.notCalled.should.be.true;
-        statusSpy.withArgs(403).calledTwice.should.be.true;
+        requireRole('admin')(request, response, next);
+        requireRole('subscriber')(request, response, next);
+
+        expect(next.notCalled).to.be.true;
+        expect(
+            status.withArgs(403).calledTwice
+        ).to.be.true;
     });
 });

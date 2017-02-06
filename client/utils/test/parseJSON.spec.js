@@ -1,20 +1,18 @@
-import chai from 'chai';
+import { expect } from 'chai';
+import sinon from 'sinon';
+
 import parseJSON from '../parseJSON';
-chai.should();
 
 describe('parseJSON()', function () {
 
-    it('Parse the response body to a JSON format', function () {
-        // This doesn't properly test the Fetch API Response object
-        const bodyObj = { testData: 'test' };
-        const bodyStr = JSON.stringify(bodyObj);
+    it('should call the json() method of the response object', sinon.test(function () {
         const response = {
-            body: bodyStr,
-            json: function () {
-                return JSON.parse(this.body);
-            }
+            json: this.spy()
         };
-        
-        parseJSON(response).should.deep.equal(bodyObj);
-    });
+
+        parseJSON(response);
+
+        expect(response.json)
+            .to.be.calledOnce;
+    }));
 });

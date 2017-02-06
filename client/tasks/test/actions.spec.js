@@ -16,7 +16,7 @@ describe('Task actions', function () {
 
     let newTask, existingTask, socket;
 
-    beforeEach(function() {
+    beforeEach(function () {
         newTask = factories.newTask();
         existingTask = factories.existingTask();
         socket = factories.socket();
@@ -64,7 +64,7 @@ describe('Task actions', function () {
 
         it('should create an action to clear the task array', function () {
             const expected = { type: t.CLEAR };
-            a.clearTasks().should.deep.equal(expected);
+            expect(a.clearTasks()).deep.equal(expected);
         });
     });
 

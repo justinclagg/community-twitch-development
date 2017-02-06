@@ -45,9 +45,12 @@ function updatedTask() {
 
 function request() {
     return {
-        body: newTask,
+        body: {},
         params: {
-            category: newTask.category
+            category: ''
+        },
+        user: {
+            role: ''
         }
     };
 }

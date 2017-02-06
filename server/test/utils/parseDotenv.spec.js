@@ -1,27 +1,36 @@
 const chai = require('chai');
+const expect = chai.expect;
 const parseKey = require('../../utils/parseDotenv').parseKey;
-chai.should();
 
 describe('parseDotenv()', function () {
-    it('Case sensitive variables', function () {
+
+    it('case sensitive variables should be lowercased', function () {
         const key = 'TWITCH_STREAMER';
         const value = 'jClagg';
-        const test = parseKey(key, value);
         const expected = 'jclagg';
-        test.should.equal(expected);
+
+        const test = parseKey(key, value);
+
+        expect(test).to.equal(expected);
     });
-    it('Case sensitive arrays', function () {
+
+    it('case sensitive lists should be parsed to an array and lowercased', function () {
         const key = 'ADDITIONAL_ADMINS';
         const value = 'jClagg, JCLAGG,jClAgG';
-        const test = parseKey(key, value);
         const expected = ['jclagg', 'jclagg', 'jclagg'];
-        test.should.deep.equal(expected);        
+
+        const test = parseKey(key, value);
+
+        expect(test).to.deep.equal(expected);
     });
-    it('Case insensitive arrays', function () {
+
+    it('case insensitive lists should be parsed to an array', function () {
         const key = 'TEST';
         const value = 'A, b,C';
-        const test = parseKey(key, value);
         const expected = ['A', 'b', 'C'];
-        test.should.deep.equal(expected);        
+
+        const test = parseKey(key, value);
+
+        expect(test).to.deep.equal(expected);
     });
 });

@@ -1,21 +1,33 @@
-import chai from 'chai';
-import userHasAccess from '../userHasAccess';
-chai.should();
+import { expect } from 'chai';
 
-const roles = ['admin', 'subscriber', 'member'];
+import * as factories from './factories';
+import userHasAccess from '../userHasAccess';
 
 describe('userHasAccess()', function () {
+
     it('Users have access to their level and lower', function () {
-        roles.forEach(role => {
-            userHasAccess({ role: 'admin' }, role).should.be.true;
+        const userRoles = factories.userRoles();
+
+        userRoles.forEach((role, i) => {
+            let user = { role };
+            for (let k = i; k < userRoles.length; k++) { // Test the current user role and those after
+                expect(
+                    userHasAccess(user, userRoles[k])
+                ).to.be.true;
+            }
         });
-        userHasAccess({ role: 'subscriber' }, 'subscriber').should.be.true;
-        userHasAccess({ role: 'subscriber' }, 'member').should.be.true;
-        userHasAccess({ role: 'member' }, 'member').should.be.true;
     });
+
     it('Users can\'t access above their level', function () {
-        userHasAccess({ role: 'subscriber' }, 'admin').should.be.false;
-        userHasAccess({ role: 'member' }, 'subscriber').should.be.false;
-        userHasAccess({ role: 'member' }, 'admin').should.be.false;
+        const userRoles = factories.userRoles().reverse(); // Reverse role order to test lowest level roles first
+
+        userRoles.forEach((role, i) => {
+            let user = { role };
+            for (let k = i + 1; k < userRoles.length; k++) { // Test roles after the current user role
+                expect(
+                    userHasAccess(user, userRoles[k])
+                ).to.be.false;
+            }
+        });
     });
 });
